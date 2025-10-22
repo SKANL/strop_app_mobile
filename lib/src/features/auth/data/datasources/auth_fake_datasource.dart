@@ -12,6 +12,8 @@
 /// 1. Ir a auth_di.dart
 /// 2. Reemplazar registro de AuthFakeDataSource por AuthRemoteDataSource
 /// 3. ¡Listo! La arquitectura garantiza que todo funcione sin cambios adicionales
+library;
+
 
 class AuthFakeDataSource {
   /// Base de datos fake de usuarios

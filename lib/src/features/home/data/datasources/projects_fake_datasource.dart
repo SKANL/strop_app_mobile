@@ -8,6 +8,8 @@
 /// 1. Crear ProjectsRemoteDataSource
 /// 2. Actualizar home_di.dart para registrar RemoteDataSource
 /// 3. Actualizar ProjectsRepositoryImpl
+library;
+
 
 class ProjectsFakeDataSource {
   /// Lista de proyectos fake

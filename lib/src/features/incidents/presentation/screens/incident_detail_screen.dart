@@ -396,7 +396,7 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
+        SizedBox(
           height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,

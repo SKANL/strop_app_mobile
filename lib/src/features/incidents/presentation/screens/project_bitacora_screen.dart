@@ -1,6 +1,9 @@
 // lib/src/features/incidents/presentation/screens/project_bitacora_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../providers/incidents_provider.dart';
 import '../widgets/incident_list_item.dart';
 
 /// Screen 13: Bitácora del Proyecto - Historial completo con filtros
@@ -22,22 +25,66 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
   DateTimeRange? _selectedDateRange;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Implementar con Provider para datos reales
-    final hasIncidents = false; // Cambiar según Provider
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<IncidentsProvider>().loadBitacora(widget.projectId);
+    });
+  }
 
-    return Column(
-      children: [
-        // Barra de filtros
-        _buildFiltersBar(context),
-        
-        // Lista de incidencias
-        Expanded(
-          child: hasIncidents 
-              ? _buildIncidentsList(context)
-              : _buildEmptyState(context),
-        ),
-      ],
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<IncidentsProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoadingBitacora) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (provider.bitacoraError != null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  'Error al cargar bitácora',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(provider.bitacoraError!),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: () => provider.loadBitacora(widget.projectId),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Reintentar'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final incidents = provider.bitacora;
+
+        return Column(
+          children: [
+            // Barra de filtros
+            _buildFiltersBar(context),
+            
+            // Lista de incidencias
+            Expanded(
+              child: incidents.isEmpty
+                  ? _buildEmptyState(context)
+                  : RefreshIndicator(
+                      onRefresh: () => provider.loadBitacora(widget.projectId),
+                      child: _buildIncidentsList(context, incidents),
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -205,62 +252,49 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
     }
   }
 
-  Widget _buildIncidentsList(BuildContext context) {
-    // Datos de ejemplo
-    final incidents = [
-      {
-        'id': '1',
-        'title': 'Problema de fuga en P1',
-        'type': 'Problema',
-        'author': 'Cabo Martínez',
-        'date': DateTime.now().subtract(const Duration(hours: 2)),
-        'status': 'Abierta',
-        'critical': true,
+  Widget _buildIncidentsList(BuildContext context, List incidents) {
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 8, bottom: 80),
+      itemCount: incidents.length,
+      itemBuilder: (context, index) {
+        final incident = incidents[index];
+        return IncidentListItem(
+          title: incident.title,
+          type: _getTypeLabel(incident.type),
+          author: incident.createdBy,
+          reportedDate: incident.createdAt,
+          status: _getStatusLabel(incident.status),
+          isCritical: incident.priority == IncidentPriority.critical,
+          onTap: () {
+            context.push('/incident/${incident.id}');
+          },
+        );
       },
-      {
-        'id': '2',
-        'title': 'Reporte de avance - Cimentación',
-        'type': 'Avance',
-        'author': 'Residente García',
-        'date': DateTime.now().subtract(const Duration(days: 1)),
-        'status': 'Cerrada',
-        'critical': false,
-      },
-      {
-        'id': '3',
-        'title': 'Solicitud de cemento',
-        'type': 'Material',
-        'author': 'Residente García',
-        'date': DateTime.now().subtract(const Duration(days: 2)),
-        'status': 'Pendiente',
-        'critical': false,
-      },
-    ];
-
-    return RefreshIndicator(
-      onRefresh: () async {
-        // TODO: Implementar refresh
-        await Future.delayed(const Duration(seconds: 1));
-      },
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 8, bottom: 80),
-        itemCount: incidents.length,
-        itemBuilder: (context, index) {
-          final incident = incidents[index];
-          return IncidentListItem(
-            title: incident['title'] as String,
-            type: incident['type'] as String,
-            author: incident['author'] as String,
-            reportedDate: incident['date'] as DateTime,
-            status: incident['status'] as String,
-            isCritical: incident['critical'] as bool,
-            onTap: () {
-              context.push('/incident/${incident['id']}');
-            },
-          );
-        },
-      ),
     );
+  }
+
+  String _getTypeLabel(IncidentType type) {
+    switch (type) {
+      case IncidentType.progressReport:
+        return 'Avance';
+      case IncidentType.problem:
+        return 'Problema';
+      case IncidentType.consultation:
+        return 'Consulta';
+      case IncidentType.safetyIncident:
+        return 'Seguridad';
+      case IncidentType.materialRequest:
+        return 'Material';
+    }
+  }
+
+  String _getStatusLabel(IncidentStatus status) {
+    switch (status) {
+      case IncidentStatus.open:
+        return 'Abierta';
+      case IncidentStatus.closed:
+        return 'Cerrada';
+    }
   }
 
   Widget _buildEmptyState(BuildContext context) {

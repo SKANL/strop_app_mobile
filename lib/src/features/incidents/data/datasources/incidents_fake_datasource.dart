@@ -13,6 +13,8 @@
 /// 1. Crear IncidentsRemoteDataSource
 /// 2. Actualizar incidents_di.dart
 /// 3. Actualizar IncidentsRepositoryImpl
+library;
+
 
 class IncidentsFakeDataSource {
   /// Base de datos fake de incidencias

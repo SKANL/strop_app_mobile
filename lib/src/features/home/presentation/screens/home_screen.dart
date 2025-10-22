@@ -3,9 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
+import '../providers/projects_provider.dart';
+import '../../../../core/core_ui/widgets/app_loading.dart';
+import '../../../../core/core_ui/widgets/app_error.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Cargar proyectos al iniciar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProjectsProvider>().loadActiveProjects();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +33,14 @@ class HomeScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  user != null ? 'Hola, ${user.name}' : 'Mis Proyectos',
-                  style: const TextStyle(fontSize: 20),
+                Flexible(
+                  child: Text(
+                    user != null ? 'Hola, ${user.name}' : 'Mis Proyectos',
+                    style: const TextStyle(fontSize: 18),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (user != null) ...[
                   const SizedBox(width: 8),
@@ -93,117 +114,147 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildProjectsList(BuildContext context) {
-    // TODO: Reemplazar con datos reales del provider
-    // Por ahora mostramos un proyecto de ejemplo para probar navegación
-    final hasProjects = true; // Cambiar a false para ver empty state
-    
-    if (!hasProjects) {
-      return SliverFillRemaining(
-        hasScrollBody: false,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.folder_open_outlined,
-                size: 64,
-                color: Colors.grey[400],
+    return Consumer<ProjectsProvider>(
+      builder: (context, projectsProvider, _) {
+        // Loading state
+        if (projectsProvider.isLoadingActive) {
+          return const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(child: AppLoading()),
+          );
+        }
+
+        // Error state
+        if (projectsProvider.activeError != null) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: AppError(
+                message: 'Error al cargar proyectos',
+                onRetry: () => projectsProvider.loadActiveProjects(),
               ),
-              const SizedBox(height: 16),
-              Text(
-                'Aún no tienes proyectos asignados',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Los proyectos asignados aparecerán aquí',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[500],
-                    ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    
-    // Lista de proyectos de ejemplo
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return Card(
-              margin: const EdgeInsets.only(bottom: 12.0),
-              child: InkWell(
-                onTap: () {
-                  // Navegar a ProjectTabsScreen
-                  context.push('/project/${index + 1}/tabs');
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Título y estado
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Proyecto ${index + 1}',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                          _buildStatusChip(context, 'Activo'),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Torre Centenario - CDMX',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              'Av. Reforma 123, CDMX',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Inicio: 01/01/2024',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
+            ),
+          );
+        }
+
+        final projects = projectsProvider.activeProjects;
+
+        // Empty state
+        if (projects.isEmpty) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.folder_open_outlined,
+                    size: 64,
+                    color: Colors.grey[400],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Aún no tienes proyectos asignados',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Los proyectos asignados aparecerán aquí',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[500],
+                        ),
+                  ),
+                ],
               ),
-            );
-          },
-          childCount: 2, // 2 proyectos de ejemplo
-        ),
-      ),
+            ),
+          );
+        }
+
+        // Lista de proyectos reales
+        return SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final project = projects[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  child: InkWell(
+                    onTap: () {
+                      // Navegar a ProjectTabsScreen con ID real
+                      context.push('/project/${project.id}/tabs');
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Título y estado
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  project.name,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              _buildStatusChip(context, project.status.name),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (project.description.isNotEmpty)
+                            Text(
+                              project.description,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  project.address ?? 'Sin dirección',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: Colors.grey[600],
+                                      ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Inicio: ${_formatDate(project.startDate)}',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              childCount: projects.length,
+            ),
+          ),
+        );
+      },
     );
   }
   
@@ -258,5 +309,9 @@ class HomeScreen extends StatelessWidget {
       default:
         return roleStr;
     }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 }

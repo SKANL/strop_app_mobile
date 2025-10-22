@@ -1,7 +1,6 @@
 // lib/src/features/auth/auth_di.dart
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import '../../core/core_domain/repositories/auth_repository.dart';
 import 'data/datasources/auth_fake_datasource.dart';
 import 'data/repositories_impl/auth_repository_impl.dart';
@@ -64,26 +63,20 @@ void setupAuthModule() {
 }
 
 /// Rutas de autenticación
+/// 
+/// NOTA: AuthProvider ahora se provee globalmente en app.dart
+/// No es necesario wrappear cada ruta individualmente
 final authRoutes = <GoRoute>[
   GoRoute(
     path: '/',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
-      child: const SplashScreen(),
-    ),
+    builder: (context, state) => const SplashScreen(),
   ),
   GoRoute(
     path: '/login',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
-      child: const LoginScreen(),
-    ),
+    builder: (context, state) => const LoginScreen(),
   ),
   GoRoute(
     path: '/forgot-password',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
-      child: const ForgotPasswordScreen(),
-    ),
+    builder: (context, state) => const ForgotPasswordScreen(),
   ),
 ];

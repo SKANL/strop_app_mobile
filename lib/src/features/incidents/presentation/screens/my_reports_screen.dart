@@ -1,9 +1,12 @@
 // lib/src/features/incidents/presentation/screens/my_reports_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../providers/incidents_provider.dart';
 
 /// Screen 12: Mis Reportes - Lista de incidencias creadas por el usuario (Bottom-Up)
-class MyReportsScreen extends StatelessWidget {
+class MyReportsScreen extends StatefulWidget {
   final String projectId;
 
   const MyReportsScreen({
@@ -12,51 +15,67 @@ class MyReportsScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Implementar con Provider para datos reales
-    final hasReports = false; // Cambiar según Provider
+  State<MyReportsScreen> createState() => _MyReportsScreenState();
+}
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        // TODO: Implementar refresh desde Provider
-        await Future.delayed(const Duration(seconds: 1));
+class _MyReportsScreenState extends State<MyReportsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<IncidentsProvider>().loadMyReports('user-cabo-001');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<IncidentsProvider>(
+      builder: (context, provider, _) {
+        if (provider.isLoadingReports) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (provider.reportsError != null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  'Error al cargar reportes',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(provider.reportsError!),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: () => provider.loadMyReports('user-cabo-001'),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Reintentar'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final reports = provider.myReports;
+
+        if (reports.isEmpty) {
+          return _buildEmptyState(context);
+        }
+
+        return RefreshIndicator(
+          onRefresh: () => provider.loadMyReports('user-cabo-001'),
+          child: _buildReportsList(context, reports),
+        );
       },
-      child: hasReports ? _buildReportsList(context) : _buildEmptyState(context),
     );
   }
 
-  Widget _buildReportsList(BuildContext context) {
-    // Datos de ejemplo con estados de aprobación
-    final reports = [
-      {
-        'id': '1',
-        'title': 'Solicitud de cemento adicional',
-        'type': 'Material',
-        'date': DateTime.now().subtract(const Duration(hours: 5)),
-        'status': 'Pendiente',
-        'approvalStatus': 'PENDIENTE',
-        'critical': false,
-      },
-      {
-        'id': '2',
-        'title': 'Reporte de avance Planta 1',
-        'type': 'Avance',
-        'date': DateTime.now().subtract(const Duration(days: 1)),
-        'status': 'Cerrada',
-        'approvalStatus': 'APROBADA',
-        'critical': false,
-      },
-      {
-        'id': '3',
-        'title': 'Consulta sobre especificación',
-        'type': 'Consulta',
-        'date': DateTime.now().subtract(const Duration(days: 2)),
-        'status': 'Abierta',
-        'approvalStatus': 'RECHAZADA',
-        'critical': false,
-      },
-    ];
-
+  Widget _buildReportsList(BuildContext context, List<IncidentEntity> reports) {
     return ListView.builder(
       padding: const EdgeInsets.only(top: 8, bottom: 80),
       itemCount: reports.length,
@@ -67,12 +86,12 @@ class MyReportsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReportCard(BuildContext context, Map<String, dynamic> report) {
+  Widget _buildReportCard(BuildContext context, IncidentEntity report) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
         onTap: () {
-          context.push('/incident/${report['id']}');
+          context.push('/incident/${report.id}');
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -86,7 +105,7 @@ class MyReportsScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      report['title'] as String,
+                      report.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -95,7 +114,7 @@ class MyReportsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  _buildApprovalBadge(context, report['approvalStatus'] as String),
+                  _buildApprovalBadge(context, report.approvalStatus),
                 ],
               ),
               
@@ -104,12 +123,12 @@ class MyReportsScreen extends StatelessWidget {
               // Tipo y fecha
               Row(
                 children: [
-                  _buildTypeChip(context, report['type'] as String),
+                  _buildTypeChip(context, _getTypeLabel(report.type)),
                   const Spacer(),
                   Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
-                    _formatRelativeTime(report['date'] as DateTime),
+                    _formatRelativeTime(report.createdAt),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey[600],
                         ),
@@ -123,36 +142,58 @@ class MyReportsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildApprovalBadge(BuildContext context, String approvalStatus) {
+  Widget _buildApprovalBadge(BuildContext context, ApprovalStatus? approvalStatus) {
+    if (approvalStatus == null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.grey.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey, width: 1.5),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.help_outline, size: 14, color: Colors.grey),
+            const SizedBox(width: 4),
+            Text(
+              'N/A',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Color color;
     IconData icon;
     String label;
 
-    switch (approvalStatus.toUpperCase()) {
-      case 'PENDIENTE':
+    switch (approvalStatus) {
+      case ApprovalStatus.pending:
         color = Colors.orange;
         icon = Icons.pending;
         label = 'PENDIENTE';
         break;
-      case 'APROBADA':
+      case ApprovalStatus.approved:
         color = Colors.green;
         icon = Icons.check_circle;
         label = 'APROBADA';
         break;
-      case 'RECHAZADA':
+      case ApprovalStatus.rejected:
         color = Colors.red;
         icon = Icons.cancel;
         label = 'RECHAZADA';
         break;
-      case 'ASIGNADA':
+      case ApprovalStatus.assigned:
         color = Colors.blue;
         icon = Icons.assignment_turned_in;
         label = 'ASIGNADA';
         break;
-      default:
-        color = Colors.grey;
-        icon = Icons.help_outline;
-        label = 'N/A';
     }
 
     return Container(
@@ -178,6 +219,21 @@ class MyReportsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getTypeLabel(IncidentType type) {
+    switch (type) {
+      case IncidentType.progressReport:
+        return 'Avance';
+      case IncidentType.problem:
+        return 'Problema';
+      case IncidentType.consultation:
+        return 'Consulta';
+      case IncidentType.safetyIncident:
+        return 'Seguridad';
+      case IncidentType.materialRequest:
+        return 'Material';
+    }
   }
 
   Widget _buildTypeChip(BuildContext context, String type) {
@@ -239,7 +295,7 @@ class MyReportsScreen extends StatelessWidget {
         const SizedBox(height: 32),
         ElevatedButton.icon(
           onPressed: () {
-            context.push('/project/$projectId/select-incident-type');
+            context.push('/project/${widget.projectId}/select-incident-type');
           },
           icon: const Icon(Icons.add),
           label: const Text('Crear Primer Reporte'),

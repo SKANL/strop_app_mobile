@@ -1,6 +1,20 @@
 // lib/src/features/incidents/incidents_di.dart
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+// Core
+import '../../core/core_domain/repositories/incident_repository.dart';
+
+// Data layer
+import 'data/datasources/incidents_fake_datasource.dart';
+import 'data/repositories_impl/incidents_repository_impl.dart';
+
+// Presentation layer
+import 'presentation/providers/incidents_provider.dart';
+
+// AuthProvider (cross-module)
+import '../auth/presentation/manager/auth_provider.dart';
 
 // Pantallas
 import 'presentation/screens/project_tabs_screen.dart';
@@ -18,7 +32,18 @@ final getIt = GetIt.instance;
 
 /// Configuración del módulo de incidencias
 void setupIncidentsModule() {
-  // TODO: Implementar registros de DataSources, Repositories, UseCases, Providers
+  // DataSource - Usar FakeDataSource (para cambiar a API real, cambiar aquí)
+  getIt.registerLazySingleton(() => IncidentsFakeDataSource());
+  
+  // Repository - Implementación con FakeDataSource
+  getIt.registerLazySingleton<IncidentRepository>(
+    () => IncidentsRepositoryImpl(fakeDataSource: getIt()),
+  );
+  
+  // Provider - Estado de incidencias
+  getIt.registerLazySingleton(
+    () => IncidentsProvider(repository: getIt()),
+  );
   
   // Registrar rutas
   getIt.registerLazySingleton<List<GoRoute>>(
@@ -35,9 +60,12 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final projectId = state.pathParameters['projectId']!;
       final isArchived = state.uri.queryParameters['archived'] == 'true';
-      return ProjectTabsScreen(
-        projectId: projectId,
-        isArchived: isArchived,
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentsProvider>(),
+        child: ProjectTabsScreen(
+          projectId: projectId,
+          isArchived: isArchived,
+        ),
       );
     },
   ),
@@ -60,12 +88,15 @@ final incidentRoutes = <GoRoute>[
     },
   ),
 
-  // Screen 16: Seleccionar tipo de incidencia
+  // Screen 16: Selector de tipo de incidencia (necesita AuthProvider)
   GoRoute(
     path: '/project/:projectId/select-incident-type',
     builder: (context, state) {
       final projectId = state.pathParameters['projectId']!;
-      return SelectIncidentTypeScreen(projectId: projectId);
+      return ChangeNotifierProvider.value(
+        value: getIt<AuthProvider>(),
+        child: SelectIncidentTypeScreen(projectId: projectId),
+      );
     },
   ),
 

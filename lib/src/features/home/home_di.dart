@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../auth/presentation/manager/auth_provider.dart';
+import '../../core/core_domain/repositories/project_repository.dart';
+import 'data/datasources/projects_fake_datasource.dart';
+import 'data/repositories_impl/projects_repository_impl.dart';
+import 'presentation/providers/projects_provider.dart';
 import 'presentation/screens/archived_projects_screen.dart';
 import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/notifications_screen.dart';
@@ -16,7 +19,18 @@ final getIt = GetIt.instance;
 
 /// Configuración del módulo home (proyectos)
 void setupHomeModule() {
-  // TODO: Implementar registros de DataSources, Repositories, UseCases, Providers
+  // DataSource - Usar FakeDataSource (para cambiar a API real, cambiar aquí)
+  getIt.registerLazySingleton(() => ProjectsFakeDataSource());
+  
+  // Repository - Implementación con FakeDataSource
+  getIt.registerLazySingleton<ProjectRepository>(
+    () => ProjectsRepositoryImpl(fakeDataSource: getIt()),
+  );
+  
+  // Provider - Estado de proyectos
+  getIt.registerLazySingleton(
+    () => ProjectsProvider(repository: getIt<ProjectRepository>()),
+  );
   
   // Registrar rutas
   getIt.registerLazySingleton<List<GoRoute>>(
@@ -26,12 +40,15 @@ void setupHomeModule() {
 }
 
 /// Rutas de home/proyectos
+/// 
+/// NOTA: AuthProvider ahora se provee globalmente en app.dart
+/// Solo necesitamos proveer ProjectsProvider en las rutas que lo necesiten
 final homeRoutes = <GoRoute>[
   // Pantalla principal
   GoRoute(
     path: '/home',
     builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
+      value: getIt<ProjectsProvider>(),
       child: const HomeScreen(),
     ),
   ),
@@ -45,19 +62,13 @@ final homeRoutes = <GoRoute>[
   // Configuración
   GoRoute(
     path: '/settings',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
-      child: const SettingsScreen(),
-    ),
+    builder: (context, state) => const SettingsScreen(),
   ),
   
   // Perfil de usuario
   GoRoute(
     path: '/user-profile',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<AuthProvider>(),
-      child: const UserProfileScreen(),
-    ),
+    builder: (context, state) => const UserProfileScreen(),
   ),
   
   // Cola de sincronización

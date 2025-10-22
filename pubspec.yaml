@@ -1,0 +1,65 @@
+name: mobile_strop_app
+description: "App móvil para reportes de campo en construcción - Arquitectura V5"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  provider: ^6.1.2
+  
+  # Dependency Injection
+  get_it: ^8.0.2
+  
+  # Navigation
+  go_router: ^14.6.2
+  
+  # Networking
+  dio: ^5.7.0
+  connectivity_plus: ^6.1.2
+  
+  # Local Database
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  
+  # Utilities
+  equatable: ^2.0.7
+  intl: ^0.20.1
+  uuid: ^4.5.1
+  
+  # UI/UX
+  lottie: ^3.2.1
+  image_picker: ^1.1.2
+  
+  # Storage
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.4
+  
+  # Code Generation
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  
+  # Build Runner & Code Generation
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+  drift_dev: ^2.20.3
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/animations/
+    - assets/icons/

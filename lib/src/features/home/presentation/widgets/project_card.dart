@@ -160,8 +160,8 @@ class ProjectCard extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: color.withOpacity(0.1),
-      side: BorderSide(color: color.withOpacity(0.3)),
+  backgroundColor: color.withAlpha((0.1 * 255).round()),
+  side: BorderSide(color: color.withAlpha((0.3 * 255).round())),
       padding: EdgeInsets.zero,
       visualDensity: VisualDensity.compact,
     );

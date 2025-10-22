@@ -301,7 +301,7 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
     final selectedUser = _availableUsers.firstWhere(
       (u) => u['id'] == _selectedUserId,
     );
-    print('Asignando incidencia ${widget.incidentId} a ${selectedUser['name']}');
+  debugPrint('Asignando incidencia ${widget.incidentId} a ${selectedUser['name']}');
 
     // Mostrar confirmación
     ScaffoldMessenger.of(context).showSnackBar(

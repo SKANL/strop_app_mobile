@@ -3,6 +3,8 @@ import '../../../../core/core_domain/entities/project_entity.dart';
 import '../../../../core/core_domain/entities/user_entity.dart';
 import '../../../../core/core_domain/repositories/project_repository.dart';
 import '../datasources/projects_fake_datasource.dart';
+import '../../../../core/core_di.dart';
+import '../../../auth/presentation/manager/auth_provider.dart';
 import '../models/project_model.dart';
 
 /// Implementación del repositorio de proyectos usando FakeDataSource
@@ -20,8 +22,13 @@ class ProjectsRepositoryImpl implements ProjectRepository {
   @override
   Future<List<ProjectEntity>> getActiveProjects() async {
     try {
-      // Obtener userId del usuario actual (por ahora hardcoded, debe venir de AuthProvider)
-      const userId = 'user-cabo-001'; // TODO: Obtener de session actual
+      // Obtener userId del usuario actual desde AuthProvider si está disponible
+      String userId = 'user-cabo-001';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) userId = user.id;
+      } catch (_) {}
       
       final List<Map<String, dynamic>> projectsData = 
           await fakeDataSource.getActiveProjects(userId);
@@ -37,7 +44,12 @@ class ProjectsRepositoryImpl implements ProjectRepository {
   @override
   Future<List<ProjectEntity>> getArchivedProjects() async {
     try {
-      const userId = 'user-cabo-001'; // TODO: Obtener de session actual
+      String userId = 'user-cabo-001';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) userId = user.id;
+      } catch (_) {}
       
       final List<Map<String, dynamic>> projectsData = 
           await fakeDataSource.getArchivedProjects(userId);

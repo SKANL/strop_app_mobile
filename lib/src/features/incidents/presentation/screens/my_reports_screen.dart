@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../auth/presentation/manager/auth_provider.dart';
 import '../providers/incidents_provider.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 12: Mis Reportes - Lista de incidencias creadas por el usuario (Bottom-Up)
 class MyReportsScreen extends StatefulWidget {
@@ -23,7 +25,8 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<IncidentsProvider>().loadMyReports('user-cabo-001');
+      final userId = context.read<AuthProvider>().user?.id ?? '';
+      context.read<IncidentsProvider>().loadMyReports(userId);
     });
   }
 
@@ -32,31 +35,14 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     return Consumer<IncidentsProvider>(
       builder: (context, provider, _) {
         if (provider.isLoadingReports) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: AppLoading());
         }
 
         if (provider.reportsError != null) {
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text(
-                  'Error al cargar reportes',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                Text(provider.reportsError!),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  onPressed: () => provider.loadMyReports('user-cabo-001'),
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Reintentar'),
-                ),
-              ],
+            child: AppError(
+              message: provider.reportsError ?? 'Error',
+              onRetry: () => provider.loadMyReports(context.read<AuthProvider>().user?.id ?? ''),
             ),
           );
         }
@@ -64,11 +50,11 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
         final reports = provider.myReports;
 
         if (reports.isEmpty) {
-          return _buildEmptyState(context);
+          return EmptyState.noReports(onCreateReport: () => context.push('/project/${widget.projectId}/select-incident-type'));
         }
 
         return RefreshIndicator(
-          onRefresh: () => provider.loadMyReports('user-cabo-001'),
+          onRefresh: () => provider.loadMyReports(context.read<AuthProvider>().user?.id ?? ''),
           child: _buildReportsList(context, reports),
         );
       },
@@ -265,45 +251,5 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     }
   }
 
-  Widget _buildEmptyState(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(24.0),
-      children: [
-        const SizedBox(height: 80),
-        Icon(
-          Icons.description_outlined,
-          size: 80,
-          color: Colors.grey[300],
-        ),
-        const SizedBox(height: 24),
-        Text(
-          'No has creado reportes',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.bold,
-              ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'Usa el botón + para crear tu primer reporte de avance, problema, consulta o incidente de seguridad.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[500],
-              ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 32),
-        ElevatedButton.icon(
-          onPressed: () {
-            context.push('/project/${widget.projectId}/select-incident-type');
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Crear Primer Reporte'),
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
-          ),
-        ),
-      ],
-    );
-  }
+  // Empty state handled via EmptyState.noReports() in build()
 }

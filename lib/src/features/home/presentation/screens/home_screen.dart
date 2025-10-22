@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
 import '../providers/projects_provider.dart';
-import '../../../../core/core_ui/widgets/app_loading.dart';
-import '../../../../core/core_ui/widgets/app_error.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
+import '../widgets/project_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,26 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Row(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
+                if (user != null) AvatarWithInitials.forRole(name: user.name, role: user.role.toString().split('.').last),
+                const SizedBox(width: 12),
+                Expanded(
                   child: Text(
                     user != null ? 'Hola, ${user.name}' : 'Mis Proyectos',
                     style: const TextStyle(fontSize: 18),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (user != null) ...[
-                  const SizedBox(width: 8),
-                  Chip(
-                    label: Text(
-                      _getRoleLabel(user.role),
-                      style: const TextStyle(fontSize: 11),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
               ],
             ),
             actions: [
@@ -172,82 +162,16 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
 
-        // Lista de proyectos reales
+        // Lista de proyectos reales usando ProjectCard reusable
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final project = projects[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12.0),
-                  child: InkWell(
-                    onTap: () {
-                      // Navegar a ProjectTabsScreen con ID real
-                      context.push('/project/${project.id}/tabs');
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Título y estado
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  project.name,
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                              _buildStatusChip(context, project.status.name),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          if (project.description.isNotEmpty)
-                            Text(
-                              project.description,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
-                                  project.address ?? 'Sin dirección',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: Colors.grey[600],
-                                      ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Inicio: ${_formatDate(project.startDate)}',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                return ProjectCard(
+                  project: project,
+                  onTap: () => context.push('/project/${project.id}/tabs'),
                 );
               },
               childCount: projects.length,
@@ -258,60 +182,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   
-  Widget _buildStatusChip(BuildContext context, String status) {
-    Color color;
-    IconData icon;
-    
-    switch (status.toLowerCase()) {
-      case 'activo':
-        color = Colors.green;
-        icon = Icons.play_circle_outline;
-        break;
-      case 'pausado':
-        color = Colors.orange;
-        icon = Icons.pause_circle_outline;
-        break;
-      case 'completado':
-        color = Colors.blue;
-        icon = Icons.check_circle_outline;
-        break;
-      default:
-        color = Colors.grey;
-        icon = Icons.circle_outlined;
-    }
-    
-    return Chip(
-      avatar: Icon(icon, size: 16, color: color),
-      label: Text(
-        status,
-        style: TextStyle(fontSize: 12, color: color),
-      ),
-      padding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
-      side: BorderSide(color: color),
-      backgroundColor: color.withValues(alpha: 0.1),
-    );
-  }
-
-  String _getRoleLabel(dynamic role) {
-    final roleStr = role.toString().split('.').last;
-    switch (roleStr) {
-      case 'superadmin':
-        return 'Super Admin';
-      case 'owner':
-        return 'Dueño';
-      case 'superintendent':
-        return 'Superintendente';
-      case 'resident':
-        return 'Residente';
-      case 'cabo':
-        return 'Cabo';
-      default:
-        return roleStr;
-    }
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
-  }
+  // Helper methods removed — replaced by reusable widgets (ProjectCard, AvatarWithInitials)
 }

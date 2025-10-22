@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
 import '../providers/incidents_provider.dart';
 import '../widgets/incident_list_item.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 13: Bitácora del Proyecto - Historial completo con filtros
 class ProjectBitacoraScreen extends StatefulWidget {
@@ -68,21 +69,36 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
 
         final incidents = provider.bitacora;
 
-        return Column(
-          children: [
-            // Barra de filtros
-            _buildFiltersBar(context),
-            
-            // Lista de incidencias
-            Expanded(
-              child: incidents.isEmpty
-                  ? _buildEmptyState(context)
-                  : RefreshIndicator(
-                      onRefresh: () => provider.loadBitacora(widget.projectId),
-                      child: _buildIncidentsList(context, incidents),
-                    ),
-            ),
-          ],
+        return ResponsiveLayout(
+          mobileBody: Column(
+            children: [
+              // Barra de filtros
+              _buildFiltersBar(context),
+
+              // Lista de incidencias
+              Expanded(
+                child: incidents.isEmpty
+                    ? EmptyState.noData(title: _hasActiveFilters() ? 'No hay resultados' : 'No hay actividad registrada')
+                    : RefreshIndicator(
+                        onRefresh: () => provider.loadBitacora(widget.projectId),
+                        child: _buildIncidentsList(context, incidents),
+                      ),
+              ),
+            ],
+          ),
+          tabletBody: Row(
+            children: [
+              SizedBox(width: 300, child: _buildFiltersPanel()),
+              Expanded(
+                child: incidents.isEmpty
+                    ? EmptyState.noData(title: _hasActiveFilters() ? 'No hay resultados' : 'No hay actividad registrada')
+                    : RefreshIndicator(
+                        onRefresh: () => provider.loadBitacora(widget.projectId),
+                        child: _buildIncidentsList(context, incidents),
+                      ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -185,13 +201,15 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
       _selectedStatus = null;
       _selectedDateRange = null;
     });
-    // TODO: Recargar lista sin filtros
+    final provider = context.read<IncidentsProvider>();
+    provider.clearFilters();
+    provider.loadBitacora(widget.projectId);
   }
 
   void _showTypeFilter(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => _FilterBottomSheet(
+      builder: (ctx) => _FilterBottomSheet(
         title: 'Filtrar por Tipo',
         options: [
           'Todos',
@@ -206,8 +224,10 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
           setState(() {
             _selectedType = value == 'Todos' ? null : value;
           });
-          Navigator.pop(context);
-          // TODO: Aplicar filtro
+          // Cerrar el sheet usando el contexto del builder y usar el contexto
+          // externo para acceder al Provider (evita ProviderNotFoundException)
+          Navigator.pop(ctx);
+          context.read<IncidentsProvider>().updateFilters(type: _selectedType?.toLowerCase());
         },
       ),
     );
@@ -216,7 +236,7 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
   void _showStatusFilter(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => _FilterBottomSheet(
+      builder: (ctx) => _FilterBottomSheet(
         title: 'Filtrar por Estado',
         options: [
           'Todos',
@@ -229,14 +249,15 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
           setState(() {
             _selectedStatus = value == 'Todos' ? null : value;
           });
-          Navigator.pop(context);
-          // TODO: Aplicar filtro
+          Navigator.pop(ctx);
+          context.read<IncidentsProvider>().updateFilters(status: _selectedStatus?.toLowerCase());
         },
       ),
     );
   }
 
   void _showDateFilter(BuildContext context) async {
+    final provider = context.read<IncidentsProvider>();
     final picked = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -245,10 +266,11 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
     );
 
     if (picked != null) {
+      if (!mounted) return;
       setState(() {
         _selectedDateRange = picked;
       });
-      // TODO: Aplicar filtro
+      provider.updateFilters(startDate: picked.start, endDate: picked.end);
     }
   }
 
@@ -297,50 +319,20 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
     }
   }
 
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.history,
-              size: 80,
-              color: Colors.grey[300],
-            ),
-            const SizedBox(height: 24),
-            Text(
-              _hasActiveFilters() 
-                  ? 'No hay resultados para los filtros seleccionados'
-                  : 'No hay actividad registrada',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.bold,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _hasActiveFilters()
-                  ? 'Intenta cambiar los filtros para ver más resultados.'
-                  : 'La bitácora mostrará toda la actividad del proyecto una vez que se creen reportes.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[500],
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            if (_hasActiveFilters()) ...[
-              const SizedBox(height: 24),
-              OutlinedButton.icon(
-                onPressed: _clearFilters,
-                icon: const Icon(Icons.clear_all),
-                label: const Text('Limpiar Filtros'),
-              ),
-            ],
-          ],
-        ),
-      ),
+  // Empty state handled by EmptyState widgets in the layouts above.
+
+  Widget _buildFiltersPanel() {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        const Text('Filtros', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        _buildFilterChip(icon: Icons.filter_list, label: _selectedType ?? 'Tipo', onTap: () => _showTypeFilter(context)),
+        const SizedBox(height: 8),
+        _buildFilterChip(icon: Icons.circle, label: _selectedStatus ?? 'Estado', onTap: () => _showStatusFilter(context)),
+        const SizedBox(height: 8),
+        _buildFilterChip(icon: Icons.calendar_today, label: _selectedDateRange == null ? 'Fecha' : 'Rango', onTap: () => _showDateFilter(context)),
+      ],
     );
   }
 }

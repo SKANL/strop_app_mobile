@@ -325,9 +325,9 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
 
     // TODO: Implementar con Provider
     final note = _noteController.text.trim();
-    print('Cerrando incidencia ${widget.incidentId}');
-    print('Nota: $note');
-    print('Fotos: ${_selectedImages.length}');
+  debugPrint('Cerrando incidencia ${widget.incidentId}');
+  debugPrint('Nota: $note');
+  debugPrint('Fotos: ${_selectedImages.length}');
 
     // Mostrar confirmación
     ScaffoldMessenger.of(context).showSnackBar(

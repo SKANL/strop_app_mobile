@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../auth/presentation/manager/auth_provider.dart';
+import '../providers/incidents_provider.dart';
+import '../widgets/incident_header.dart';
+import '../widgets/timeline_event.dart';
 
 /// Screen 19: Detalle de Incidencia
 /// 
@@ -126,7 +128,15 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Cabecera inalterable
-                  _buildHeader(theme, incident),
+                  IncidentHeader(
+                    type: incident['type'],
+                    title: incident['title'] ?? 'Sin título',
+                    description: incident['description'] ?? '',
+                    authorName: incident['author'] ?? 'Desconocido',
+                    reportedDate: incident['createdAt'],
+                    location: incident['gpsLocation'],
+                    isCritical: incident['isCritical'] == true,
+                  ),
                   const SizedBox(height: 24),
 
                   // Estado visual
@@ -145,7 +155,39 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                     const SizedBox(height: 24),
 
                   // Timeline de eventos
-                  _buildTimeline(theme),
+                  Timeline(
+                    events: _mockTimeline.map((e) {
+                      final type = e['type'] as String;
+                      switch (type) {
+                        case 'assigned':
+                          return TimelineEvent.assignment(
+                            assignedBy: e['actor'],
+                            assignedTo: e['description'] ?? '',
+                            timestamp: e['timestamp'],
+                          );
+                        case 'comment':
+                          return TimelineEvent.comment(
+                            author: e['actor'],
+                            comment: e['description'],
+                            timestamp: e['timestamp'],
+                          );
+                        case 'correction':
+                          return TimelineEvent.correction(
+                            author: e['actor'],
+                            explanation: e['description'],
+                            timestamp: e['timestamp'],
+                          );
+                        case 'created':
+                        default:
+                          return TimelineEvent(
+                            title: '${e['actor']} ${e['description']}',
+                            timestamp: e['timestamp'],
+                            icon: Icons.add_circle,
+                          );
+                      }
+                    }).toList(),
+                    emptyWidget: const SizedBox.shrink(),
+                  ),
                   const SizedBox(height: 80), // Espacio para el campo de comentario
                 ],
               ),
@@ -163,119 +205,9 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
     );
   }
 
-  Widget _buildHeader(ThemeData theme, Map<String, dynamic> incident) {
-    final color = _getTypeColor(incident['type']);
-    final icon = _getTypeIcon(incident['type']);
+  // Header is provided by the reusable IncidentHeader widget in the build method.
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Tipo e ID
-          Row(
-            children: [
-              Icon(icon, color: color, size: 24),
-              const SizedBox(width: 8),
-              Text(
-                _getTypeLabel(incident['type']),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              if (incident['isCritical'] == true)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.warning, color: Colors.white, size: 14),
-                      SizedBox(width: 4),
-                      Text(
-                        'CRÍTICA',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // Título
-          Text(
-            incident['title'] ?? 'Sin título',
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          const Divider(),
-          const SizedBox(height: 8),
-
-          // Metadatos
-          _buildMetadataRow(Icons.person_outline, 'Creado por', incident['author']),
-          const SizedBox(height: 4),
-          if (incident['assignedTo'] != null)
-            _buildMetadataRow(Icons.assignment_ind, 'Asignado a', incident['assignedTo']),
-          if (incident['assignedTo'] != null)
-            const SizedBox(height: 4),
-          _buildMetadataRow(
-            Icons.schedule,
-            'Fecha',
-            DateFormat('dd/MM/yyyy HH:mm').format(incident['createdAt']),
-          ),
-          const SizedBox(height: 4),
-          _buildMetadataRow(
-            Icons.location_on_outlined,
-            'Ubicación GPS',
-            incident['gpsLocation'] ?? 'No disponible',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMetadataRow(IconData icon, String label, String value) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: Colors.grey[600]),
-        const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 13,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Metadata rows are rendered by the IncidentHeader widget; helper removed.
 
   Widget _buildStatusBadge(ThemeData theme, Map<String, dynamic> incident) {
     final status = incident['status'] as String;
@@ -412,13 +344,25 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.grey[300]!),
-                    image: DecorationImage(
-                      image: NetworkImage(photos[index]),
-                      fit: BoxFit.cover,
-                    ),
+                    image: null,
                   ),
                   child: Stack(
                     children: [
+                      // Image (network) with error handler to avoid crashes when offline
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            photos[index],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              color: Colors.grey[200],
+                              alignment: Alignment.center,
+                              child: const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ),
                       // Overlay con info de GPS/timestamp
                       Positioned(
                         bottom: 0,
@@ -431,9 +375,9 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                               colors: [
-                                Colors.black.withValues(alpha: 0.7),
-                                Colors.transparent,
-                              ],
+                                  Colors.black.withAlpha((0.7 * 255).round()),
+                                  Colors.transparent,
+                                ],
                             ),
                           ),
                           child: const Text(
@@ -457,136 +401,9 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
     );
   }
 
-  Widget _buildTimeline(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Historial de actividad',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _mockTimeline.length,
-          itemBuilder: (context, index) {
-            final event = _mockTimeline[index];
-            return _buildTimelineEvent(theme, event, index == _mockTimeline.length - 1);
-          },
-        ),
-      ],
-    );
-  }
+  // Timeline is rendered with the reusable Timeline widget in the build method.
 
-  Widget _buildTimelineEvent(ThemeData theme, Map<String, dynamic> event, bool isLast) {
-    final type = event['type'] as String;
-    Color iconColor;
-    IconData icon;
-
-    switch (type) {
-      case 'created':
-        iconColor = Colors.blue;
-        icon = Icons.add_circle;
-        break;
-      case 'assigned':
-        iconColor = Colors.purple;
-        icon = Icons.assignment_ind;
-        break;
-      case 'comment':
-        iconColor = Colors.teal;
-        icon = Icons.comment;
-        break;
-      case 'correction':
-        iconColor = Colors.orange;
-        icon = Icons.edit_note;
-        break;
-      case 'closed':
-        iconColor = Colors.green;
-        icon = Icons.check_circle;
-        break;
-      case 'approved':
-        iconColor = Colors.green;
-        icon = Icons.thumb_up;
-        break;
-      case 'rejected':
-        iconColor = Colors.red;
-        icon = Icons.thumb_down;
-        break;
-      default:
-        iconColor = Colors.grey;
-        icon = Icons.circle;
-    }
-
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Línea vertical del timeline
-          Column(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: iconColor.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 16, color: iconColor),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    color: Colors.grey[300],
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 12),
-          
-          // Contenido del evento
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: event['actor'],
-                                style: const TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ' ${event['description']}'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatRelativeTime(event['timestamp']),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // TimelineEvent rendering is handled by the reusable TimelineEvent widget.
 
   Widget _buildCommentInputBar(ThemeData theme) {
     return Container(
@@ -650,8 +467,9 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
     final status = incident['status'] as String;
     final isClosed = status == 'cerrada';
     
-    // TODO: Verificar si el usuario es el asignado
-    final isAssigned = true; // Placeholder
+  // Determinar si el usuario actual es el asignado (placeholder: compara nombres cuando existan)
+  final assignedToText = incident['assignedTo']?.toString() ?? '';
+  final isAssigned = user != null && assignedToText.isNotEmpty && assignedToText.contains(user.name);
     
     final canAssign = isResidentOrSuper && !isClosed;
     final canClose = !isClosed && (isAssigned || isResidentOrSuper);
@@ -704,51 +522,19 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
     );
   }
 
-  void _submitComment() {
-    // TODO: Implementar envío de comentario con Provider
+  void _submitComment() async {
     final comment = _commentController.text.trim();
-    print('Comentario: $comment');
-    
-    // Limpiar campo
-    _commentController.clear();
-    
-    // Mostrar confirmación
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Comentario agregado')),
-    );
-  }
+    if (comment.isEmpty) return;
 
-  Color _getTypeColor(String type) {
-    switch (type) {
-      case 'avance':
-        return Colors.blue;
-      case 'problema':
-        return Colors.orange;
-      case 'consulta':
-        return Colors.purple;
-      case 'seguridad':
-        return Colors.red;
-      case 'material':
-        return Colors.teal;
-      default:
-        return Colors.grey;
-    }
-  }
+    final provider = context.read<IncidentsProvider>();
+    final ok = await provider.addComment(widget.incidentId, comment);
+    if (!mounted) return;
 
-  IconData _getTypeIcon(String type) {
-    switch (type) {
-      case 'avance':
-        return Icons.trending_up;
-      case 'problema':
-        return Icons.warning;
-      case 'consulta':
-        return Icons.help_outline;
-      case 'seguridad':
-        return Icons.security;
-      case 'material':
-        return Icons.inventory_2;
-      default:
-        return Icons.description;
+    if (ok) {
+      _commentController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Comentario agregado')));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al agregar comentario')));
     }
   }
 
@@ -769,20 +555,4 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
     }
   }
 
-  String _formatRelativeTime(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inMinutes < 1) {
-      return 'Ahora';
-    } else if (difference.inHours < 1) {
-      return 'Hace ${difference.inMinutes}m';
-    } else if (difference.inDays < 1) {
-      return 'Hace ${difference.inHours}h';
-    } else if (difference.inDays < 7) {
-      return 'Hace ${difference.inDays}d';
-    } else {
-      return DateFormat('dd/MM/yyyy').format(timestamp);
-    }
-  }
 }

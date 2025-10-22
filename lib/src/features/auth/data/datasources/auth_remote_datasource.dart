@@ -28,9 +28,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
       
-      final data = response.data['data'];
-      final userData = data['user'];
-      final tokens = data['tokens'];
+  final data = response.data['data'];
+  final userData = data['user'];
       
       // TODO: Guardar tokens con flutter_secure_storage
       // await _secureStorage.write(key: 'accessToken', value: tokens['accessToken']);

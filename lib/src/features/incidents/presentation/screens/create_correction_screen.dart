@@ -200,7 +200,7 @@ class _CreateCorrectionScreenState extends State<CreateCorrectionScreen> {
 
     // TODO: Implementar con Provider
     final explanation = _explanationController.text.trim();
-    print('Aclaración para incidencia ${widget.incidentId}: $explanation');
+  debugPrint('Aclaración para incidencia ${widget.incidentId}: $explanation');
 
     // Mostrar confirmación y cerrar
     ScaffoldMessenger.of(context).showSnackBar(

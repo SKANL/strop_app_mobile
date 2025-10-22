@@ -2,6 +2,8 @@
 import '../../../../core/core_domain/entities/incident_entity.dart';
 import '../../../../core/core_domain/repositories/incident_repository.dart';
 import '../datasources/incidents_fake_datasource.dart';
+import '../../../../core/core_di.dart';
+import '../../../auth/presentation/manager/auth_provider.dart';
 import '../models/incident_model.dart';
 
 /// Implementación del repositorio de incidencias usando FakeDataSource
@@ -83,9 +85,19 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<IncidentEntity> createIncident(IncidentEntity incident) async {
     try {
-      // TODO: Obtener datos del usuario actual de la session
-      const userName = 'Cabo López';
-      const userRole = 'cabo';
+      // Obtener datos del usuario actual desde AuthProvider si está disponible
+      String userName = 'Cabo López';
+      String userRole = 'cabo';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) {
+          userName = user.name;
+          userRole = user.role.name;
+        }
+      } catch (_) {
+        // si GetIt no tiene AuthProvider aún, usar valores por defecto
+      }
       
       final Map<String, dynamic> createdData = 
           await fakeDataSource.createIncident(
@@ -110,8 +122,12 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<IncidentEntity> assignIncident(String incidentId, String userId) async {
     try {
-      // TODO: Obtener nombre de usuario de la session
-      const userName = 'Usuario Asignado';
+      String userName = 'Usuario Asignado';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) userName = user.name;
+      } catch (_) {}
       
       await fakeDataSource.assignIncident(incidentId, userId, userName);
       
@@ -125,9 +141,16 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<IncidentEntity> closeIncident(String incidentId, String closeNote) async {
     try {
-      // TODO: Obtener datos del usuario actual
-      const userId = 'user-cabo-001';
-      const userName = 'Cabo López';
+      String userId = 'user-cabo-001';
+      String userName = 'Cabo López';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) {
+          userId = user.id;
+          userName = user.name;
+        }
+      } catch (_) {}
       
       await fakeDataSource.closeIncident(
         incidentId, 
@@ -147,9 +170,16 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<void> addComment(String incidentId, String comment) async {
     try {
-      // TODO: Obtener datos del usuario actual
-      const userId = 'user-cabo-001';
-      const userName = 'Cabo López';
+      String userId = 'user-cabo-001';
+      String userName = 'Cabo López';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) {
+          userId = user.id;
+          userName = user.name;
+        }
+      } catch (_) {}
       
       await fakeDataSource.addComment(incidentId, userId, userName, comment);
     } catch (e) {
@@ -160,10 +190,17 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<void> addCorrection(String incidentId, String correction) async {
     try {
-      // TODO: Obtener datos del usuario actual
-      const userId = 'user-cabo-001';
-      const userName = 'Cabo López';
-      
+      String userId = 'user-cabo-001';
+      String userName = 'Cabo López';
+      try {
+        final auth = getIt<AuthProvider>();
+        final user = auth.user;
+        if (user != null) {
+          userId = user.id;
+          userName = user.name;
+        }
+      } catch (_) {}
+
       await fakeDataSource.addCorrection(incidentId, userId, userName, correction);
     } catch (e) {
       throw Exception('Error al agregar aclaración al incidente $incidentId: $e');

@@ -14,8 +14,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'admin@strop.com');
-  final _passwordController = TextEditingController(text: 'Admin123');
+  final _emailController = TextEditingController(text: 'super@strop.com');
+  final _passwordController = TextEditingController(text: 'super123');
   bool _isLoading = false;
 
   @override

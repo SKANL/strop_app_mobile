@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
+import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../providers/incidents_provider.dart';
 
 /// Screen 17: Formulario de Reporte Básico (Avance, Problema, Consulta, Seguridad)
 class CreateIncidentFormScreen extends StatefulWidget {
@@ -308,9 +310,11 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
     final currentUser = authProvider.user;
 
     if (currentUser == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error: No se encontró usuario autenticado')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error: No se encontró usuario autenticado')),
+        );
+      }
       return;
     }
 
@@ -318,22 +322,73 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
       _isSubmitting = true;
     });
 
-    // TODO: Implementar creación de incidencia con Provider
-    await Future.delayed(const Duration(seconds: 2)); // Simular envío
+    // Crear entidad de incidencia
+    final incidentType = _getIncidentTypeFromString(widget.type);
+    final description = _descriptionController.text.trim();
+    
+    // Generar título automático basado en tipo y primeras palabras de descripción
+    final titlePrefix = _getTypeLabel().split('-').first.trim();
+    final descWords = description.split(' ').take(5).join(' ');
+    final autoTitle = '$titlePrefix: ${descWords.length > 30 ? '${descWords.substring(0, 30)}...' : descWords}';
+    
+    // Convertir XFile a rutas de string (en producción serían URLs después de subir)
+    final photoUrls = _images.map((img) => img.path).toList();
+    
+    final newIncident = IncidentEntity(
+      id: '', // El FakeDataSource asignará el ID
+      projectId: widget.projectId,
+      type: incidentType,
+      title: autoTitle,
+      description: description,
+      createdBy: currentUser.name,
+      createdAt: DateTime.now(),
+      status: IncidentStatus.open,
+      priority: _isCritical ? IncidentPriority.critical : IncidentPriority.normal,
+      photoUrls: photoUrls,
+    );
 
-    if (mounted) {
-      setState(() {
-        _isSubmitting = false;
-      });
+    // Llamar al provider para crear
+    final incidentsProvider = context.read<IncidentsProvider>();
+    final success = await incidentsProvider.createIncident(newIncident);
 
+    if (!mounted) return;
+
+    setState(() {
+      _isSubmitting = false;
+    });
+
+    if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Reporte creado exitosamente'),
           backgroundColor: Colors.green,
         ),
       );
+      context.pop(true); // Retornar true para indicar éxito
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al crear reporte: ${incidentsProvider.operationError ?? "Desconocido"}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
-      context.pop();
+  IncidentType _getIncidentTypeFromString(String typeStr) {
+    switch (typeStr.toLowerCase()) {
+      case 'avance':
+        return IncidentType.progressReport;
+      case 'problema':
+        return IncidentType.problem;
+      case 'consulta':
+        return IncidentType.consultation;
+      case 'seguridad':
+        return IncidentType.safetyIncident;
+      case 'material':
+        return IncidentType.materialRequest;
+      default:
+        return IncidentType.problem;
     }
   }
 

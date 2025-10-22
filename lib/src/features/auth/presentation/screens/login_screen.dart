@@ -34,17 +34,17 @@ class LoginScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Animación Lottie
                 Lottie.asset(
-                  'assets/animations/login_animation.json',
+                  'assets/animations/login_animation_v3.json',
                   width: 300,
                   height: 200,
                   fit: BoxFit.contain,
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Formulario de login
                 const LoginForm(),
               ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/incidents_provider.dart';
 
 /// Screen 20: Registrar Aclaración (Modal)
 /// 
@@ -193,24 +195,44 @@ class _CreateCorrectionScreenState extends State<CreateCorrectionScreen> {
     );
   }
 
-  void _submitCorrection() {
+  void _submitCorrection() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    // TODO: Implementar con Provider
     final explanation = _explanationController.text.trim();
-  debugPrint('Aclaración para incidencia ${widget.incidentId}: $explanation');
-
-    // Mostrar confirmación y cerrar
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Aclaración registrada correctamente'),
-        backgroundColor: Colors.green,
-      ),
+    
+    // Mostrar loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
 
-    // Retornar a la pantalla anterior
-    Navigator.of(context).pop(true);
+    // Llamar al provider
+    final incidentsProvider = context.read<IncidentsProvider>();
+    final success = await incidentsProvider.addCorrection(widget.incidentId, explanation);
+
+    if (!mounted) return;
+    
+    // Cerrar diálogo de loading
+    Navigator.of(context).pop();
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Aclaración registrada correctamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop(true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al registrar: ${incidentsProvider.operationError ?? "Desconocido"}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

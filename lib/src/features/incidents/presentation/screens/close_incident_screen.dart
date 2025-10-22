@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import '../providers/incidents_provider.dart';
 
 /// Screen 22: Cerrar Incidencia (Modal)
 /// 
@@ -318,26 +320,44 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
     }
   }
 
-  void _closeIncident() {
+  void _closeIncident() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    // TODO: Implementar con Provider
     final note = _noteController.text.trim();
-  debugPrint('Cerrando incidencia ${widget.incidentId}');
-  debugPrint('Nota: $note');
-  debugPrint('Fotos: ${_selectedImages.length}');
-
-    // Mostrar confirmación
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Incidencia cerrada correctamente'),
-        backgroundColor: Colors.green,
-      ),
+    
+    // Mostrar loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
 
-    // Retornar a la pantalla anterior
-    Navigator.of(context).pop(true);
+    // Llamar al provider
+    final incidentsProvider = context.read<IncidentsProvider>();
+    final success = await incidentsProvider.closeIncident(widget.incidentId, note);
+
+    if (!mounted) return;
+    
+    // Cerrar diálogo de loading
+    Navigator.of(context).pop();
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Incidencia cerrada correctamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop(true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al cerrar: ${incidentsProvider.operationError ?? "Desconocido"}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

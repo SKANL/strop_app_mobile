@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/incidents_provider.dart';
 
 /// Screen 21: Asignar Tarea (Modal)
 /// 
@@ -294,24 +296,47 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
     return '?';
   }
 
-  void _assignTask() {
+  void _assignTask() async {
     if (_selectedUserId == null) return;
 
-    // TODO: Implementar con Provider
     final selectedUser = _availableUsers.firstWhere(
       (u) => u['id'] == _selectedUserId,
     );
-  debugPrint('Asignando incidencia ${widget.incidentId} a ${selectedUser['name']}');
-
-    // Mostrar confirmación
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Tarea asignada a ${selectedUser['name']}'),
-        backgroundColor: Colors.green,
-      ),
+    
+    // Mostrar loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
 
-    // Retornar a la pantalla anterior
-    Navigator.of(context).pop(true);
+    // Llamar al provider
+    final incidentsProvider = context.read<IncidentsProvider>();
+    final success = await incidentsProvider.assignIncident(
+      widget.incidentId,
+      _selectedUserId!,
+    );
+
+    if (!mounted) return;
+    
+    // Cerrar diálogo de loading
+    Navigator.of(context).pop();
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Tarea asignada a ${selectedUser['name']}'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop(true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al asignar: ${incidentsProvider.operationError ?? "Desconocido"}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

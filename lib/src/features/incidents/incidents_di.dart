@@ -106,9 +106,15 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final projectId = state.pathParameters['projectId']!;
       final type = state.uri.queryParameters['type'] ?? 'avance';
-      return CreateIncidentFormScreen(
-        projectId: projectId,
-        type: type,
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
+          ChangeNotifierProvider.value(value: getIt<IncidentsProvider>()),
+        ],
+        child: CreateIncidentFormScreen(
+          projectId: projectId,
+          type: type,
+        ),
       );
     },
   ),
@@ -118,7 +124,13 @@ final incidentRoutes = <GoRoute>[
     path: '/project/:projectId/create-material-request',
     builder: (context, state) {
       final projectId = state.pathParameters['projectId']!;
-      return CreateMaterialRequestFormScreen(projectId: projectId);
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
+          ChangeNotifierProvider.value(value: getIt<IncidentsProvider>()),
+        ],
+        child: CreateMaterialRequestFormScreen(projectId: projectId),
+      );
     },
   ),
 
@@ -127,7 +139,10 @@ final incidentRoutes = <GoRoute>[
     path: '/incident/:id',
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
-      return IncidentDetailScreen(incidentId: incidentId);
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentsProvider>(),
+        child: IncidentDetailScreen(incidentId: incidentId),
+      );
     },
   ),
 
@@ -136,7 +151,10 @@ final incidentRoutes = <GoRoute>[
     path: '/incident/:id/correction',
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
-      return CreateCorrectionScreen(incidentId: incidentId);
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentsProvider>(),
+        child: CreateCorrectionScreen(incidentId: incidentId),
+      );
     },
   ),
 
@@ -146,9 +164,12 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
       final projectId = state.uri.queryParameters['projectId'] ?? '';
-      return AssignUserScreen(
-        incidentId: incidentId,
-        projectId: projectId,
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentsProvider>(),
+        child: AssignUserScreen(
+          incidentId: incidentId,
+          projectId: projectId,
+        ),
       );
     },
   ),
@@ -158,7 +179,10 @@ final incidentRoutes = <GoRoute>[
     path: '/incident/:id/close',
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
-      return CloseIncidentScreen(incidentId: incidentId);
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentsProvider>(),
+        child: CloseIncidentScreen(incidentId: incidentId),
+      );
     },
   ),
 ];

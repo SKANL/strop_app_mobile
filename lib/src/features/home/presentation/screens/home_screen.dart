@@ -140,20 +140,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icon(
                     Icons.folder_open_outlined,
                     size: 64,
-                    color: Colors.grey[400],
+                    color: AppColors.borderColor,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'Aún no tienes proyectos asignados',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
+                          color: AppColors.iconColor,
                         ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Los proyectos asignados aparecerán aquí',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[500],
+                          color: AppColors.disabledColor,
                         ),
                   ),
                 ],

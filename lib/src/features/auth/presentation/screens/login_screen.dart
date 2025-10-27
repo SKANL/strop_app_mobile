@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../widgets/login_form.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Pantalla de Login - Solo para móvil
 class LoginScreen extends StatelessWidget {
@@ -29,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                 Text(
                   'Gestión de Incidencias en Obra',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Colors.grey[600],
+                        color: AppColors.iconColor,
                       ),
                   textAlign: TextAlign.center,
                 ),

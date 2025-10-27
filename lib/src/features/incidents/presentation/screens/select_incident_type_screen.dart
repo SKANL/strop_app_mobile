@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 16: Selector de Tipo de Reporte con lógica de rol
+/// 
+/// Refactorizado para usar ActionTypeCard del core_ui y AppColors.
 class SelectIncidentTypeScreen extends StatelessWidget {
   final String projectId;
 
@@ -47,18 +50,17 @@ class SelectIncidentTypeScreen extends StatelessWidget {
               Text(
                 'Selecciona el tipo de reporte que deseas crear',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
+                      color: AppColors.iconColor,
                     ),
                 textAlign: TextAlign.center,
               ),
               
               const SizedBox(height: 32),
               
-              // Grid de opciones
-              _buildIncidentTypeCard(
-                context,
+              // Grid de opciones (usando ActionTypeCard)
+              ActionTypeCard(
                 icon: Icons.trending_up,
-                iconColor: Colors.blue,
+                iconColor: AppColors.progressReportColor,
                 title: 'Reporte de Avance',
                 description: 'Documenta el progreso de una actividad',
                 onTap: () {
@@ -68,10 +70,9 @@ class SelectIncidentTypeScreen extends StatelessWidget {
               
               const SizedBox(height: 16),
               
-              _buildIncidentTypeCard(
-                context,
+              ActionTypeCard(
                 icon: Icons.error_outline,
-                iconColor: Colors.orange,
+                iconColor: AppColors.problemColor,
                 title: 'Problema / Falla',
                 description: 'Reporta un problema técnico o falla',
                 onTap: () {
@@ -81,10 +82,9 @@ class SelectIncidentTypeScreen extends StatelessWidget {
               
               const SizedBox(height: 16),
               
-              _buildIncidentTypeCard(
-                context,
+              ActionTypeCard(
                 icon: Icons.help_outline,
-                iconColor: Colors.purple,
+                iconColor: AppColors.consultationColor,
                 title: 'Consulta',
                 description: 'Realiza una pregunta sobre especificaciones',
                 onTap: () {
@@ -94,10 +94,9 @@ class SelectIncidentTypeScreen extends StatelessWidget {
               
               const SizedBox(height: 16),
               
-              _buildIncidentTypeCard(
-                context,
+              ActionTypeCard(
                 icon: Icons.shield_outlined,
-                iconColor: Colors.red,
+                iconColor: AppColors.safetyIncidentColor,
                 title: 'Incidente de Seguridad',
                 description: 'Reporta un riesgo o incidente de seguridad',
                 onTap: () {
@@ -112,7 +111,7 @@ class SelectIncidentTypeScreen extends StatelessWidget {
                 // Separador
                 Row(
                   children: [
-                    Expanded(child: Divider(color: Colors.grey[300])),
+                    Expanded(child: Divider(color: AppColors.borderColor)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
@@ -120,126 +119,30 @@ class SelectIncidentTypeScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
+                          color: AppColors.iconColor,
                         ),
                       ),
                     ),
-                    Expanded(child: Divider(color: Colors.grey[300])),
+                    Expanded(child: Divider(color: AppColors.borderColor)),
                   ],
                 ),
                 
                 const SizedBox(height: 24),
                 
-                _buildIncidentTypeCard(
-                  context,
+                ActionTypeCard(
                   icon: Icons.inventory_2_outlined,
-                  iconColor: Colors.teal,
+                  iconColor: AppColors.materialRequestColor,
                   title: 'Solicitud de Material',
-                  description: 'Solicita materiales adicionales (requiere aprobación del Dueño)',
+                  description: 'Solicita materiales adicionales',
+                  showRequiresApproval: true,
                   onTap: () {
                     context.push('/project/$projectId/create-material-request');
                   },
-                  badge: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.amber[100],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.amber[700]!),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.admin_panel_settings, size: 14, color: Colors.amber[900]),
-                        const SizedBox(width: 4),
-                        Text(
-                          'Requiere aprobación',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber[900],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildIncidentTypeCard(
-    BuildContext context, {
-    required IconData icon,
-    required Color iconColor,
-    required String title,
-    required String description,
-    required VoidCallback onTap,
-    Widget? badge,
-  }) {
-    return Card(
-      elevation: 2,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // Icono
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: iconColor.withValues(alpha: 0.15),
-                    child: Icon(icon, color: iconColor, size: 28),
-                  ),
-                  
-                  const SizedBox(width: 16),
-                  
-                  // Título
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                  
-                  // Flecha
-                  Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey[400]),
-                ],
-              ),
-              
-              const SizedBox(height: 12),
-              
-              // Descripción
-              Padding(
-                padding: const EdgeInsets.only(left: 72),
-                child: Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                ),
-              ),
-              
-              // Badge opcional
-              if (badge != null) ...[
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.only(left: 72),
-                  child: badge,
-                ),
-              ],
-            ],
-          ),
-        ),
       ),
     );
   }

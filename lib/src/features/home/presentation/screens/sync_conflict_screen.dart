@@ -1,6 +1,7 @@
 // lib/src/features/home/presentation/screens/sync_conflict_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Pantalla Modal de Explicación de Conflicto de Sincronización (Fase 1)
 class SyncConflictScreen extends StatelessWidget {
@@ -21,11 +22,11 @@ class SyncConflictScreen extends StatelessWidget {
               // Ícono de error
               CircleAvatar(
                 radius: 40,
-                backgroundColor: Colors.red[100],
+                backgroundColor: AppColors.lighten(AppColors.error, 0.85),
                 child: Icon(
                   Icons.sync_problem,
                   size: 48,
-                  color: Colors.red[800],
+                  color: AppColors.darken(AppColors.error, 0.3),
                 ),
               ),
               
@@ -55,7 +56,7 @@ class SyncConflictScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -101,19 +102,19 @@ class SyncConflictScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.orange[50],
+                  color: AppColors.lighten(AppColors.pendingStatusColor, 0.9),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.orange[200]!),
+                  border: Border.all(color: AppColors.lighten(AppColors.pendingStatusColor, 0.7)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: Colors.orange[800]),
+                    Icon(Icons.info_outline, color: AppColors.darken(AppColors.pendingStatusColor, 0.3)),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Debes descartar este cambio local. Los datos del servidor prevalecen.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.orange[900],
+                              color: AppColors.darken(AppColors.pendingStatusColor, 0.4),
                             ),
                       ),
                     ),
@@ -145,7 +146,7 @@ class SyncConflictScreen extends StatelessWidget {
                         context.pop();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[600],
+                        backgroundColor: AppColors.error,
                         foregroundColor: Colors.white,
                       ),
                       child: const Text('Descartar mi Cambio'),
@@ -168,12 +169,12 @@ class SyncConflictScreen extends StatelessWidget {
   }) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: Colors.grey[600]),
+        Icon(icon, size: 20, color: AppColors.iconColor),
         const SizedBox(width: 8),
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.grey[600],
+                color: AppColors.iconColor,
               ),
         ),
         const SizedBox(width: 4),

@@ -1,6 +1,7 @@
 // lib/src/features/home/presentation/screens/notifications_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -57,13 +58,13 @@ class NotificationsScreen extends StatelessWidget {
             Icon(
               Icons.notifications_none,
               size: 64,
-              color: Colors.grey[400],
+              color: AppColors.borderColor,
             ),
             const SizedBox(height: 16),
             Text(
               'No tienes notificaciones',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.grey[600],
+                    color: AppColors.iconColor,
                   ),
             ),
           ],
@@ -135,12 +136,12 @@ class _NotificationTile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: notification.isRead
-            ? Colors.grey[300]
+            ? AppColors.borderColor
       : Theme.of(context).colorScheme.primary.withAlpha((0.2 * 255).round()),
         child: Icon(
           _getIconForType(notification.type),
           color: notification.isRead
-              ? Colors.grey[600]
+              ? AppColors.iconColor
               : Theme.of(context).colorScheme.primary,
         ),
       ),
@@ -190,7 +191,7 @@ class _NotificationTile extends StatelessWidget {
             _formatTimestamp(notification.timestamp),
             style: TextStyle(
               fontSize: 11,
-              color: Colors.grey[600],
+              color: AppColors.iconColor,
             ),
           ),
         ],

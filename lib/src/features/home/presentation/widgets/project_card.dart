@@ -1,6 +1,7 @@
 // lib/src/features/home/presentation/widgets/project_card.dart
 import 'package:flutter/material.dart';
 import '../../../../core/core_domain/entities/project_entity.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para mostrar un proyecto en formato de tarjeta
 class ProjectCard extends StatelessWidget {
@@ -54,14 +55,14 @@ class ProjectCard extends StatelessWidget {
                     Icon(
                       Icons.location_on_outlined,
                       size: 16,
-                      color: Colors.grey[600],
+                      color: AppColors.iconColor,
                     ),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         project.address!,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
+                              color: AppColors.iconColor,
                             ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -78,13 +79,13 @@ class ProjectCard extends StatelessWidget {
                   Icon(
                     Icons.calendar_today_outlined,
                     size: 16,
-                    color: Colors.grey[600],
+                    color: AppColors.iconColor,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     _formatDateRange(),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
+                          color: AppColors.iconColor,
                         ),
                   ),
                 ],
@@ -97,13 +98,13 @@ class ProjectCard extends StatelessWidget {
                     Icon(
                       Icons.archive_outlined,
                       size: 16,
-                      color: Colors.grey[600],
+                      color: AppColors.iconColor,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       'Proyecto archivado',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
+                            color: AppColors.iconColor,
                             fontStyle: FontStyle.italic,
                           ),
                     ),
@@ -124,27 +125,27 @@ class ProjectCard extends StatelessWidget {
 
     switch (project.status) {
       case ProjectStatus.planning:
-        color = Colors.blue;
+        color = AppColors.progressReportColor;
         label = 'Planificación';
         icon = Icons.edit_calendar;
         break;
       case ProjectStatus.active:
-        color = Colors.green;
+        color = AppColors.closedStatusColor;
         label = 'Activo';
         icon = Icons.play_circle_outline;
         break;
       case ProjectStatus.paused:
-        color = Colors.orange;
+        color = AppColors.pendingStatusColor;
         label = 'Pausado';
         icon = Icons.pause_circle_outline;
         break;
       case ProjectStatus.completed:
-        color = Colors.grey;
+        color = AppColors.inactiveStatusColor;
         label = 'Completado';
         icon = Icons.check_circle_outline;
         break;
       case ProjectStatus.cancelled:
-        color = Colors.red;
+        color = AppColors.error;
         label = 'Cancelado';
         icon = Icons.cancel_outlined;
         break;

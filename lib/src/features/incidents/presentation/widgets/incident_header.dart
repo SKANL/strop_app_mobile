@@ -1,8 +1,7 @@
 // lib/src/features/incidents/presentation/widgets/incident_header.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/core_ui/widgets/status_badge.dart';
-import '../../../../core/core_ui/widgets/info_row.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para el header de una incidencia
 /// Muestra la información principal inalterable
@@ -57,7 +56,7 @@ class IncidentHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: AppColors.lighten(AppColors.iconColor, 0.95),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
@@ -85,28 +84,9 @@ class IncidentHeader extends StatelessWidget {
         // Badge de crítica si aplica
         if (isCritical) ...[
           const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.red.shade50,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.red, width: 2),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.warning, color: Colors.red),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '¡INCIDENCIA CRÍTICA! Requiere atención inmediata.',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          CriticalBanner(
+            message: '¡INCIDENCIA CRÍTICA! Requiere atención inmediata.',
+            type: CriticalBannerType.error,
           ),
         ],
       ],

@@ -1,11 +1,13 @@
 // lib/src/features/incidents/presentation/widgets/incident_list_item.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para mostrar un item de incidencia en listas
 class IncidentListItem extends StatelessWidget {
   final String title;
-  final String type;
+  final IncidentType type;
   final String? author;
   final String? assignedTo;
   final DateTime reportedDate;
@@ -40,13 +42,10 @@ class IncidentListItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Fila superior: Tipo y Estado
+              // Fila superior: Título y Estado
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Icono de tipo
-                  _buildTypeIcon(context),
-                  const SizedBox(width: 12),
-                  
                   // Título
                   Expanded(
                     child: Column(
@@ -55,14 +54,14 @@ class IncidentListItem extends StatelessWidget {
                         if (isCritical == true)
                           Row(
                             children: [
-                              Icon(Icons.warning, size: 16, color: Colors.red[700]),
+                              Icon(Icons.warning, size: 16, color: AppColors.criticalStatusColor),
                               const SizedBox(width: 4),
                               Text(
                                 'CRÍTICA',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.red[700],
+                                  color: AppColors.criticalStatusColor,
                                 ),
                               ),
                             ],
@@ -88,46 +87,52 @@ class IncidentListItem extends StatelessWidget {
               
               const SizedBox(height: 12),
               
-              // Información adicional
+              // Tipo y fecha
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 14, color: Colors.grey[600]),
+                  TypeChip(type: type),
+                  const SizedBox(width: 12),
+                  Icon(Icons.calendar_today, size: 14, color: AppColors.iconColor),
                   const SizedBox(width: 4),
                   Text(
                     DateFormat('dd/MM/yyyy').format(reportedDate),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
+                          color: AppColors.iconColor,
                         ),
                   ),
-                  
-                  if (author != null) ...[
-                    const SizedBox(width: 16),
-                    Icon(Icons.person, size: 14, color: Colors.grey[600]),
+                ],
+              ),
+              
+              if (author != null) ...[
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(Icons.person, size: 14, color: AppColors.iconColor),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         'De: $author',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey[600],
+                              color: AppColors.iconColor,
                             ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
-                ],
-              ),
+                ),
+              ],
               
               if (assignedTo != null) ...[
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Icon(Icons.assignment_ind, size: 14, color: Colors.grey[600]),
+                    Icon(Icons.assignment_ind, size: 14, color: AppColors.iconColor),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         'Asignada a: $assignedTo',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey[600],
+                              color: AppColors.iconColor,
                             ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -142,43 +147,6 @@ class IncidentListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTypeIcon(BuildContext context) {
-    IconData icon;
-    Color color;
-
-    switch (type.toLowerCase()) {
-      case 'avance':
-        icon = Icons.trending_up;
-        color = Colors.blue;
-        break;
-      case 'problema':
-        icon = Icons.error_outline;
-        color = Colors.orange;
-        break;
-      case 'consulta':
-        icon = Icons.help_outline;
-        color = Colors.purple;
-        break;
-      case 'seguridad':
-        icon = Icons.shield_outlined;
-        color = Colors.red;
-        break;
-      case 'material':
-        icon = Icons.inventory_2_outlined;
-        color = Colors.teal;
-        break;
-      default:
-        icon = Icons.description;
-        color = Colors.grey;
-    }
-
-    return CircleAvatar(
-      radius: 20,
-      backgroundColor: color.withValues(alpha: 0.1),
-      child: Icon(icon, color: color, size: 20),
-    );
-  }
-
   Widget _buildStatusChip(BuildContext context, bool isClosed, bool isPending) {
     String label;
     Color color;
@@ -186,15 +154,15 @@ class IncidentListItem extends StatelessWidget {
 
     if (isClosed) {
       label = 'Cerrada';
-      color = Colors.green;
+      color = AppColors.closedStatusColor;
       icon = Icons.check_circle;
     } else if (isPending) {
       label = 'Pendiente';
-      color = Colors.orange;
+      color = AppColors.pendingStatusColor;
       icon = Icons.pending;
     } else {
       label = 'Abierta';
-      color = Colors.blue;
+      color = AppColors.openStatusColor;
       icon = Icons.circle;
     }
 

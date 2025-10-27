@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
 import 'di.dart';
+import 'package:flutter/services.dart';
 
 /// Punto de entrada de la aplicación Strop
 ///
@@ -12,6 +13,8 @@ import 'di.dart';
 void main() async {
   // Asegurar que los bindings de Flutter estén inicializados
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
   // Configurar todas las dependencias de la aplicación
   await setupDependencies();

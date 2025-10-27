@@ -10,8 +10,10 @@ import '../../core/core_domain/repositories/incident_repository.dart';
 import 'data/datasources/incidents_fake_datasource.dart';
 import 'data/repositories_impl/incidents_repository_impl.dart';
 
-// Presentation layer
-import 'presentation/providers/incidents_provider.dart';
+// Presentation layer - New split providers
+import 'presentation/providers/incidents_list_provider.dart';
+import 'presentation/providers/incident_detail_provider.dart';
+import 'presentation/providers/incident_form_provider.dart';
 
 // AuthProvider (cross-module)
 import '../auth/presentation/manager/auth_provider.dart';
@@ -40,9 +42,17 @@ void setupIncidentsModule() {
     () => IncidentsRepositoryImpl(fakeDataSource: getIt()),
   );
   
-  // Provider - Estado de incidencias
-  getIt.registerLazySingleton(
-    () => IncidentsProvider(repository: getIt()),
+  // Providers - 3 especializados siguiendo SRP
+  getIt.registerFactory(
+    () => IncidentsListProvider(repository: getIt()),
+  );
+  
+  getIt.registerFactory(
+    () => IncidentDetailProvider(repository: getIt()),
+  );
+  
+  getIt.registerFactory(
+    () => IncidentFormProvider(repository: getIt()),
   );
   
   // Registrar rutas
@@ -61,7 +71,7 @@ final incidentRoutes = <GoRoute>[
       final projectId = state.pathParameters['projectId']!;
       final isArchived = state.uri.queryParameters['archived'] == 'true';
       return ChangeNotifierProvider.value(
-        value: getIt<IncidentsProvider>(),
+        value: getIt<IncidentsListProvider>(),
         child: ProjectTabsScreen(
           projectId: projectId,
           isArchived: isArchived,
@@ -109,7 +119,7 @@ final incidentRoutes = <GoRoute>[
       return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
-          ChangeNotifierProvider.value(value: getIt<IncidentsProvider>()),
+          ChangeNotifierProvider.value(value: getIt<IncidentFormProvider>()),
         ],
         child: CreateIncidentFormScreen(
           projectId: projectId,
@@ -127,7 +137,7 @@ final incidentRoutes = <GoRoute>[
       return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
-          ChangeNotifierProvider.value(value: getIt<IncidentsProvider>()),
+          ChangeNotifierProvider.value(value: getIt<IncidentFormProvider>()),
         ],
         child: CreateMaterialRequestFormScreen(projectId: projectId),
       );
@@ -140,7 +150,7 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
       return ChangeNotifierProvider.value(
-        value: getIt<IncidentsProvider>(),
+        value: getIt<IncidentDetailProvider>(),
         child: IncidentDetailScreen(incidentId: incidentId),
       );
     },
@@ -152,7 +162,7 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
       return ChangeNotifierProvider.value(
-        value: getIt<IncidentsProvider>(),
+        value: getIt<IncidentDetailProvider>(),
         child: CreateCorrectionScreen(incidentId: incidentId),
       );
     },
@@ -165,7 +175,7 @@ final incidentRoutes = <GoRoute>[
       final incidentId = state.pathParameters['id']!;
       final projectId = state.uri.queryParameters['projectId'] ?? '';
       return ChangeNotifierProvider.value(
-        value: getIt<IncidentsProvider>(),
+        value: getIt<IncidentFormProvider>(),
         child: AssignUserScreen(
           incidentId: incidentId,
           projectId: projectId,
@@ -180,7 +190,7 @@ final incidentRoutes = <GoRoute>[
     builder: (context, state) {
       final incidentId = state.pathParameters['id']!;
       return ChangeNotifierProvider.value(
-        value: getIt<IncidentsProvider>(),
+        value: getIt<IncidentFormProvider>(),
         child: CloseIncidentScreen(incidentId: incidentId),
       );
     },

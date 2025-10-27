@@ -1,6 +1,6 @@
 // lib/src/features/incidents/presentation/screens/project_team_screen.dart
 import 'package:flutter/material.dart';
-import '../widgets/team_member_card.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 14: Equipo del Proyecto - Ver jerarquía de personal asignado
 class ProjectTeamScreen extends StatelessWidget {
@@ -23,7 +23,7 @@ class ProjectTeamScreen extends StatelessWidget {
           // TODO: Obtener datos reales del Provider
           RoleSection(
             roleTitle: 'Superintendente',
-            roleColor: Colors.purple,
+            roleColor: AppColors.superintendentColor,
             members: const [
               TeamMemberCard(name: 'Ing. López Ramírez', email: 'lopez@empresa.com', role: 'superintendent'),
             ],
@@ -33,7 +33,7 @@ class ProjectTeamScreen extends StatelessWidget {
 
           RoleSection(
             roleTitle: 'Residente',
-            roleColor: Colors.blue,
+            roleColor: AppColors.residentColor,
             members: const [
               TeamMemberCard(name: 'Arq. García Hernández', email: 'garcia@empresa.com', role: 'resident'),
               TeamMemberCard(name: 'Ing. Martínez Cruz', email: 'martinez@empresa.com', role: 'resident'),
@@ -44,7 +44,7 @@ class ProjectTeamScreen extends StatelessWidget {
 
           RoleSection(
             roleTitle: 'Cabo',
-            roleColor: Colors.orange,
+            roleColor: AppColors.caboColor,
             members: const [
               TeamMemberCard(name: 'Pedro Sánchez', email: 'psanchez@empresa.com', role: 'cabo'),
               TeamMemberCard(name: 'Juan Rodríguez', email: 'jrodriguez@empresa.com', role: 'cabo'),

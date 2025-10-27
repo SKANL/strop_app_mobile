@@ -1,6 +1,7 @@
 // lib/src/features/home/presentation/screens/archived_projects_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Pantalla de Proyectos Archivados (Fase 3)
 class ArchivedProjectsScreen extends StatelessWidget {
@@ -29,20 +30,20 @@ class ArchivedProjectsScreen extends StatelessWidget {
           Icon(
             Icons.archive_outlined,
             size: 64,
-            color: Colors.grey[400],
+            color: AppColors.borderColor,
           ),
           const SizedBox(height: 16),
           Text(
             'No hay proyectos archivados',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: AppColors.iconColor,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
             'Los proyectos completados o cancelados\naparecerán aquí',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[500],
+                  color: AppColors.disabledColor,
                 ),
             textAlign: TextAlign.center,
           ),

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/core_ui/widgets/app_text_field.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 import '../manager/auth_provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -99,7 +99,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Text(
             'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: AppColors.iconColor,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -155,7 +155,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         Text(
           'Hemos enviado un enlace de recuperación a ${_emailController.text}. Por favor revisa tu bandeja de entrada.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
+                color: AppColors.iconColor,
               ),
           textAlign: TextAlign.center,
         ),

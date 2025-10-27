@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget para ingresar cantidad y mostrar unidad de medida
 class QuantityInputSection extends StatelessWidget {
@@ -28,16 +29,7 @@ class QuantityInputSection extends StatelessWidget {
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
             ],
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Ingresa la cantidad';
-              }
-              final number = double.tryParse(value);
-              if (number == null || number <= 0) {
-                return 'Cantidad inválida';
-              }
-              return null;
-            },
+            validator: FormValidators.positiveNumber('La cantidad'),
           ),
         ),
         const SizedBox(width: 12),

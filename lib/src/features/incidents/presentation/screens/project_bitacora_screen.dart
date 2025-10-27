@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/domain/entities/data_state.dart';
+import '../../../../core/core_domain/entities/data_state.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
 import '../providers/incidents_list_provider.dart';
 import '../widgets/incident_list_item.dart';

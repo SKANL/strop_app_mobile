@@ -1,7 +1,7 @@
 // lib/src/features/incidents/presentation/widgets/incident_header.dart
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
+import '../utils/date_time_formatter.dart';
 
 /// Widget reutilizable para el header de una incidencia
 /// Muestra la información principal inalterable
@@ -33,7 +33,7 @@ class IncidentHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Tipo de incidencia
-        StatusBadge.incidentType(type),
+        StatusBadge.incidentType(type: type),
         const SizedBox(height: 12),
 
         // Título
@@ -68,7 +68,7 @@ class IncidentHeader extends StatelessWidget {
               const SizedBox(height: 8),
               InfoRowCompact(
                 icon: Icons.calendar_today,
-                text: DateFormat('dd/MM/yyyy HH:mm').format(reportedDate),
+                text: DateTimeFormatter.formatDateTime(reportedDate),
               ),
               if (location != null) ...[
                 const SizedBox(height: 8),
@@ -84,9 +84,8 @@ class IncidentHeader extends StatelessWidget {
         // Badge de crítica si aplica
         if (isCritical) ...[
           const SizedBox(height: 12),
-          CriticalBanner(
+          ActionConfirmationBanner.warning(
             message: '¡INCIDENCIA CRÍTICA! Requiere atención inmediata.',
-            type: CriticalBannerType.error,
           ),
         ],
       ],

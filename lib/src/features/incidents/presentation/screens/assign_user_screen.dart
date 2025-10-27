@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/incident_form_provider.dart';
-import '../utils/ui_helpers.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
 import '../../../../core/core_domain/entities/user_entity.dart';
 
@@ -73,13 +72,15 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Asignar Tarea'),
-      ),
+    return StropScaffold(
+      title: 'Asignar Tarea',
       body: Column(
         children: [
-          _buildInfoBanner(),
+          InfoBanner(
+            message: 'Selecciona a quién asignar esta tarea',
+            icon: Icons.assignment_ind,
+            type: InfoBannerType.info,
+          ),
           Expanded(
             child: UserSelectorWidget(
               users: filteredUsers,
@@ -99,34 +100,6 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
             ),
           ),
           _buildActionButtons(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoBanner() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        border: Border(
-          bottom: BorderSide(color: Colors.blue.shade200),
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.assignment_ind, color: Colors.blue.shade700),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Selecciona a quién asignar esta tarea',
-              style: TextStyle(
-                color: Colors.blue.shade900,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -152,28 +125,30 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
       child: SafeArea(
         child: FormActionButtons(
           submitText: 'Asignar Tarea',
-          onSubmit: hasSelection ? () => _handleAssign(context, formProvider) : null,
+          onSubmit: hasSelection ? () => _handleAssign(formProvider) : null,
           isLoading: formProvider.isAssigning,
         ),
       ),
     );
   }
 
-  Future<void> _handleAssign(BuildContext context, IncidentFormProvider provider) async {
+  Future<void> _handleAssign(IncidentFormProvider provider) async {
     if (_selectedUserId == null) return;
-    
-    // Buscar nombre del usuario seleccionado
-    final selectedUser = _availableUsers.firstWhere(
-      (u) => u.id == _selectedUserId,
-    );
 
-    await UiHelpers.handleFormSubmit(
-      context: context,
-      loadingMessage: 'Asignando tarea...',
-      operation: () => provider.assignIncident(widget.incidentId, _selectedUserId!),
-      successMessage: 'Tarea asignada a ${selectedUser.name}',
-      errorMessage: 'Error al asignar: ${provider.assignError ?? "Desconocido"}',
-      onSuccess: () => Navigator.of(context).pop(true),
-    );
+    // Capturar datos antes del gap asíncrono
+    final selectedUser = _availableUsers.firstWhere((u) => u.id == _selectedUserId);
+
+    try {
+      await provider.assignIncident(widget.incidentId, _selectedUserId!);
+
+      if (!mounted) return;
+
+      // Usar context solo después de verificar mounted
+      context.showSuccessSnackBar('Tarea asignada a ${selectedUser.name}');
+      context.navigateBack(true);
+    } catch (e) {
+      if (!mounted) return;
+      context.showErrorSnackBar('Error al asignar: ${provider.assignError ?? "Desconocido"}');
+    }
   }
 }

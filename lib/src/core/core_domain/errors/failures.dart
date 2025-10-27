@@ -40,3 +40,8 @@ class PermissionFailure extends Failure {
 class NetworkFailure extends Failure {
   const NetworkFailure(super.message);
 }
+
+/// Falla inesperada/genérica
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure({required String message}) : super(message);
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Diálogo para cambiar la contraseña del usuario
 class ChangePasswordDialog extends StatefulWidget {
@@ -38,12 +39,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 prefixIcon: Icon(Icons.lock_outline),
               ),
               obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Ingrese su contraseña actual';
-                }
-                return null;
-              },
+              validator: FormValidators.required('La contraseña actual'),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -53,12 +49,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 prefixIcon: Icon(Icons.lock_outline),
               ),
               obscureText: true,
-              validator: (value) {
-                if (value == null || value.length < 6) {
-                  return 'Mínimo 6 caracteres';
-                }
-                return null;
-              },
+              validator: FormValidators.minLength(6),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -68,12 +59,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 prefixIcon: Icon(Icons.lock_outline),
               ),
               obscureText: true,
-              validator: (value) {
-                if (value != _newPasswordController.text) {
-                  return 'Las contraseñas no coinciden';
-                }
-                return null;
-              },
+              validator: FormValidators.matchPassword(_newPasswordController.text),
             ),
           ],
         ),

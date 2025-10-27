@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/theme/app_colors.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget para mostrar una actividad del programa del proyecto
 class ProjectActivityCard extends StatelessWidget {
@@ -32,11 +32,9 @@ class ProjectActivityCard extends StatelessWidget {
         statusColor = AppColors.inactiveStatusColor;
     }
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+    return AppCard(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Título y estado
@@ -110,7 +108,6 @@ class ProjectActivityCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }

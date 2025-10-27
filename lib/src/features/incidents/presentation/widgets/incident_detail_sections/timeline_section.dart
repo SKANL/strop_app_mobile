@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget del timeline de eventos para incident detail
 /// 
@@ -20,44 +21,40 @@ class IncidentTimelineEventsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.timeline, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  'Timeline de Eventos',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.timeline, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Timeline de Eventos',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            // Mock timeline items
-            _buildTimelineItem(
-              context,
-              icon: Icons.add_circle_outline,
-              title: 'Incidencia creada',
-              subtitle: 'Se creó la incidencia',
-              time: 'Hace 3 horas',
-            ),
-            const SizedBox(height: 8),
-            _buildTimelineItem(
-              context,
-              icon: Icons.person_add_outlined,
-              title: 'Tarea asignada',
-              subtitle: 'Se asignó a un usuario',
-              time: 'Hace 2 horas',
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Mock timeline items
+          _buildTimelineItem(
+            context,
+            icon: Icons.add_circle_outline,
+            title: 'Incidencia creada',
+            subtitle: 'Se creó la incidencia',
+            time: 'Hace 3 horas',
+          ),
+          const SizedBox(height: 8),
+          _buildTimelineItem(
+            context,
+            icon: Icons.person_add_outlined,
+            title: 'Tarea asignada',
+            subtitle: 'Se asignó a un usuario',
+            time: 'Hace 2 horas',
+          ),
+        ],
       ),
     );
   }

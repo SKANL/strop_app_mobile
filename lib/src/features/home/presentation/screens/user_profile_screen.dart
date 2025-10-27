@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
 import '../widgets/user_avatar_section.dart';
-import '../widgets/profile_info_row.dart';
 import '../widgets/change_password_dialog.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Pantalla de Perfil de Usuario (Fase 1)
 class UserProfileScreen extends StatelessWidget {
@@ -62,21 +62,21 @@ class UserProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         
-                        ProfileInfoRow(
+                        InfoRow(
                           icon: Icons.person_outline,
                           label: 'Nombre',
                           value: user?.name ?? 'No disponible',
                         ),
                         const Divider(),
                         
-                        ProfileInfoRow(
+                        InfoRow(
                           icon: Icons.email_outlined,
                           label: 'Correo Electrónico',
                           value: user?.email ?? 'No disponible',
                         ),
                         const Divider(),
                         
-                        ProfileInfoRow(
+                        InfoRow(
                           icon: Icons.badge_outlined,
                           label: 'Rol',
                           value: _getRoleLabel(user?.role),

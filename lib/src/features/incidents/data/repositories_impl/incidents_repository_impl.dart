@@ -22,7 +22,7 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   Future<List<IncidentEntity>> getIncidentsByProject(String projectId) async {
     try {
       final List<Map<String, dynamic>> incidentsData = 
-          await fakeDataSource.getProjectBitacora(projectId);
+          await fakeDataSource.getBitacora(projectId);
       
       return incidentsData
           .map((json) => IncidentModel.fromJson(json).toEntity())
@@ -74,7 +74,7 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   Future<IncidentEntity> getIncidentById(String incidentId) async {
     try {
       final Map<String, dynamic> incidentData = 
-          await fakeDataSource.getIncidentById(incidentId);
+          await fakeDataSource.getIncidentDetail(incidentId);
       
       return IncidentModel.fromJson(incidentData).toEntity();
     } catch (e) {
@@ -99,20 +99,21 @@ class IncidentsRepositoryImpl implements IncidentRepository {
         // si GetIt no tiene AuthProvider aún, usar valores por defecto
       }
       
-      final Map<String, dynamic> createdData = 
-          await fakeDataSource.createIncident(
-            projectId: incident.projectId,
-            type: _mapTypeToString(incident.type),
-            title: incident.title,
-            description: incident.description,
-            authorId: incident.createdBy,
-            authorName: userName,
-            authorRole: userRole,
-            isCritical: incident.isCritical,
-            gpsLocation: incident.gpsData?['location'] ?? '',
-            photos: incident.photoUrls,
-          );
+      final newId = await fakeDataSource.createIncident({
+        'projectId': incident.projectId,
+        'type': _mapTypeToString(incident.type),
+        'title': incident.title,
+        'description': incident.description,
+        'authorId': incident.createdBy,
+        'authorName': userName,
+        'authorRole': userRole,
+        'isCritical': incident.isCritical,
+        'gpsLocation': incident.gpsData?['location'] ?? '',
+        'photos': incident.photoUrls,
+      });
       
+      // Obtener la incidencia recién creada para devolverla completa
+      final createdData = await fakeDataSource.getIncidentDetail(newId);
       return IncidentModel.fromJson(createdData).toEntity();
     } catch (e) {
       throw Exception('Error al crear incidente: $e');
@@ -141,24 +142,7 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<IncidentEntity> closeIncident(String incidentId, String closeNote) async {
     try {
-      String userId = 'user-cabo-001';
-      String userName = 'Cabo López';
-      try {
-        final auth = getIt<AuthProvider>();
-        final user = auth.user;
-        if (user != null) {
-          userId = user.id;
-          userName = user.name;
-        }
-      } catch (_) {}
-      
-      await fakeDataSource.closeIncident(
-        incidentId, 
-        userId, 
-        userName, 
-        closeNote, 
-        [],
-      );
+      await fakeDataSource.closeIncident(incidentId, closeNote);
       
       // Retornar incidente actualizado
       return await getIncidentById(incidentId);
@@ -170,18 +154,16 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<void> addComment(String incidentId, String comment) async {
     try {
-      String userId = 'user-cabo-001';
       String userName = 'Cabo López';
       try {
         final auth = getIt<AuthProvider>();
         final user = auth.user;
         if (user != null) {
-          userId = user.id;
           userName = user.name;
         }
       } catch (_) {}
       
-      await fakeDataSource.addComment(incidentId, userId, userName, comment);
+      await fakeDataSource.addComment(incidentId, comment, userName);
     } catch (e) {
       throw Exception('Error al agregar comentario al incidente $incidentId: $e');
     }
@@ -190,18 +172,22 @@ class IncidentsRepositoryImpl implements IncidentRepository {
   @override
   Future<void> addCorrection(String incidentId, String correction) async {
     try {
-      String userId = 'user-cabo-001';
       String userName = 'Cabo López';
       try {
         final auth = getIt<AuthProvider>();
         final user = auth.user;
         if (user != null) {
-          userId = user.id;
           userName = user.name;
         }
       } catch (_) {}
 
-      await fakeDataSource.addCorrection(incidentId, userId, userName, correction);
+      // El datasource refactorizado usa addComment para ambos casos
+      // La diferencia se puede manejar con un prefijo en el mensaje
+      await fakeDataSource.addComment(
+        incidentId, 
+        '**ACLARACIÓN**: $correction', 
+        userName,
+      );
     } catch (e) {
       throw Exception('Error al agregar aclaración al incidente $incidentId: $e');
     }

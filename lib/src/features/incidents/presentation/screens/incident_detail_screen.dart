@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/domain/entities/data_state.dart';
+import '../../../../core/core_domain/entities/data_state.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
 import '../providers/incident_detail_provider.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';

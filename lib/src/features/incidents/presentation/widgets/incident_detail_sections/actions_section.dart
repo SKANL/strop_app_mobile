@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/core_domain/entities/incident_entity.dart';
 import '../../../../../core/core_domain/entities/user_entity.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
 
 /// Widget de botones de acción para incident detail
@@ -34,27 +35,24 @@ class IncidentActionsSection extends StatelessWidget {
     
     if (actions.isEmpty) return const SizedBox.shrink();
     
-    return Card(
+    return AppCard(
       margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: actions.map((action) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: ElevatedButton.icon(
-                onPressed: () => _handleAction(context, action, incident.id),
-                icon: Icon(action.icon),
-                label: Text(action.label),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: action.color,
-                  foregroundColor: Colors.white,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: actions.map((action) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ElevatedButton.icon(
+              onPressed: () => _handleAction(context, action, incident.id),
+              icon: Icon(action.icon),
+              label: Text(action.label),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: action.color,
+                foregroundColor: Colors.white,
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

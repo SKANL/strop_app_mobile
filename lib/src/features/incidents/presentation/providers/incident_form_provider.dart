@@ -1,8 +1,8 @@
 // lib/src/features/incidents/presentation/providers/incident_form_provider.dart
 import 'package:flutter/foundation.dart';
-import '../../../../../core/domain/entities/data_state.dart';
-import '../../../../../core/domain/failures/failure.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../core/core_domain/entities/data_state.dart';
+import '../../../../core/core_domain/errors/failures.dart';
 import '../../../../core/core_domain/repositories/incident_repository.dart';
 
 /// Provider especializado para FORMULARIOS de incidencias
@@ -66,7 +66,7 @@ class IncidentFormProvider extends ChangeNotifier {
     required void Function(DataState<T>) setState,
   }) {
     if (!isValid) {
-      setState(DataState.error(ValidationFailure(message: errorMessage)));
+      setState(DataState.error(ValidationFailure(errorMessage)));
       notifyListeners();
       return false;
     }

@@ -12,7 +12,12 @@ import 'data/repositories_impl/incidents_repository_impl.dart';
 
 // Presentation layer - New split providers
 import 'presentation/providers/incidents_list_provider.dart';
+import 'presentation/providers/my_tasks_provider.dart';
+import 'presentation/providers/my_reports_provider.dart';
+import 'presentation/providers/bitacora_provider.dart';
 import 'presentation/providers/incident_detail_provider.dart';
+import 'presentation/providers/incident_comments_provider.dart';
+import 'presentation/providers/incident_actions_provider.dart';
 import 'presentation/providers/incident_form_provider.dart';
 
 // AuthProvider (cross-module)
@@ -42,15 +47,38 @@ void setupIncidentsModule() {
     () => IncidentsRepositoryImpl(fakeDataSource: getIt()),
   );
   
-  // Providers - 3 especializados siguiendo SRP
+  // Providers - DEPRECATED (mantener por compatibilidad)
   getIt.registerFactory(
     () => IncidentsListProvider(repository: getIt()),
   );
   
+  // Providers - Especializados por tipo de incidencia (SRP)
+  getIt.registerFactory(
+    () => MyTasksProvider(repository: getIt()),
+  );
+  
+  getIt.registerFactory(
+    () => MyReportsProvider(repository: getIt()),
+  );
+  
+  getIt.registerFactory(
+    () => BitacoraProvider(repository: getIt()),
+  );
+  
+  // Providers - Para detalle de incidencia (SRP segregado)
   getIt.registerFactory(
     () => IncidentDetailProvider(repository: getIt()),
   );
   
+  getIt.registerFactory(
+    () => IncidentCommentsProvider(repository: getIt()),
+  );
+  
+  getIt.registerFactory(
+    () => IncidentActionsProvider(repository: getIt()),
+  );
+  
+  // Provider - Para formularios
   getIt.registerFactory(
     () => IncidentFormProvider(repository: getIt()),
   );

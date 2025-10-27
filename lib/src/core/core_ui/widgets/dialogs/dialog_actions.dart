@@ -72,7 +72,7 @@ class DialogActions extends StatelessWidget {
     this.confirmText = 'Confirmar',
     this.isLoading = false,
     this.showCancelButton = true,
-    this.confirmButtonType = _ConfirmButtonType.primary,
+  this.confirmButtonType = ConfirmButtonType.primary,
   });
 
   final VoidCallback? onCancel;
@@ -81,7 +81,7 @@ class DialogActions extends StatelessWidget {
   final String confirmText;
   final bool isLoading;
   final bool showCancelButton;
-  final _ConfirmButtonType confirmButtonType;
+  final ConfirmButtonType confirmButtonType;
 
   /// Constructor para diálogos con acción de peligro (botón rojo).
   const DialogActions.danger({
@@ -92,7 +92,7 @@ class DialogActions extends StatelessWidget {
     this.confirmText = 'Eliminar',
     this.isLoading = false,
     this.showCancelButton = true,
-  }) : confirmButtonType = _ConfirmButtonType.danger;
+  }) : confirmButtonType = ConfirmButtonType.danger;
 
   /// Constructor para diálogos de éxito (botón verde).
   const DialogActions.success({
@@ -103,7 +103,7 @@ class DialogActions extends StatelessWidget {
     this.confirmText = 'Aceptar',
     this.isLoading = false,
     this.showCancelButton = true,
-  }) : confirmButtonType = _ConfirmButtonType.success;
+  }) : confirmButtonType = ConfirmButtonType.success;
 
   @override
   Widget build(BuildContext context) {
@@ -136,19 +136,19 @@ class DialogActions extends StatelessWidget {
 
   Widget _buildConfirmButton() {
     switch (confirmButtonType) {
-      case _ConfirmButtonType.primary:
+      case ConfirmButtonType.primary:
         return AppButton.primary(
           text: confirmText,
           isLoading: isLoading,
           onPressed: onConfirm,
         );
-      case _ConfirmButtonType.danger:
+      case ConfirmButtonType.danger:
         return AppButton.danger(
           text: confirmText,
           isLoading: isLoading,
           onPressed: onConfirm,
         );
-      case _ConfirmButtonType.success:
+      case ConfirmButtonType.success:
         return AppButton.success(
           text: confirmText,
           isLoading: isLoading,
@@ -157,8 +157,8 @@ class DialogActions extends StatelessWidget {
     }
   }
 }
-
-enum _ConfirmButtonType {
+/// Tipos de botón de confirmación usados por `DialogActions`.
+enum ConfirmButtonType {
   primary,
   danger,
   success,

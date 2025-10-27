@@ -15,426 +15,269 @@
 /// 3. Actualizar IncidentsRepositoryImpl
 library;
 
+import 'package:mobile_strop_app/src/core/core_testing/fake_data_factory.dart';
 
 class IncidentsFakeDataSource {
-  /// Base de datos fake de incidencias
-  final List<Map<String, dynamic>> _fakeIncidents = [
-    {
-      'id': '1',
-      'projectId': '1',
-      'type': 'avance',
-      'title': 'Avance en cimentación sector A',
-      'description': 'Se completó el 80% de la cimentación en el sector A',
-      'authorId': '3',
-      'authorName': 'Residente González',
-      'authorRole': 'resident',
-      'assignedToId': null,
-      'assignedToName': null,
-      'status': 'cerrada', // abierta, pendiente, cerrada
-      'isCritical': false,
-      'createdAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
-      'closedAt': DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
-      'gpsLocation': '19.4326, -99.1332',
-      'photos': [
-        'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=Avance+1',
-        'https://via.placeholder.com/300x200/2196F3/FFFFFF?text=Avance+2',
-      ],
-      'approvalStatus': null,
-    },
-    {
-      'id': '2',
-      'projectId': '1',
-      'type': 'problema',
-      'title': 'Fuga de agua en tubería principal',
-      'description': 'Se detectó fuga considerable en tubería del piso 3. Requiere atención inmediata.',
-      'authorId': '4',
-      'authorName': 'Cabo López',
-      'authorRole': 'cabo',
-      'assignedToId': '4',
-      'assignedToName': 'Cabo López',
-      'status': 'abierta',
-      'isCritical': true,
-      'createdAt': DateTime.now().subtract(const Duration(hours: 3)).toIso8601String(),
-      'closedAt': null,
-      'gpsLocation': '19.4326, -99.1332',
-      'photos': [
-        'https://via.placeholder.com/300x200/FF9800/FFFFFF?text=Fuga+1',
-      ],
-      'approvalStatus': null,
-    },
-    {
-      'id': '3',
-      'projectId': '1',
-      'type': 'consulta',
-      'title': 'Duda sobre especificaciones eléctricas',
-      'description': 'Revisar planos de instalación eléctrica piso 5',
-      'authorId': '4',
-      'authorName': 'Cabo López',
-      'authorRole': 'cabo',
-      'assignedToId': '3',
-      'assignedToName': 'Residente González',
-      'status': 'abierta',
-      'isCritical': false,
-      'createdAt': DateTime.now().subtract(const Duration(hours: 12)).toIso8601String(),
-      'closedAt': null,
-      'gpsLocation': '19.4326, -99.1332',
-      'photos': [],
-      'approvalStatus': null,
-    },
-    {
-      'id': '4',
-      'projectId': '1',
-      'type': 'seguridad',
-      'title': 'Falta equipo de protección',
-      'description': 'Trabajador sin casco de seguridad en zona de riesgo',
-      'authorId': '3',
-      'authorName': 'Residente González',
-      'authorRole': 'resident',
-      'assignedToId': '4',
-      'assignedToName': 'Cabo López',
-      'status': 'cerrada',
-      'isCritical': true,
-      'createdAt': DateTime.now().subtract(const Duration(days: 1, hours: 5)).toIso8601String(),
-      'closedAt': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
-      'gpsLocation': '19.4326, -99.1332',
-      'photos': [
-        'https://via.placeholder.com/300x200/F44336/FFFFFF?text=Seguridad',
-      ],
-      'approvalStatus': null,
-    },
-    {
-      'id': '5',
-      'projectId': '1',
-      'type': 'material',
-      'title': 'Solicitud de cemento Portland',
-      'description': 'Requiero 50 bultos adicionales para continuar obra',
-      'authorId': '3',
-      'authorName': 'Residente González',
-      'authorRole': 'resident',
-      'assignedToId': null,
-      'assignedToName': null,
-      'status': 'pendiente',
-      'isCritical': false,
-      'createdAt': DateTime.now().subtract(const Duration(hours: 8)).toIso8601String(),
-      'closedAt': null,
-      'gpsLocation': '19.4326, -99.1332',
-      'photos': [],
-      'approvalStatus': 'pendiente', // pendiente, aprobada, rechazada
-      'materialDetails': {
-        'material': 'Cemento Portland',
-        'quantity': 50.0,
-        'unit': 'bultos',
-        'justification': 'Consumo mayor al previsto debido a correcciones en cimentación',
-        'isUrgent': false,
-      },
-    },
-    {
-      'id': '6',
-      'projectId': '2',
-      'type': 'avance',
-      'title': 'Terminado acabados sala principal',
-      'description': 'Se completaron acabados de pintura y pisos',
-      'authorId': '4',
-      'authorName': 'Cabo López',
-      'authorRole': 'cabo',
-      'assignedToId': null,
-      'assignedToName': null,
-      'status': 'cerrada',
-      'isCritical': false,
-      'createdAt': DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
-      'closedAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
-      'gpsLocation': '19.3969, -99.2310',
-      'photos': [
-        'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Acabado+Final',
-      ],
-      'approvalStatus': null,
-    },
+  /// Tipos de incidentes disponibles
+  static const _incidentTypes = ['avance', 'problema', 'consulta', 'seguridad', 'calidad'];
+  
+  /// Estados disponibles
+  static const _statuses = ['abierta', 'pendiente', 'cerrada'];
+  
+  /// Lista de autores predefinidos
+  static const _authors = [
+    {'id': '3', 'name': 'Residente González', 'role': 'resident'},
+    {'id': '4', 'name': 'Cabo López', 'role': 'cabo'},
+    {'id': '5', 'name': 'Ingeniero Ramírez', 'role': 'engineer'},
+    {'id': '6', 'name': 'Supervisor Martínez', 'role': 'supervisor'},
   ];
 
-  /// Timeline de eventos de una incidencia
-  final Map<String, List<Map<String, dynamic>>> _fakeTimelines = {
-    '2': [
-      {
-        'type': 'created',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 3)).toIso8601String(),
-        'actor': 'Cabo López',
-        'description': 'creó esta incidencia',
-      },
-      {
-        'type': 'assigned',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 2, minutes: 45)).toIso8601String(),
-        'actor': 'Residente González',
-        'description': 'asignó esta tarea a Cabo López',
-      },
-      {
-        'type': 'comment',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 1, minutes: 30)).toIso8601String(),
-        'actor': 'Cabo López',
-        'description': 'Ya localicé la fuga. Necesito materiales para repararla.',
-      },
-    ],
-    '3': [
-      {
-        'type': 'created',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 12)).toIso8601String(),
-        'actor': 'Cabo López',
-        'description': 'creó esta consulta',
-      },
-      {
-        'type': 'assigned',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 11)).toIso8601String(),
-        'actor': 'Superintendente García',
-        'description': 'asignó esta consulta a Residente González',
-      },
-      {
-        'type': 'comment',
-        'timestamp': DateTime.now().subtract(const Duration(hours: 5)).toIso8601String(),
-        'actor': 'Residente González',
-        'description': 'Revisando planos, te respondo en 2 horas',
-      },
-    ],
-  };
+  /// Genera una incidencia fake aleatoria
+  Map<String, dynamic> _generateIncident(String id) {
+    final author = FakeDataFactory.selectRandom(_authors);
+    final type = FakeDataFactory.selectRandom(_incidentTypes);
+    final status = FakeDataFactory.selectRandom(_statuses);
+    final isCritical = FakeDataFactory.generateBool(probabilidadTrue: 0.2);
+    final createdAt = FakeDataFactory.generateFechaReciente(maxDiasAtras: 30);
+    final hasAssigned = status != 'abierta' || FakeDataFactory.generateBool(probabilidadTrue: 0.7);
+    final assignedTo = hasAssigned ? FakeDataFactory.selectRandom(_authors) : null;
+    final isClosed = status == 'cerrada';
+    final photoCount = FakeDataFactory.generateInt(min: 0, max: 4);
+    
+    return {
+      'id': id,
+      'projectId': '1',
+      'type': type,
+      'title': _generateTitle(type),
+      'description': FakeDataFactory.generateDescripcion(_getTitleComplement(type)),
+      'authorId': author['id'],
+      'authorName': author['name'],
+      'authorRole': author['role'],
+      'assignedToId': assignedTo?['id'],
+      'assignedToName': assignedTo?['name'],
+      'status': status,
+      'isCritical': isCritical,
+      'createdAt': createdAt.toIso8601String(),
+      'closedAt': isClosed ? createdAt.add(Duration(days: FakeDataFactory.generateInt(min: 1, max: 7))).toIso8601String() : null,
+      'gpsLocation': '19.4326, -99.1332',
+      'photos': photoCount > 0 ? FakeDataFactory.generateImageUrls(count: photoCount) : [],
+      'approvalStatus': isCritical && isClosed ? 'approved' : null,
+    };
+  }
 
-  /// Obtener tareas asignadas al usuario (Top-Down)
+  String _generateTitle(String type) {
+    final titles = {
+      'avance': [
+        'Avance en cimentación',
+        'Progreso estructura metálica',
+        'Completado levantamiento de muros',
+        'Instalación de ventanas sector',
+      ],
+      'problema': [
+        'Fuga de agua detectada',
+        'Grieta en estructura',
+        'Material defectuoso',
+        'Retraso en entrega',
+      ],
+      'consulta': [
+        'Duda sobre especificaciones',
+        'Revisión de planos',
+        'Consulta técnica',
+        'Aclaración procedimiento',
+      ],
+      'seguridad': [
+        'Falta equipo de protección',
+        'Zona insegura detectada',
+        'Incidente menor reportado',
+        'Condición peligrosa',
+      ],
+      'calidad': [
+        'Inspección de calidad',
+        'No conformidad detectada',
+        'Revisión acabados',
+        'Control de materiales',
+      ],
+    };
+    
+    return FakeDataFactory.selectRandom(titles[type] ?? titles['problema']!);
+  }
+
+  String _getTitleComplement(String type) {
+    final complements = {
+      'avance': 'sector A',
+      'problema': 'tubería principal',
+      'consulta': 'planos',
+      'seguridad': 'zona de trabajo',
+      'calidad': 'acabados',
+    };
+    
+    return complements[type] ?? 'proyecto';
+  }
+
+  /// Base de datos fake de incidencias (generada dinámicamente)
+  late final List<Map<String, dynamic>> _fakeIncidents = 
+    List.generate(25, (index) => _generateIncident('${index + 1}'));
+
+  /// Obtener todas las incidencias
+  Future<List<Map<String, dynamic>>> getIncidents() async {
+    await FakeDataFactory.simulateNetworkDelay();
+    return List.from(_fakeIncidents);
+  }
+
+  /// Obtener incidencias del proyecto
+  Future<List<Map<String, dynamic>>> getProjectIncidents(String projectId) async {
+    await FakeDataFactory.simulateNetworkDelay();
+    return _fakeIncidents.where((i) => i['projectId'] == projectId).toList();
+  }
+
+  /// Obtener mis tareas (asignadas a mí)
   Future<List<Map<String, dynamic>>> getMyTasks(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
+    await FakeDataFactory.simulateNetworkDelay();
     return _fakeIncidents
-        .where((i) => i['assignedToId'] == userId && i['status'] == 'abierta')
+        .where((i) => i['assignedToId'] == userId && i['status'] != 'cerrada')
         .toList();
   }
 
-  /// Obtener reportes creados por el usuario (Bottom-Up)
+  /// Obtener mis reportes (creados por mí)
   Future<List<Map<String, dynamic>>> getMyReports(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
+    await FakeDataFactory.simulateNetworkDelay();
     return _fakeIncidents
         .where((i) => i['authorId'] == userId)
         .toList();
   }
 
-  /// Obtener bitácora completa del proyecto
-  Future<List<Map<String, dynamic>>> getProjectBitacora(
-    String projectId, {
-    String? type,
-    String? status,
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    var filtered = _fakeIncidents.where((i) => i['projectId'] == projectId);
-
-    if (type != null && type != 'todos') {
-      filtered = filtered.where((i) => i['type'] == type);
-    }
-
-    if (status != null && status != 'todos') {
-      filtered = filtered.where((i) => i['status'] == status);
-    }
-
-    // Filtro de fecha (simplificado)
-    if (startDate != null) {
-      filtered = filtered.where((i) {
-        final createdAt = DateTime.parse(i['createdAt']);
-        return createdAt.isAfter(startDate);
-      });
-    }
-
-    if (endDate != null) {
-      filtered = filtered.where((i) {
-        final createdAt = DateTime.parse(i['createdAt']);
-        return createdAt.isBefore(endDate);
-      });
-    }
-
-    return filtered.toList();
+  /// Obtener bitácora (todas las incidencias)
+  Future<List<Map<String, dynamic>>> getBitacora(String projectId) async {
+    await FakeDataFactory.simulateNetworkDelay();
+    return getProjectIncidents(projectId);
   }
 
-  /// Obtener detalle de una incidencia
-  Future<Map<String, dynamic>> getIncidentById(String incidentId) async {
-    await Future.delayed(const Duration(milliseconds: 400));
-
+  /// Obtener detalle de incidencia
+  Future<Map<String, dynamic>> getIncidentDetail(String id) async {
+    await FakeDataFactory.simulateNetworkDelay();
     final incident = _fakeIncidents.firstWhere(
-      (i) => i['id'] == incidentId,
-      orElse: () => throw Exception('Incidencia no encontrada'),
+      (i) => i['id'] == id,
+      orElse: () => _generateIncident(id),
     );
-
+    
+    // Agregar timeline fake
+    incident['timeline'] = _generateTimeline(incident);
+    
     return incident;
   }
 
-  /// Obtener timeline de una incidencia
-  Future<List<Map<String, dynamic>>> getIncidentTimeline(String incidentId) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
-    return _fakeTimelines[incidentId] ?? [];
+  List<Map<String, dynamic>> _generateTimeline(Map<String, dynamic> incident) {
+    final timeline = <Map<String, dynamic>>[];
+    final createdAt = DateTime.parse(incident['createdAt'] as String);
+    
+    // Evento de creación
+    timeline.add({
+      'id': '1',
+      'type': 'created',
+      'message': 'Incidencia creada',
+      'authorName': incident['authorName'],
+      'timestamp': createdAt.toIso8601String(),
+    });
+    
+    // Evento de asignación (si existe)
+    if (incident['assignedToId'] != null) {
+      timeline.add({
+        'id': '2',
+        'type': 'assigned',
+        'message': 'Asignado a ${incident['assignedToName']}',
+        'authorName': incident['authorName'],
+        'timestamp': createdAt.add(const Duration(minutes: 30)).toIso8601String(),
+      });
+    }
+    
+    // Eventos de comentarios aleatorios
+    if (FakeDataFactory.generateBool(probabilidadTrue: 0.6)) {
+      timeline.add({
+        'id': '3',
+        'type': 'comment',
+        'message': FakeDataFactory.generateDescripcion('actualización'),
+        'authorName': FakeDataFactory.selectRandom(_authors)['name'],
+        'timestamp': createdAt.add(Duration(hours: FakeDataFactory.generateInt(min: 1, max: 24))).toIso8601String(),
+      });
+    }
+    
+    // Evento de cierre (si está cerrada)
+    if (incident['status'] == 'cerrada' && incident['closedAt'] != null) {
+      timeline.add({
+        'id': '${timeline.length + 1}',
+        'type': 'closed',
+        'message': 'Incidencia cerrada',
+        'authorName': incident['assignedToName'] ?? incident['authorName'],
+        'timestamp': incident['closedAt'],
+      });
+    }
+    
+    return timeline;
   }
 
-  /// Crear incidencia básica
-  Future<Map<String, dynamic>> createIncident({
-    required String projectId,
-    required String type,
-    required String title,
-    required String description,
-    required String authorId,
-    required String authorName,
-    required String authorRole,
-    required bool isCritical,
-    required String gpsLocation,
-    required List<String> photos,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 700));
-
+  /// Crear nueva incidencia
+  Future<String> createIncident(Map<String, dynamic> data) async {
+    await FakeDataFactory.simulateNetworkDelay(milliseconds: 800);
+    
+    final newId = '${_fakeIncidents.length + 1}';
     final newIncident = {
-      'id': '${_fakeIncidents.length + 1}',
-      'projectId': projectId,
-      'type': type,
-      'title': title,
-      'description': description,
-      'authorId': authorId,
-      'authorName': authorName,
-      'authorRole': authorRole,
-      'assignedToId': null,
-      'assignedToName': null,
-      'status': 'pendiente',
-      'isCritical': isCritical,
+      'id': newId,
+      'projectId': data['projectId'] ?? '1',
+      'type': data['type'],
+      'title': data['title'],
+      'description': data['description'],
+      'authorId': data['authorId'],
+      'authorName': data['authorName'] ?? 'Usuario',
+      'authorRole': data['authorRole'] ?? 'user',
+      'assignedToId': data['assignedToId'],
+      'assignedToName': data['assignedToName'],
+      'status': 'abierta',
+      'isCritical': data['isCritical'] ?? false,
       'createdAt': DateTime.now().toIso8601String(),
       'closedAt': null,
-      'gpsLocation': gpsLocation,
-      'photos': photos,
+      'gpsLocation': data['gpsLocation'] ?? '19.4326, -99.1332',
+      'photos': data['photos'] ?? [],
       'approvalStatus': null,
     };
-
+    
     _fakeIncidents.add(newIncident);
-    return newIncident;
+    return newId;
   }
 
-  /// Crear solicitud de material
-  Future<Map<String, dynamic>> createMaterialRequest({
-    required String projectId,
-    required String authorId,
-    required String authorName,
-    required String authorRole,
-    required String material,
-    required double quantity,
-    required String unit,
-    required String description,
-    required String justification,
-    required bool isUrgent,
-    required String gpsLocation,
-    required List<String> photos,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    final newRequest = {
-      'id': '${_fakeIncidents.length + 1}',
-      'projectId': projectId,
-      'type': 'material',
-      'title': 'Solicitud de $material',
-      'description': description,
-      'authorId': authorId,
-      'authorName': authorName,
-      'authorRole': authorRole,
-      'assignedToId': null,
-      'assignedToName': null,
-      'status': 'pendiente',
-      'isCritical': isUrgent,
-      'createdAt': DateTime.now().toIso8601String(),
-      'closedAt': null,
-      'gpsLocation': gpsLocation,
-      'photos': photos,
-      'approvalStatus': 'pendiente',
-      'materialDetails': {
-        'material': material,
-        'quantity': quantity,
-        'unit': unit,
-        'justification': justification,
-        'isUrgent': isUrgent,
-      },
-    };
-
-    _fakeIncidents.add(newRequest);
-    return newRequest;
-  }
-
-  /// Agregar comentario a incidencia
-  Future<void> addComment(String incidentId, String userId, String userName, String comment) async {
-    await Future.delayed(const Duration(milliseconds: 400));
-
-    // Agregar al timeline
-    if (!_fakeTimelines.containsKey(incidentId)) {
-      _fakeTimelines[incidentId] = [];
-    }
-
-    _fakeTimelines[incidentId]!.add({
-      'type': 'comment',
-      'timestamp': DateTime.now().toIso8601String(),
-      'actor': userName,
-      'description': comment,
-    });
-  }
-
-  /// Registrar aclaración
-  Future<void> addCorrection(String incidentId, String userId, String userName, String explanation) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    if (!_fakeTimelines.containsKey(incidentId)) {
-      _fakeTimelines[incidentId] = [];
-    }
-
-    _fakeTimelines[incidentId]!.add({
-      'type': 'correction',
-      'timestamp': DateTime.now().toIso8601String(),
-      'actor': userName,
-      'description': 'Aclaración: $explanation',
-    });
-  }
-
-  /// Asignar incidencia a usuario
-  Future<void> assignIncident(String incidentId, String targetUserId, String targetUserName) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    final incident = _fakeIncidents.firstWhere((i) => i['id'] == incidentId);
-    incident['assignedToId'] = targetUserId;
-    incident['assignedToName'] = targetUserName;
-    incident['status'] = 'abierta';
-
-    // Agregar al timeline
-    if (!_fakeTimelines.containsKey(incidentId)) {
-      _fakeTimelines[incidentId] = [];
-    }
-
-    _fakeTimelines[incidentId]!.add({
-      'type': 'assigned',
-      'timestamp': DateTime.now().toIso8601String(),
-      'actor': 'Sistema',
-      'description': 'asignó esta tarea a $targetUserName',
-    });
+  /// Asignar incidencia
+  Future<void> assignIncident(String id, String userId, String userName) async {
+    await FakeDataFactory.simulateNetworkDelay(milliseconds: 500);
+    
+    final incident = _fakeIncidents.firstWhere((i) => i['id'] == id);
+    incident['assignedToId'] = userId;
+    incident['assignedToName'] = userName;
+    incident['status'] = 'pendiente';
   }
 
   /// Cerrar incidencia
-  Future<void> closeIncident(String incidentId, String userId, String userName, String note, List<String> photos) async {
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    final incident = _fakeIncidents.firstWhere((i) => i['id'] == incidentId);
+  Future<void> closeIncident(String id, String resolution) async {
+    await FakeDataFactory.simulateNetworkDelay(milliseconds: 600);
+    
+    final incident = _fakeIncidents.firstWhere((i) => i['id'] == id);
     incident['status'] = 'cerrada';
     incident['closedAt'] = DateTime.now().toIso8601String();
+    incident['resolution'] = resolution;
+  }
 
-    // Agregar fotos de cierre si existen
-    if (photos.isNotEmpty) {
-      (incident['photos'] as List).addAll(photos);
-    }
+  /// Agregar comentario
+  Future<void> addComment(String incidentId, String comment, String authorName) async {
+    await FakeDataFactory.simulateNetworkDelay(milliseconds: 400);
+    // En implementación real, esto agregaría al timeline
+  }
 
-    // Agregar al timeline
-    if (!_fakeTimelines.containsKey(incidentId)) {
-      _fakeTimelines[incidentId] = [];
-    }
-
-    _fakeTimelines[incidentId]!.add({
-      'type': 'closed',
-      'timestamp': DateTime.now().toIso8601String(),
-      'actor': userName,
-      'description': 'cerró esta incidencia. Nota: $note',
-    });
+  /// Buscar incidencias
+  Future<List<Map<String, dynamic>>> searchIncidents(String query) async {
+    await FakeDataFactory.simulateNetworkDelay();
+    
+    return FakeDataFactory.search(
+      _fakeIncidents,
+      query,
+      (incident) => '${incident['title']} ${incident['description']}',
+    );
   }
 }

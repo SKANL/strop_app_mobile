@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/theme/app_colors.dart';
+import '../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget para mostrar una categoría de materiales con sus items
 class ProjectMaterialCategory extends StatelessWidget {
@@ -14,7 +14,8 @@ class ProjectMaterialCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: ExpansionTile(
         leading: const Icon(Icons.category),
         title: Text(

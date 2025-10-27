@@ -1,8 +1,8 @@
 // lib/src/features/incidents/presentation/providers/incident_detail_provider.dart
 import 'package:flutter/foundation.dart';
-import '../../../../../core/domain/entities/data_state.dart';
-import '../../../../../core/domain/failures/failure.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../core/core_domain/entities/data_state.dart';
+import '../../../../core/core_domain/errors/failures.dart';
 import '../../../../core/core_domain/repositories/incident_repository.dart';
 
 /// Provider especializado para gestionar DETALLES de una incidencia

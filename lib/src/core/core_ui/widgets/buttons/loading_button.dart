@@ -40,8 +40,8 @@ class LoadingButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.icon,
-    this.state = LoadingButtonState.idle,
-    this.variant = _LoadingButtonVariant.elevated,
+        this.state = LoadingButtonState.idle,
+        this.variant = LoadingButtonVariant.elevated,
     this.size = LoadingButtonSize.medium,
     this.showSuccessState = true,
     this.successDuration = const Duration(seconds: 2),
@@ -51,7 +51,7 @@ class LoadingButton extends StatefulWidget {
   final Future<void> Function()? onPressed;
   final IconData? icon;
   final LoadingButtonState state;
-  final _LoadingButtonVariant variant;
+  final LoadingButtonVariant variant;
   final LoadingButtonSize size;
   final bool showSuccessState;
   final Duration successDuration;
@@ -66,7 +66,7 @@ class LoadingButton extends StatefulWidget {
     this.size = LoadingButtonSize.medium,
     this.showSuccessState = true,
     this.successDuration = const Duration(seconds: 2),
-  }) : variant = _LoadingButtonVariant.outlined;
+  }) : variant = LoadingButtonVariant.outlined;
 
   /// Constructor para botón de texto.
   const LoadingButton.text({
@@ -78,7 +78,7 @@ class LoadingButton extends StatefulWidget {
     this.size = LoadingButtonSize.medium,
     this.showSuccessState = true,
     this.successDuration = const Duration(seconds: 2),
-  }) : variant = _LoadingButtonVariant.text;
+  }) : variant = LoadingButtonVariant.text;
 
   @override
   State<LoadingButton> createState() => _LoadingButtonState();
@@ -164,7 +164,7 @@ class _LoadingButtonState extends State<LoadingButton> {
 
     // Construir botón según variante
     switch (widget.variant) {
-      case _LoadingButtonVariant.elevated:
+      case LoadingButtonVariant.elevated:
         return SizedBox(
           height: height,
           width: double.infinity,
@@ -179,7 +179,7 @@ class _LoadingButtonState extends State<LoadingButton> {
             child: content,
           ),
         );
-      case _LoadingButtonVariant.outlined:
+      case LoadingButtonVariant.outlined:
         return SizedBox(
           height: height,
           width: double.infinity,
@@ -194,7 +194,7 @@ class _LoadingButtonState extends State<LoadingButton> {
             child: content,
           ),
         );
-      case _LoadingButtonVariant.text:
+      case LoadingButtonVariant.text:
         return SizedBox(
           height: height,
           child: TextButton(
@@ -231,7 +231,7 @@ class _LoadingButtonState extends State<LoadingButton> {
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(
-          widget.variant == _LoadingButtonVariant.elevated
+          widget.variant == LoadingButtonVariant.elevated
               ? Colors.white
               : Theme.of(context).colorScheme.primary,
         ),
@@ -342,7 +342,8 @@ enum LoadingButtonSize {
   large,
 }
 
-enum _LoadingButtonVariant {
+/// Variante visual del LoadingButton
+enum LoadingButtonVariant {
   elevated,
   outlined,
   text,

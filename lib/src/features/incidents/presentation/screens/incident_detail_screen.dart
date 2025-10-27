@@ -30,7 +30,7 @@ import '../widgets/incident_detail_sections/actions_section.dart';
 /// - IncidentTimelineEventsSection: timeline de eventos
 /// - IncidentCommentsListSection: lista de comentarios
 /// - IncidentActionsSection: botones según rol/estado
-class IncidentDetailScreen extends StatelessWidget {
+class IncidentDetailScreen extends StatefulWidget {
   const IncidentDetailScreen({
     super.key,
     required this.incidentId,
@@ -39,7 +39,33 @@ class IncidentDetailScreen extends StatelessWidget {
   final String incidentId;
 
   @override
+  State<IncidentDetailScreen> createState() => _IncidentDetailScreenState();
+}
+
+class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
+  bool _showDeferredSections = false;
+  String? _renderedIncidentId;
+  @override
+  void initState() {
+    super.initState();
+    // Cargar detalle de incidencia al montar la pantalla
+    print('[IncidentDetailScreen] initState - incidentId: ${widget.incidentId}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        print('[IncidentDetailScreen] Calling loadIncidentDetail');
+        final provider = context.read<IncidentDetailProvider>();
+        provider.loadIncidentDetail(widget.incidentId);
+        print('[IncidentDetailScreen] loadIncidentDetail called successfully');
+      } catch (e, stackTrace) {
+        print('[IncidentDetailScreen] Error in loadIncidentDetail: $e');
+        print('[IncidentDetailScreen] StackTrace: $stackTrace');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('[IncidentDetailScreen] Building widget');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de Incidencia'),
@@ -66,33 +92,116 @@ class IncidentDetailScreen extends StatelessWidget {
         ],
       ),
       body: Selector<IncidentDetailProvider, DataState<IncidentEntity>>(
-        selector: (_, provider) => provider.incidentState,
+        selector: (_, provider) {
+          print('[IncidentDetailScreen] Selector called - state: ${provider.incidentState}');
+          return provider.incidentState;
+        },
         builder: (context, incidentState, _) {
-          return incidentState.when(
-            initial: () => const Center(child: Text('Cargando...')),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (failure) => Center(
-              child: AppError(
-                message: failure.message,
-                onRetry: () => context.read<IncidentDetailProvider>().loadIncidentDetail(incidentId),
-              ),
-            ),
-            success: (incident) => SingleChildScrollView(
+          print('[IncidentDetailScreen] Builder called with state: $incidentState');
+          try {
+            return incidentState.when(
+              initial: () {
+                print('[IncidentDetailScreen] Showing initial state');
+                return const Center(child: Text('Cargando...'));
+              },
+              loading: () {
+                print('[IncidentDetailScreen] Showing loading state');
+                return const Center(child: CircularProgressIndicator());
+              },
+              error: (failure) {
+                print('[IncidentDetailScreen] Showing error state: ${failure.message}');
+                return Center(
+                  child: AppError(
+                    message: failure.message,
+                    onRetry: () => context.read<IncidentDetailProvider>().loadIncidentDetail(widget.incidentId),
+                  ),
+                );
+              },
+              success: (incident) {
+                  print('[IncidentDetailScreen] Showing success state - incident: ${incident.title}');
+                  // If we've just loaded a new incident, defer heavy sections to avoid a large first frame
+                  if (_renderedIncidentId != incident.id) {
+                    _renderedIncidentId = incident.id;
+                    _showDeferredSections = false;
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      // small delay to allow first frame to render
+                      Future.delayed(const Duration(milliseconds: 80), () {
+                        if (mounted) setState(() => _showDeferredSections = true);
+                      });
+                    });
+                  }
+                  return _buildSuccessContent(incident);
+                },
+            );
+          } catch (e, stackTrace) {
+            print('[IncidentDetailScreen] Error in builder: $e');
+            print('[IncidentDetailScreen] StackTrace: $stackTrace');
+            return Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IncidentDetailHeaderSection(incident: incident),
-                  IncidentDescriptionSection(description: incident.description),
-                  IncidentPhotosSection(photoUrls: incident.photoUrls),
-                  IncidentTimelineEventsSection(incidentId: incidentId),
-                  IncidentCommentsListSection(incidentId: incidentId),
-                  IncidentActionsSection(incident: incident),
+                  const Icon(Icons.error, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
+                  Text('Error inesperado: $e'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Volver'),
+                  ),
                 ],
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );
+  }
+
+  Widget _buildSuccessContent(IncidentEntity incident) {
+    try {
+      print('[IncidentDetailScreen] Building success content');
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            // Render lightweight sections immediately
+            IncidentDetailHeaderSection(incident: incident),
+            IncidentDescriptionSection(description: incident.description),
+
+            // Deferred (potentially heavier) sections: photos, timeline, comments, actions
+            if (_showDeferredSections) ...[
+              IncidentPhotosSection(photoUrls: incident.photoUrls),
+              IncidentTimelineEventsSection(incidentId: widget.incidentId),
+              IncidentCommentsListSection(incidentId: widget.incidentId),
+              IncidentActionsSection(incident: incident),
+            ] else ...[
+              // Lightweight placeholders while heavy sections are prepared
+              const SizedBox(height: 8),
+              const Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))),
+              const SizedBox(height: 8),
+            ],
+
+            const SizedBox(height: 16),
+          ],
+        ),
+      );
+    } catch (e, stackTrace) {
+      print('[IncidentDetailScreen] Error building success content: $e');
+      print('[IncidentDetailScreen] StackTrace: $stackTrace');
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text('Error al mostrar detalles: $e'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Volver'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

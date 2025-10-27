@@ -50,14 +50,20 @@ class IncidentDetailProvider extends ChangeNotifier {
 
   /// Cargar detalle de incidencia por ID
   Future<void> loadIncidentDetail(String incidentId) async {
+    print('[IncidentDetailProvider] Iniciando carga de incidencia: $incidentId');
     _incidentState = const DataState.loading();
     notifyListeners();
 
     try {
+      print('[IncidentDetailProvider] Llamando al repositorio...');
       final incident = await repository.getIncidentById(incidentId);
+      print('[IncidentDetailProvider] Incidencia cargada exitosamente: ${incident.title}');
       _incidentState = DataState.success(incident);
       notifyListeners();
-    } catch (e) {
+      print('[IncidentDetailProvider] Estado actualizado a success');
+    } catch (e, stackTrace) {
+      print('[IncidentDetailProvider] Error al cargar detalle: $e');
+      print('[IncidentDetailProvider] StackTrace: $stackTrace');
       _incidentState = DataState.error(
         UnexpectedFailure(
           message: 'Error al cargar detalle: ${e.toString()}',

@@ -19,9 +19,11 @@ class IncidentTimelineEventsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
-    return AppCard(
+    print('[IncidentTimelineEventsSection] build');
+    try {
+      final theme = Theme.of(context);
+      
+      return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,7 +58,12 @@ class IncidentTimelineEventsSection extends StatelessWidget {
           ),
         ],
       ),
-    );
+      );
+    } catch (e, st) {
+      print('[IncidentTimelineEventsSection] build error: $e');
+      print(st);
+      return Center(child: Text('Error al renderizar timeline'));
+    }
   }
   
   Widget _buildTimelineItem(

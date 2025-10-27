@@ -24,9 +24,11 @@ class IncidentDetailHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
-    return AppCard(
+    print('[IncidentDetailHeaderSection] build');
+    try {
+      final theme = Theme.of(context);
+      
+      return AppCard(
       margin: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,9 +111,14 @@ class IncidentDetailHeaderSection extends StatelessWidget {
           ],
         ],
       ),
-    );
+      );
+    } catch (e, st) {
+      print('[IncidentDetailHeaderSection] build error: $e');
+      print(st);
+      return Center(child: Text('Error al renderizar cabecera'));
+    }
   }
-  
+
   Widget _buildTypeChip(BuildContext context) {
     final theme = Theme.of(context);
     final typeData = IncidentTypeConfig.getData(incident.type);

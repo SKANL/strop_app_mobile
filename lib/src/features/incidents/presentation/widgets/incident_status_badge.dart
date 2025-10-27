@@ -27,10 +27,15 @@ class IncidentStatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
+        // Use MainAxisSize.min and a loose Flexible so this widget
+        // can be placed inside parents that provide unbounded width
+        // (for example inside other rows or scrollable constraints).
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(statusInfo.icon, color: statusInfo.textColor, size: 20),
           const SizedBox(width: 12),
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose,
             child: Text(
               statusInfo.text,
               style: theme.textTheme.titleSmall?.copyWith(

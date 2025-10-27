@@ -227,7 +227,8 @@ class AppColors {
 
   /// Obtiene un color con opacidad reducida
   static Color withOpacity(Color color, double opacity) {
-    return color.withValues(alpha: opacity);
+    // Use standard withOpacity to remain compatible across Flutter versions
+    return color.withOpacity(opacity);
   }
 
   /// Obtiene un color más claro (para backgrounds)

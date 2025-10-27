@@ -19,9 +19,11 @@ class IncidentCommentsListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
-    return AppCard(
+    print('[IncidentCommentsListSection] build');
+    try {
+      final theme = Theme.of(context);
+      
+      return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,7 +57,12 @@ class IncidentCommentsListSection extends StatelessWidget {
           ),
         ],
       ),
-    );
+      );
+    } catch (e, st) {
+      print('[IncidentCommentsListSection] build error: $e');
+      print(st);
+      return Center(child: Text('Error al renderizar comentarios'));
+    }
   }
 }
 

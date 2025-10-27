@@ -34,6 +34,7 @@ import 'presentation/screens/incident_detail_screen.dart';
 import 'presentation/screens/create_correction_screen.dart';
 import 'presentation/screens/assign_user_screen.dart';
 import 'presentation/screens/close_incident_screen.dart';
+import 'presentation/screens/add_comment_screen.dart';
 
 final getIt = GetIt.instance;
 
@@ -180,6 +181,18 @@ final incidentRoutes = <GoRoute>[
       return ChangeNotifierProvider.value(
         value: getIt<IncidentDetailProvider>(),
         child: IncidentDetailScreen(incidentId: incidentId),
+      );
+    },
+  ),
+
+  // Screen 19b: Agregar comentario (pantalla simple)
+  GoRoute(
+    path: '/incident/:id/add-comment',
+    builder: (context, state) {
+      final incidentId = state.pathParameters['id']!;
+      return ChangeNotifierProvider.value(
+        value: getIt<IncidentCommentsProvider>(),
+        child: AddCommentScreen(incidentId: incidentId),
       );
     },
   ),

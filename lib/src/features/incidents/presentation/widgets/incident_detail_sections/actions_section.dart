@@ -26,35 +26,42 @@ class IncidentActionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthProvider>();
-    final currentUser = authProvider.user;
-    
-    if (currentUser == null) return const SizedBox.shrink();
-    
-    final actions = _getAvailableActions(currentUser, incident);
-    
-    if (actions.isEmpty) return const SizedBox.shrink();
-    
-    return AppCard(
-      margin: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: actions.map((action) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: ElevatedButton.icon(
-              onPressed: () => _handleAction(context, action, incident.id),
-              icon: Icon(action.icon),
-              label: Text(action.label),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: action.color,
-                foregroundColor: Colors.white,
+    print('[IncidentActionsSection] build');
+    try {
+      final authProvider = context.watch<AuthProvider>();
+      final currentUser = authProvider.user;
+      
+      if (currentUser == null) return const SizedBox.shrink();
+      
+      final actions = _getAvailableActions(currentUser, incident);
+      
+      if (actions.isEmpty) return const SizedBox.shrink();
+      
+      return AppCard(
+        margin: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: actions.map((action) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ElevatedButton.icon(
+                onPressed: () => _handleAction(context, action, incident.id),
+                icon: Icon(action.icon),
+                label: Text(action.label),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: action.color,
+                  foregroundColor: Colors.white,
+                ),
               ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+            );
+          }).toList(),
+        ),
+      );
+    } catch (e, st) {
+      print('[IncidentActionsSection] build error: $e');
+      print(st);
+      return Center(child: Text('Error al renderizar acciones'));
+    }
   }
   
   List<_ActionButton> _getAvailableActions(UserEntity user, IncidentEntity incident) {
@@ -98,7 +105,9 @@ class IncidentActionsSection extends StatelessWidget {
   }
   
   void _handleAction(BuildContext context, _ActionButton action, String incidentId) {
-    context.push('/incidents/$incidentId/${action.route}');
+    // Router defines singular route '/incident/:id/...'.
+    // Use the singular path so GoRouter finds the route.
+    context.push('/incident/$incidentId/${action.route}');
   }
 }
 

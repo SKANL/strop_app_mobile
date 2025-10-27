@@ -19,11 +19,13 @@ class IncidentPhotosSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (photoUrls.isEmpty) return const SizedBox.shrink();
-    
-    final theme = Theme.of(context);
-    
-    return AppCard(
+    print('[IncidentPhotosSection] build');
+    try {
+      if (photoUrls.isEmpty) return const SizedBox.shrink();
+      
+      final theme = Theme.of(context);
+      
+      return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,6 +62,11 @@ class IncidentPhotosSection extends StatelessWidget {
           ),
         ],
       ),
-    );
+      );
+    } catch (e, st) {
+      print('[IncidentPhotosSection] build error: $e');
+      print(st);
+      return Center(child: Text('Error al renderizar fotos'));
+    }
   }
 }

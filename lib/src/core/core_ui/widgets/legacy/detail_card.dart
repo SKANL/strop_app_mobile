@@ -1,7 +1,7 @@
 // lib/src/core/core_ui/widgets/detail_card.dart
 
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../../theme/app_colors.dart';
 
 /// Card genérico para mostrar información detallada con título y contenido
 /// 

@@ -1,7 +1,7 @@
 // lib/src/features/home/presentation/screens/sync/sync_conflict_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Pantalla Modal de Explicación de Conflicto de Sincronización (Fase 1)
 class SyncConflictScreen extends StatelessWidget {

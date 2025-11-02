@@ -1,7 +1,7 @@
 // lib/src/features/incidents/presentation/screens/project/project_info_screen.dart
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
-import '../widgets/project_material_category.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../widgets/form_inputs/project_material_category.dart';
 
 /// Screen 15: Información del Proyecto - Programa y explosión de insumos (solo lectura)
 class ProjectInfoScreen extends StatefulWidget {

@@ -1,8 +1,8 @@
-// lib/src/features/incidents/presentation/screens/project_tabs_screen.dart
+// lib/src/features/incidents/presentation/screens/project/project_tabs_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'my_tasks_screen.dart';
-import 'my_reports_screen.dart';
+import '../lists/my_tasks_screen.dart';
+import '../lists/my_reports_screen.dart';
 import 'project_bitacora_screen.dart';
 
 /// Pantalla de Tabs del Proyecto (Fase 2)

@@ -1,6 +1,6 @@
-// lib/src/features/incidents/presentation/widgets/incident_timeline_section.dart
+// lib/src/features/incidents/presentation/widgets/sections/incident_timeline_section.dart
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget that displays the chronological timeline of incident events
 class IncidentTimelineSection extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/core_ui/utils/app_logger.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../../core/core_ui/utils/app_logger.dart';
+import '../../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Reusable base for incident detail sections.
 ///

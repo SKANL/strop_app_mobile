@@ -1,7 +1,7 @@
-// lib/src/features/home/presentation/screens/notifications_screen.dart
+// lib/src/features/home/presentation/screens/settings/notifications_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});

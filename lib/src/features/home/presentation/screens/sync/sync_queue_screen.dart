@@ -1,10 +1,10 @@
-// lib/src/features/home/presentation/screens/sync_queue_screen.dart
+// lib/src/features/home/presentation/screens/sync/sync_queue_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
-import '../widgets/sync/connection_status_card.dart';
-import '../widgets/sync/pending_items_section.dart';
-import '../widgets/sync/conflicts_section.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../widgets/sync/connection_status_card.dart';
+import '../../widgets/sync/pending_items_section.dart';
+import '../../widgets/sync/conflicts_section.dart';
 
 /// Pantalla de Cola de Sincronización (Fase 1)
 /// 

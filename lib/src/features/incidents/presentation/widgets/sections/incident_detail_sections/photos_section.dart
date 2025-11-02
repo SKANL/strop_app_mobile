@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../../core/core_ui/widgets/widgets.dart';
 import 'section_base.dart';
 
 /// Widget de galería de fotos para incident detail

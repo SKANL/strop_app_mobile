@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Diálogo para cambiar la contraseña del usuario
 class ChangePasswordDialog extends StatefulWidget {

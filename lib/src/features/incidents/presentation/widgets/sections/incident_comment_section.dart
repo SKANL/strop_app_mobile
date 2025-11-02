@@ -1,6 +1,6 @@
-// lib/src/features/incidents/presentation/widgets/incident_comment_section.dart
+// lib/src/features/incidents/presentation/widgets/sections/incident_comment_section.dart
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget that displays the comment input section for incidents
 class IncidentCommentSection extends StatelessWidget {

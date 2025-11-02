@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/theme/app_colors.dart';
+import '../../../../../core/core_ui/theme/app_colors.dart';
 
 /// Widget para buscar y seleccionar un material de una lista
 class MaterialSearchSelector extends StatelessWidget {

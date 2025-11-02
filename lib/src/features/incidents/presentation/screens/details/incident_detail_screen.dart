@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/core_domain/entities/data_state.dart';
-import '../../../../core/core_domain/entities/incident_entity.dart';
-import '../providers/incident_detail_provider.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
-import '../../../../core/core_ui/utils/app_logger.dart';
-import '../widgets/incident_detail_sections/header_section.dart';
-import '../widgets/incident_detail_sections/description_section.dart';
-import '../widgets/incident_detail_sections/photos_section.dart';
-import '../widgets/incident_detail_sections/timeline_section.dart';
-import '../widgets/incident_detail_sections/comments_section.dart';
-import '../widgets/incident_detail_sections/actions_section.dart';
+import '../../../../../core/core_domain/entities/data_state.dart';
+import '../../../../../core/core_domain/entities/incident_entity.dart';
+import '../../providers/incident_detail_provider.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/utils/app_logger.dart';
+import '../../widgets/sections/incident_detail_sections/header_section.dart';
+import '../../widgets/sections/incident_detail_sections/description_section.dart';
+import '../../widgets/sections/incident_detail_sections/photos_section.dart';
+import '../../widgets/sections/incident_detail_sections/timeline_section.dart';
+import '../../widgets/sections/incident_detail_sections/comments_section.dart';
+import '../../widgets/sections/incident_detail_sections/actions_section.dart';
 
 /// Screen 19: Detalle de Incidencia
 /// 

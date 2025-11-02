@@ -1,9 +1,9 @@
-// lib/src/features/incidents/presentation/screens/select_incident_type_screen.dart
+// lib/src/features/incidents/presentation/screens/forms/select_incident_type_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../auth/presentation/manager/auth_provider.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../auth/presentation/manager/auth_provider.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 16: Selector de Tipo de Reporte con lógica de rol
 /// 

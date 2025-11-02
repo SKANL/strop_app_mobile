@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../core/core_domain/entities/incident_entity.dart';
-import '../../../../../core/core_domain/entities/user_entity.dart';
-import '../../../../auth/presentation/manager/auth_provider.dart';
+import '../../../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../../../core/core_domain/entities/user_entity.dart';
+import '../../../../../auth/presentation/manager/auth_provider.dart';
 import 'section_base.dart';
 
 /// Widget de botones de acción para incident detail

@@ -1,11 +1,11 @@
 // lib/src/features/home/presentation/screens/settings/settings_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/settings/user_info_section.dart';
-import '../widgets/settings/sync_status_section.dart';
-import '../widgets/settings/preferences_section.dart';
-import '../widgets/settings/about_section.dart';
-import '../widgets/settings/logout_button.dart';
+import '../../widgets/settings/user_info_section.dart';
+import '../../widgets/settings/sync_status_section.dart';
+import '../../widgets/settings/preferences_section.dart';
+import '../../widgets/settings/about_section.dart';
+import '../../widgets/settings/logout_button.dart';
 
 /// Pantalla de configuración de la aplicación.
 /// 

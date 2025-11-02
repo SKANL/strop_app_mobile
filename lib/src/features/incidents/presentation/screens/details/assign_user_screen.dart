@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/incident_form_provider.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
-import '../../../../core/core_domain/entities/user_entity.dart';
+import '../../providers/incident_form_provider.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_domain/entities/user_entity.dart';
 
 /// Screen 21: Asignar Tarea (Modal)
 /// 

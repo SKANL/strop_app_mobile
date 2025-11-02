@@ -1,7 +1,7 @@
 // lib/src/features/home/presentation/widgets/cards/project_card.dart
 import 'package:flutter/material.dart';
-import '../../../../core/core_domain/entities/project_entity.dart';
-import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_domain/entities/project_entity.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para mostrar un proyecto en formato de tarjeta
 class ProjectCard extends StatelessWidget {

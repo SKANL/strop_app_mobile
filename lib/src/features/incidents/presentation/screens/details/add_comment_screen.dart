@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/incident_comments_provider.dart';
+import '../../providers/incident_comments_provider.dart';
 
 /// Simple screen to add a comment to an incident.
 class AddCommentScreen extends StatefulWidget {

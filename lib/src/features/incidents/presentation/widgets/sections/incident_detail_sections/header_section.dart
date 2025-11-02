@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_domain/entities/incident_entity.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../../../core/core_ui/widgets/widgets.dart';
 import '../../../helpers/incident_helpers.dart';
 import '../../../formatters/date_time_formatter.dart';
 import '../../../config/incident_type_config.dart';

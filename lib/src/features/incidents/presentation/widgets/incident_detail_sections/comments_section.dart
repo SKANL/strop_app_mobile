@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'section_base.dart';
 
 /// Widget de comentarios para incident detail
 /// 
@@ -19,50 +19,36 @@ class IncidentCommentsListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentCommentsListSection] build');
-    try {
-      final theme = Theme.of(context);
-      
-      return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.comment, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Comentarios',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return DetailSectionBase(
+      margin: const EdgeInsets.all(16),
+      title: 'Comentarios',
+      leading: const Icon(Icons.comment, size: 20),
+      builder: (context) {
+        final theme = Theme.of(context);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Los comentarios aparecerán aquí...',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Los comentarios aparecerán aquí...',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey,
-              fontStyle: FontStyle.italic,
             ),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton.icon(
-            onPressed: () {
-              // TODO: Navegar a pantalla de agregar comentario
-            },
-            icon: const Icon(Icons.add_comment),
-            label: const Text('Agregar Comentario'),
-          ),
-        ],
-      ),
-      );
-    } catch (e, st) {
-      print('[IncidentCommentsListSection] build error: $e');
-      print(st);
-      return Center(child: Text('Error al renderizar comentarios'));
-    }
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: () {
+                // TODO: Navegar a pantalla de agregar comentario
+              },
+              icon: const Icon(Icons.add_comment),
+              label: const Text('Agregar Comentario'),
+            ),
+          ],
+        );
+      },
+      errorBuilder: (ctx, err) => Center(child: Text('Error al renderizar comentarios')),
+    );
   }
 }
 

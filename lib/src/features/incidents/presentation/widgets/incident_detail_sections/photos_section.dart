@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../incident_photo_gallery.dart';
+import 'section_base.dart';
 
 /// Widget de galería de fotos para incident detail
 /// 
@@ -19,54 +19,32 @@ class IncidentPhotosSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentPhotosSection] build');
-    try {
-      if (photoUrls.isEmpty) return const SizedBox.shrink();
-      
-      final theme = Theme.of(context);
-      
-      return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.photo_library, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Evidencia Fotográfica',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${photoUrls.length} foto${photoUrls.length > 1 ? "s" : ""}',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.blue.shade700,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
+    return DetailSectionBase(
+      visible: photoUrls.isNotEmpty,
+      title: 'Evidencia Fotográfica',
+      leading: const Icon(Icons.photo_library, size: 20),
+      actions: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(height: 12),
-          IncidentPhotoGallery(
-            photos: photoUrls,
+          child: Text(
+            '${photoUrls.length} foto${photoUrls.length > 1 ? "s" : ""}',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ],
-      ),
-      );
-    } catch (e, st) {
-      print('[IncidentPhotosSection] build error: $e');
-      print(st);
-      return Center(child: Text('Error al renderizar fotos'));
-    }
+        ),
+      ],
+      builder: (context) {
+        return IncidentPhotoGallery(
+          photos: photoUrls,
+        );
+      },
+      errorBuilder: (ctx, err) => Center(child: Text('Error al renderizar fotos')),
+    );
   }
 }

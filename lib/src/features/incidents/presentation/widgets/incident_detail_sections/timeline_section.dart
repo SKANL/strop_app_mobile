@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'section_base.dart';
 
 /// Widget del timeline de eventos para incident detail
 /// 
@@ -19,51 +19,35 @@ class IncidentTimelineEventsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentTimelineEventsSection] build');
-    try {
-      final theme = Theme.of(context);
-      
-      return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.timeline, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Timeline de Eventos',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          // Mock timeline items
-          _buildTimelineItem(
-            context,
-            icon: Icons.add_circle_outline,
-            title: 'Incidencia creada',
-            subtitle: 'Se creó la incidencia',
-            time: 'Hace 3 horas',
-          ),
-          const SizedBox(height: 8),
-          _buildTimelineItem(
-            context,
-            icon: Icons.person_add_outlined,
-            title: 'Tarea asignada',
-            subtitle: 'Se asignó a un usuario',
-            time: 'Hace 2 horas',
-          ),
-        ],
-      ),
-      );
-    } catch (e, st) {
-      print('[IncidentTimelineEventsSection] build error: $e');
-      print(st);
-      return Center(child: Text('Error al renderizar timeline'));
-    }
+    return DetailSectionBase(
+      margin: const EdgeInsets.all(16),
+      title: 'Timeline de Eventos',
+      leading: const Icon(Icons.timeline, size: 20),
+      builder: (context) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Mock timeline items
+            _buildTimelineItem(
+              context,
+              icon: Icons.add_circle_outline,
+              title: 'Incidencia creada',
+              subtitle: 'Se creó la incidencia',
+              time: 'Hace 3 horas',
+            ),
+            const SizedBox(height: 8),
+            _buildTimelineItem(
+              context,
+              icon: Icons.person_add_outlined,
+              title: 'Tarea asignada',
+              subtitle: 'Se asignó a un usuario',
+              time: 'Hace 2 horas',
+            ),
+          ],
+        );
+      },
+      errorBuilder: (ctx, err) => Center(child: Text('Error al renderizar timeline')),
+    );
   }
   
   Widget _buildTimelineItem(

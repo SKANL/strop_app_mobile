@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/core_domain/entities/incident_entity.dart';
 import '../../../../../core/core_domain/entities/user_entity.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
+import 'section_base.dart';
 
 /// Widget de botones de acción para incident detail
 /// 
@@ -26,20 +26,21 @@ class IncidentActionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentActionsSection] build');
-    try {
-      final authProvider = context.watch<AuthProvider>();
-      final currentUser = authProvider.user;
-      
-      if (currentUser == null) return const SizedBox.shrink();
-      
-      final actions = _getAvailableActions(currentUser, incident);
-      
-      if (actions.isEmpty) return const SizedBox.shrink();
-      
-      return AppCard(
-        margin: const EdgeInsets.all(16),
-        child: Column(
+    return DetailSectionBase(
+      margin: const EdgeInsets.all(16),
+      title: 'Acciones',
+      leading: const Icon(Icons.flash_on),
+      builder: (context) {
+        final authProvider = context.watch<AuthProvider>();
+        final currentUser = authProvider.user;
+
+        if (currentUser == null) return const SizedBox.shrink();
+
+        final actions = _getAvailableActions(currentUser, incident);
+
+        if (actions.isEmpty) return const SizedBox.shrink();
+
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: actions.map((action) {
             return Padding(
@@ -55,13 +56,10 @@ class IncidentActionsSection extends StatelessWidget {
               ),
             );
           }).toList(),
-        ),
-      );
-    } catch (e, st) {
-      print('[IncidentActionsSection] build error: $e');
-      print(st);
-      return Center(child: Text('Error al renderizar acciones'));
-    }
+        );
+      },
+      errorBuilder: (ctx, err) => Center(child: Text('Error al renderizar acciones')),
+    );
   }
   
   List<_ActionButton> _getAvailableActions(UserEntity user, IncidentEntity incident) {

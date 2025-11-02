@@ -4,6 +4,7 @@ import '../../../../core/core_domain/entities/data_state.dart';
 import '../../../../core/core_domain/entities/incident_entity.dart';
 import '../providers/incident_detail_provider.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../core/core_ui/utils/app_logger.dart';
 import '../widgets/incident_detail_sections/header_section.dart';
 import '../widgets/incident_detail_sections/description_section.dart';
 import '../widgets/incident_detail_sections/photos_section.dart';
@@ -49,23 +50,22 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
   void initState() {
     super.initState();
     // Cargar detalle de incidencia al montar la pantalla
-    print('[IncidentDetailScreen] initState - incidentId: ${widget.incidentId}');
+    AppLogger.d('[IncidentDetailScreen] initState - incidentId: ${widget.incidentId}');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
-        print('[IncidentDetailScreen] Calling loadIncidentDetail');
+        AppLogger.d('[IncidentDetailScreen] Calling loadIncidentDetail');
         final provider = context.read<IncidentDetailProvider>();
         provider.loadIncidentDetail(widget.incidentId);
-        print('[IncidentDetailScreen] loadIncidentDetail called successfully');
+        AppLogger.d('[IncidentDetailScreen] loadIncidentDetail called successfully');
       } catch (e, stackTrace) {
-        print('[IncidentDetailScreen] Error in loadIncidentDetail: $e');
-        print('[IncidentDetailScreen] StackTrace: $stackTrace');
+        AppLogger.e('[IncidentDetailScreen] Error in loadIncidentDetail', e, stackTrace);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentDetailScreen] Building widget');
+  AppLogger.d('[IncidentDetailScreen] Building widget');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de Incidencia'),
@@ -93,23 +93,23 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
       ),
       body: Selector<IncidentDetailProvider, DataState<IncidentEntity>>(
         selector: (_, provider) {
-          print('[IncidentDetailScreen] Selector called - state: ${provider.incidentState}');
+          AppLogger.d('[IncidentDetailScreen] Selector called - state: ${provider.incidentState}');
           return provider.incidentState;
         },
         builder: (context, incidentState, _) {
-          print('[IncidentDetailScreen] Builder called with state: $incidentState');
+          AppLogger.d('[IncidentDetailScreen] Builder called with state: $incidentState');
           try {
             return incidentState.when(
               initial: () {
-                print('[IncidentDetailScreen] Showing initial state');
+                AppLogger.d('[IncidentDetailScreen] Showing initial state');
                 return const Center(child: Text('Cargando...'));
               },
               loading: () {
-                print('[IncidentDetailScreen] Showing loading state');
+                AppLogger.d('[IncidentDetailScreen] Showing loading state');
                 return const Center(child: CircularProgressIndicator());
               },
               error: (failure) {
-                print('[IncidentDetailScreen] Showing error state: ${failure.message}');
+                AppLogger.d('[IncidentDetailScreen] Showing error state: ${failure.message}');
                 return Center(
                   child: AppError(
                     message: failure.message,
@@ -118,7 +118,7 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                 );
               },
               success: (incident) {
-                  print('[IncidentDetailScreen] Showing success state - incident: ${incident.title}');
+                  AppLogger.d('[IncidentDetailScreen] Showing success state - incident: ${incident.title}');
                   // If we've just loaded a new incident, defer heavy sections to avoid a large first frame
                   if (_renderedIncidentId != incident.id) {
                     _renderedIncidentId = incident.id;
@@ -134,8 +134,7 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
                 },
             );
           } catch (e, stackTrace) {
-            print('[IncidentDetailScreen] Error in builder: $e');
-            print('[IncidentDetailScreen] StackTrace: $stackTrace');
+            AppLogger.e('[IncidentDetailScreen] Error in builder', e, stackTrace);
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +158,7 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
 
   Widget _buildSuccessContent(IncidentEntity incident) {
     try {
-      print('[IncidentDetailScreen] Building success content');
+      AppLogger.d('[IncidentDetailScreen] Building success content');
       return SingleChildScrollView(
         child: Column(
           children: [
@@ -185,8 +184,7 @@ class _IncidentDetailScreenState extends State<IncidentDetailScreen> {
         ),
       );
     } catch (e, stackTrace) {
-      print('[IncidentDetailScreen] Error building success content: $e');
-      print('[IncidentDetailScreen] StackTrace: $stackTrace');
+      AppLogger.e('[IncidentDetailScreen] Error building success content', e, stackTrace);
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/core_domain/entities/incident_entity.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../utils/incident_helpers.dart';
 import '../../utils/date_time_formatter.dart';
 import '../../utils/incident_type_config.dart';
 import '../incident_status_badge.dart';
+import 'section_base.dart';
 
 /// Widget de cabecera para incident detail
 /// 
@@ -24,99 +24,83 @@ class IncidentDetailHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('[IncidentDetailHeaderSection] build');
-    try {
-      final theme = Theme.of(context);
-      
-      return AppCard(
+    final theme = Theme.of(context);
+
+    return DetailSectionBase(
       margin: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Tipo y estado
-          Row(
-            children: [
-              _buildTypeChip(context),
-              const Spacer(),
-              IncidentStatusBadge(
-                status: IncidentHelpers.getStatusLabel(incident.status).toLowerCase(),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 12),
-          
-          // Título
-          Text(
-            incident.title,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+      leading: _buildTypeChip(context),
+      titleWidget: Text(
+        incident.title,
+        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+      ),
+      actions: [
+        IncidentStatusBadge(
+          status: IncidentHelpers.getStatusLabel(incident.status).toLowerCase(),
+        ),
+      ],
+      builder: (context) {
+        // Author, date and critical banner live in the content area below the uniform header
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Autor y fecha
+            Row(
+              children: [
+                const Icon(Icons.person, size: 16),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    'Creado por ${incident.createdBy}',
+                    style: theme.textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-          ),
-          
-          const SizedBox(height: 8),
-          
-          // Autor y fecha
-          Row(
-            children: [
-              const Icon(Icons.person, size: 16),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  'Creado por ${incident.createdBy}',
+
+            const SizedBox(height: 4),
+
+            Row(
+              children: [
+                const Icon(Icons.access_time, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  _formatDateTime(incident.createdAt),
                   style: theme.textTheme.bodySmall,
-                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+
+            // Banner crítico
+            if (incident.priority == IncidentPriority.critical) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.warning, color: Colors.red.shade700, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      '¡Incidencia Crítica!',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.red.shade700,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          
-          const SizedBox(height: 4),
-          
-          Row(
-            children: [
-              const Icon(Icons.access_time, size: 16),
-              const SizedBox(width: 4),
-              Text(
-                _formatDateTime(incident.createdAt),
-                style: theme.textTheme.bodySmall,
-              ),
-            ],
-          ),
-          
-          // Banner crítico
-          if (incident.priority == IncidentPriority.critical) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                border: Border.all(color: Colors.red),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.warning, color: Colors.red.shade700, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    '¡Incidencia Crítica!',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.red.shade700,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
-        ],
-      ),
-      );
-    } catch (e, st) {
-      print('[IncidentDetailHeaderSection] build error: $e');
-      print(st);
-      return Center(child: Text('Error al renderizar cabecera'));
-    }
+        );
+      },
+      errorBuilder: (ctx, err) => Center(child: Text('Error al renderizar cabecera')),
+    );
   }
 
   Widget _buildTypeChip(BuildContext context) {

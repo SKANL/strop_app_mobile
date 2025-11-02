@@ -69,8 +69,6 @@ export 'cards/reference_card.dart';
 export 'cards/example_card.dart';
 export 'section_card.dart';
 // legacy: moved to legacy/ during refactor cleanup. Keep export to preserve API while we validate.
-export 'legacy/detail_card.dart';
-export 'stats_card.dart' hide StatsCard;
 export 'action_type_card.dart';
 export 'selectable_card.dart';
 

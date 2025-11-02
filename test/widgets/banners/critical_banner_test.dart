@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
-import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 void main() {
   group('CriticalBanner Widget Tests', () {

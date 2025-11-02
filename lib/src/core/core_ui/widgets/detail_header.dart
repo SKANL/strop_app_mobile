@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../theme/app_colors.dart';
-import 'status_badge.dart';
+import 'badges/status_badge.dart';
 import 'info_row.dart';
 import 'critical_banner.dart';
 
@@ -84,8 +84,8 @@ class DetailHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Tipo/Badge
-        StatusBadge.incidentType(type),
+  // Tipo/Badge
+  StatusBadge.incidentType(type: type),
         const SizedBox(height: 12),
 
         // Título

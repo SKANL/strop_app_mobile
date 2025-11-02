@@ -1,9 +1,9 @@
 // lib/src/core/core_ui/widgets/builders/async_state_builder.dart
 import 'package:flutter/material.dart';
 import '../../../core_domain/entities/data_state.dart';
-import '../app_loading.dart';
-import '../app_error.dart';
-import '../empty_state.dart';
+import '../states/app_loading.dart';
+import '../states/app_error.dart';
+import '../states/empty_state.dart';
 
 /// Builder widget para manejar estados asíncronos con DataState.
 ///

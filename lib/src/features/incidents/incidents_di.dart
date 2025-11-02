@@ -24,17 +24,17 @@ import 'presentation/providers/incident_form_provider.dart';
 import '../auth/presentation/manager/auth_provider.dart';
 
 // Pantallas
-import 'presentation/screens/project_tabs_screen.dart';
-import 'presentation/screens/project_team_screen.dart';
-import 'presentation/screens/project_info_screen.dart';
-import 'presentation/screens/select_incident_type_screen.dart';
-import 'presentation/screens/create_incident_form_screen.dart';
-import 'presentation/screens/create_material_request_form_screen.dart';
-import 'presentation/screens/incident_detail_screen.dart';
-import 'presentation/screens/create_correction_screen.dart';
-import 'presentation/screens/assign_user_screen.dart';
-import 'presentation/screens/close_incident_screen.dart';
-import 'presentation/screens/add_comment_screen.dart';
+import 'presentation/screens/project/project_tabs_screen.dart';
+import 'presentation/screens/project/project_team_screen.dart';
+import 'presentation/screens/project/project_info_screen.dart';
+import 'presentation/screens/forms/select_incident_type_screen.dart';
+import 'presentation/screens/forms/create_incident_form_screen.dart';
+import 'presentation/screens/forms/create_material_request_form_screen.dart';
+import 'presentation/screens/details/incident_detail_screen.dart';
+import 'presentation/screens/forms/create_correction_screen.dart';
+import 'presentation/screens/details/assign_user_screen.dart';
+import 'presentation/screens/details/close_incident_screen.dart';
+import 'presentation/screens/details/add_comment_screen.dart';
 
 final getIt = GetIt.instance;
 

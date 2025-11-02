@@ -1,10 +1,10 @@
 // lib/src/core/core_ui/widgets/widgets.dart
 // Barrel file para todos los widgets reutilizables de core_ui
 // 
-// REFACTORIZADO FASE 6:
-// - Eliminadas duplicaciones y exports conflictivos
-// - Organizado por categoría lógica
-// - Mantiene la coherencia con la arquitectura V5
+// OPTIMIZADO - Arquitectura Clean + DDD
+// - Estructura por carpetas semánticas
+// - Eliminación de duplicaciones
+// - Organización coherente y escalable
 
 // ============================================================================
 // FOUNDATION - Theme & Utils
@@ -23,11 +23,11 @@ export '../mixins/form_mixin.dart';
 export '../mixins/snackbar_mixin.dart';
 
 // ============================================================================
-// LAYOUT & RESPONSIVE (Core Layout Widgets)
+// LAYOUT & RESPONSIVE
 // ============================================================================
-export 'responsive_layout.dart';
-export 'adaptive_grid.dart';
-export 'adaptive_spacing.dart';
+export 'layouts/responsive_layout.dart';
+export 'layouts/adaptive_grid.dart';
+export 'layouts/adaptive_spacing.dart';
 
 // ============================================================================
 // SCAFFOLDS (Page-level containers)
@@ -36,24 +36,33 @@ export 'scaffolds/strop_scaffold.dart';
 export 'scaffolds/form_scaffold.dart';
 
 // ============================================================================
-// BUILDERS & STATE MANAGEMENT HELPERS
+// BUILDERS & STATE MANAGEMENT
 // ============================================================================
 export 'builders/async_state_builder.dart';
+
+// ============================================================================
+// STATES (Loading, Error, Empty)
+// ============================================================================
+export 'states/app_error.dart';
+export 'states/app_loading.dart';
+export 'states/empty_state.dart';
+export 'states/loading_placeholder.dart';
 
 // ============================================================================
 // BANNERS (Informational overlays)
 // ============================================================================
 export 'banners/info_banner.dart';
-export 'critical_banner.dart';
+export 'banners/critical_banner.dart';
 export 'banners/banner_info.dart';
 export 'banners/action_confirmation_banner.dart';
 
 // ============================================================================
-// BADGES & STATUS INDICATORS
+// BADGES & CHIPS
 // ============================================================================
 export 'badges/status_badge.dart';
-export 'approval_badge.dart';
-export 'role_badge.dart';
+export 'badges/approval_badge.dart';
+export 'badges/role_badge.dart';
+export 'badges/type_chip.dart';
 
 // ============================================================================
 // BUTTONS
@@ -62,45 +71,56 @@ export 'buttons/app_button.dart';
 export 'buttons/loading_button.dart';
 
 // ============================================================================
-// CARDS & CONTAINERS (Major content blocks)
+// CARDS & CONTAINERS
 // ============================================================================
 export 'cards/app_card.dart';
 export 'cards/reference_card.dart';
 export 'cards/example_card.dart';
-export 'section_card.dart';
-// legacy: moved to legacy/ during refactor cleanup. Keep export to preserve API while we validate.
-export 'action_type_card.dart';
-// selectable_card.dart eliminado - código muerto no utilizado
+export 'cards/section_card.dart';
+export 'cards/action_type_card.dart';
+export 'cards/team_member_card.dart';
 
 // ============================================================================
-// DIALOGS
+// DIALOGS & OVERLAYS
 // ============================================================================
 export 'dialogs/confirm_dialog.dart';
 export 'dialogs/dialog_actions.dart';
-export 'loading_dialog.dart';
+export 'overlays/loading_dialog.dart';
+export 'overlays/filter_bottom_sheet.dart';
 
 // ============================================================================
-// FORMS (Form-related widgets)
+// FORMS
 // ============================================================================
-export 'form_section.dart';
+export 'forms/form_section.dart';
 export 'forms/form_field_with_label.dart';
 export 'forms/multi_image_picker.dart';
 export 'forms/form_action_buttons.dart';
 export 'forms/datetime_picker_field.dart';
 
 // ============================================================================
-// LISTS (List variants with built-in state management)
+// INPUTS (Form inputs & selectors)
+// ============================================================================
+export 'inputs/app_text_field.dart';
+export 'inputs/user_selector_widget.dart';
+
+// ============================================================================
+// LISTS (List widgets with state management)
 // ============================================================================
 export 'lists/async_list_view.dart';
 export 'lists/filterable_list_view.dart';
 export 'lists/tabbed_list_view.dart';
+export 'lists/team_list.dart';
 
 // ============================================================================
 // TILES & LIST ITEMS
 // ============================================================================
 export 'tiles/settings_tile.dart';
 export 'tiles/info_list_tile.dart';
-export 'info_row.dart';
+
+// ============================================================================
+// DISPLAYS (Information display widgets)
+// ============================================================================
+export 'displays/info_row.dart';
 
 // ============================================================================
 // PHOTOS & MEDIA
@@ -108,23 +128,18 @@ export 'info_row.dart';
 export 'photos/photo_grid.dart';
 
 // ============================================================================
-// BASIC WIDGETS (Foundational, frequently used)
-// ============================================================================
-export 'app_error.dart';
-export 'app_loading.dart';
-export 'app_text_field.dart';
-export 'avatar_with_initials.dart';
-export 'empty_state.dart';
-export 'filter_bottom_sheet.dart';
-export 'user_selector_widget.dart';
-
-// ============================================================================
-// SPECIALIZED WIDGETS (Semantic/Domain-specific)
+// HEADERS
 // ============================================================================
 export 'headers/section_header.dart';
-export 'timeline_event.dart';
-export 'team_member_card.dart';
-export 'team_list.dart';
-export 'detail_header.dart';
-export 'type_chip.dart';
+export 'headers/detail_header.dart';
+
+// ============================================================================
+// TIMELINE
+// ============================================================================
+export 'timeline/timeline_event.dart';
+
+// ============================================================================
+// AVATARS
+// ============================================================================
+export 'avatars/avatar_with_initials.dart';
 

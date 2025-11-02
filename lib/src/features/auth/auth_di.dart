@@ -16,18 +16,27 @@ import 'presentation/screens/splash_screen.dart';
 final getIt = GetIt.instance;
 
 /// Configuración del módulo de autenticación
-/// 
-/// IMPORTANTE: Actualmente usa AuthFakeDataSource (datos mockeados)
-/// Para cambiar a API real:
-/// 1. Importar 'auth_remote_datasource.dart' en lugar de 'auth_fake_datasource.dart'
-/// 2. En setupAuthModule(), cambiar:
-///    getIt.registerLazySingleton(() => AuthFakeDataSource())
-///    por:
-///    getIt.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(getIt()))
-/// 3. En AuthRepositoryImpl constructor, cambiar:
-///    fakeDataSource: getIt()
-///    por:
-///    remoteDataSource: getIt(), networkInfo: getIt()
+///
+/// IMPORTANTE: Actualmente este módulo registra un `AuthFakeDataSource` (datos mockeados).
+/// Para cambiar a una implementación real basada en API, sigue estos pasos:
+///
+/// 1. Reemplaza la importación:
+/// ```dart
+/// // import 'data/datasources/auth_fake_datasource.dart';
+/// import 'data/datasources/auth_remote_datasource.dart';
+/// ```
+///
+/// 2. En `setupAuthModule()` cambia la instancia registrada:
+/// ```dart
+/// // getIt.registerLazySingleton(() => AuthFakeDataSource());
+/// getIt.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(getIt()));
+/// ```
+///
+/// 3. Ajusta la construcción del repositorio para usar el datasource remoto y network info:
+/// ```dart
+/// // AuthRepositoryImpl(fakeDataSource: getIt())
+/// AuthRepositoryImpl(remoteDataSource: getIt(), networkInfo: getIt())
+/// ```
 void setupAuthModule() {
   // Registrar FakeDataSource (para pruebas sin API)
   getIt.registerLazySingleton(() => AuthFakeDataSource());

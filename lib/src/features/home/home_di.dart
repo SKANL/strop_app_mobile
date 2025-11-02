@@ -7,13 +7,13 @@ import '../../core/core_domain/repositories/project_repository.dart';
 import 'data/datasources/projects_fake_datasource.dart';
 import 'data/repositories_impl/projects_repository_impl.dart';
 import 'presentation/providers/projects_provider.dart';
-import 'presentation/screens/archived_projects_screen.dart';
+import 'presentation/screens/projects/archived_projects_screen.dart';
 import 'presentation/screens/home_screen.dart';
-import 'presentation/screens/notifications_screen.dart';
-import 'presentation/screens/settings_screen.dart';
-import 'presentation/screens/sync_conflict_screen.dart';
-import 'presentation/screens/sync_queue_screen.dart';
-import 'presentation/screens/user_profile_screen.dart';
+import 'presentation/screens/settings/notifications_screen.dart';
+import 'presentation/screens/settings/settings_screen.dart';
+import 'presentation/screens/sync/sync_conflict_screen.dart';
+import 'presentation/screens/sync/sync_queue_screen.dart';
+import 'presentation/screens/settings/user_profile_screen.dart';
 
 final getIt = GetIt.instance;
 

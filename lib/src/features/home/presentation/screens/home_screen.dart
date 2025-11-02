@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
 import '../providers/projects_provider.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
-import '../widgets/project_card.dart';
+import '../widgets/cards/project_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
-import '../../helpers/ui_helpers.dart';
-import '../../helpers/incident_helpers.dart';
+import '../../utils/ui_helpers/ui_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../widgets/form_inputs/material_search_selector.dart';
 import '../../widgets/form_inputs/quantity_input_section.dart';
@@ -186,7 +186,7 @@ class _CreateMaterialRequestFormScreenState
 
     final currentUser = context.read<AuthProvider>().user;
     if (currentUser == null) {
-      showErrorSnackBar(IncidentHelpers.noAuthUserError);
+      showErrorSnackBar(IncidentConverters.noAuthUserError);
       return;
     }
 

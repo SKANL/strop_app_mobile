@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
 import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import '../../providers/incident_form_provider.dart';
-import '../../helpers/incident_helpers.dart';
-import '../../helpers/ui_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
+import '../../utils/ui_helpers/ui_helpers.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 17: Formulario de Reporte Básico (Avance, Problema, Consulta, Seguridad)
@@ -45,8 +45,8 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final incidentType = IncidentHelpers.getIncidentTypeFromString(widget.type);
-    final typeLabel = IncidentHelpers.getTypeLabel(incidentType);
+    final incidentType = IncidentConverters.getIncidentTypeFromString(widget.type);
+    final typeLabel = IncidentConverters.getTypeLabel(incidentType);
     final formProvider = context.watch<IncidentFormProvider>();
     
     return Scaffold(
@@ -82,7 +82,7 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
                   label: 'Descripción',
                   hint: 'Describe el reporte en detalle...',
                   controller: _descriptionController,
-                  validator: IncidentHelpers.validateDescription,
+                  validator: IncidentConverters.validateDescription,
                   maxLines: 5,
                   isRequired: true,
                 ),
@@ -156,17 +156,17 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
 
     if (currentUser == null) {
       if (mounted) {
-        UiHelpers.showErrorSnackBar(context, IncidentHelpers.noAuthUserError);
+        UiHelpers.showErrorSnackBar(context, IncidentConverters.noAuthUserError);
       }
       return;
     }
 
     // Crear entidad de incidencia
-    final incidentType = IncidentHelpers.getIncidentTypeFromString(widget.type);
+    final incidentType = IncidentConverters.getIncidentTypeFromString(widget.type);
     final description = _descriptionController.text.trim();
     
     // Generar título automático basado en tipo y primeras palabras de descripción
-    final titlePrefix = IncidentHelpers.getTypeLabel(incidentType);
+    final titlePrefix = IncidentConverters.getTypeLabel(incidentType);
     final descWords = description.split(' ').take(5).join(' ');
     final autoTitle = '$titlePrefix: ${descWords.length > 30 ? '${descWords.substring(0, 30)}...' : descWords}';
     

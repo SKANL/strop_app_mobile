@@ -7,7 +7,7 @@ import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.d
 import '../../../../auth/presentation/manager/auth_provider.dart';
 import '../../providers/incidents_list_provider.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
-import '../../helpers/incident_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
 import '../../widgets/list_items/incident_list_item.dart';
 
 /// Screen 12: Mis Reportes - Lista de incidencias creadas por el usuario (Bottom-Up)
@@ -89,7 +89,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
           type: report.type,
           author: report.createdBy,
           reportedDate: report.createdAt,
-          status: IncidentHelpers.getStatusLabel(report.status),
+          status: IncidentConverters.getStatusLabel(report.status),
           isCritical: report.priority == IncidentPriority.critical,
           approvalStatus: report.approvalStatus,
           showRelativeTime: true,

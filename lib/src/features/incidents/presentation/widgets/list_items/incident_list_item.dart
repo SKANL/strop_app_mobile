@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
-import '../../formatters/date_time_formatter.dart';
+import '../../utils/formatters/date_time_formatter.dart';
 
 /// Widget reutilizable para mostrar un item de incidencia en listas
 class IncidentListItem extends StatelessWidget {

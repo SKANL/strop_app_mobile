@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/incident_form_provider.dart';
-import '../../helpers/incident_helpers.dart';
-import '../../helpers/ui_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
+import '../../utils/ui_helpers/ui_helpers.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 22: Cerrar Incidencia (Modal)
@@ -71,7 +71,7 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
                     prefixIcon: const Icon(Icons.note_add),
                     maxLines: 4,
                     isRequired: true,
-                    validator: IncidentHelpers.validateCloseNote,
+                    validator: IncidentConverters.validateCloseNote,
                   ),
                   const SizedBox(height: 24),
                   FormSection(

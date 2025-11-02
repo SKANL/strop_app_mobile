@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
-import '../../../helpers/incident_helpers.dart';
-import '../../../formatters/date_time_formatter.dart';
-import '../../../config/incident_type_config.dart';
+import '../../utils/converters/incident_converters.dart';
+import '../../utils/formatters/date_time_formatter.dart';
+import '../../utils/constants/incident_type_config.dart';
 import 'section_base.dart';
 
 /// Widget de cabecera para incident detail
@@ -35,7 +35,7 @@ class IncidentDetailHeaderSection extends StatelessWidget {
       ),
       actions: [
         StatusBadge.incidentStatus(
-          status: IncidentHelpers.getStatusLabel(incident.status),
+          status: IncidentConverters.getStatusLabel(incident.status),
           useSoftColors: true,
         ),
       ],

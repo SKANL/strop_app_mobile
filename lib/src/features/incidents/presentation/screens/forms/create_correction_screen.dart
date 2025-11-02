@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/incident_detail_provider.dart';
-import '../../helpers/incident_helpers.dart';
-import '../../helpers/ui_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
+import '../../utils/ui_helpers/ui_helpers.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 20: Registrar Aclaración (Modal)
@@ -81,7 +81,7 @@ class _CreateCorrectionScreenState extends State<CreateCorrectionScreen> {
                     prefixIcon: const Icon(Icons.edit_note),
                     maxLines: 5,
                     isRequired: true,
-                    validator: IncidentHelpers.validateExplanation,
+                    validator: IncidentConverters.validateExplanation,
                   ),
                   const SizedBox(height: 24),
                   

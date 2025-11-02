@@ -1,11 +1,11 @@
-// lib/src/features/incidents/presentation/helpers/incident_helpers.dart
+// lib/src/features/incidents/presentation/utils/converters/incident_converters.dart
 
-import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../../core/core_domain/entities/incident_entity.dart';
 
-/// Utilidades compartidas para manejo de incidencias
-/// Elimina duplicación de métodos de conversión en múltiples screens
-class IncidentHelpers {
-  IncidentHelpers._(); // Private constructor para prevenir instanciación
+/// Utilidades compartidas para conversión de datos de incidencias
+/// Convierte enums a strings legibles y viceversa
+class IncidentConverters {
+  IncidentConverters._(); // Private constructor para prevenir instanciación
 
   // ============================================================================
   // Conversión de Tipos a Labels

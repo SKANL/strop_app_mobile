@@ -7,7 +7,7 @@ import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.d
 import '../../../../auth/presentation/manager/auth_provider.dart';
 import '../../providers/incidents_list_provider.dart';
 import '../../widgets/list_items/incident_list_item.dart';
-import '../../helpers/incident_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 11: Mis Tareas - Lista de incidencias asignadas al usuario (Top-Down)
@@ -87,7 +87,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
           type: task.type,
           author: task.createdBy,
           reportedDate: task.createdAt,
-          status: IncidentHelpers.getStatusLabel(task.status),
+          status: IncidentConverters.getStatusLabel(task.status),
           isCritical: task.priority == IncidentPriority.critical,
           onTap: () {
             context.push('/incident/${task.id}');

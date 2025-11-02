@@ -1,7 +1,7 @@
-// lib/src/features/incidents/presentation/helpers/ui_helpers.dart
+// lib/src/features/incidents/presentation/utils/ui_helpers/ui_helpers.dart
 
 import 'package:flutter/material.dart';
-import '../../../../core/core_ui/theme/app_colors.dart';
+import '../../../../../core/core_ui/theme/app_colors.dart';
 
 /// Utilidades compartidas para UI y feedback al usuario
 /// Elimina duplicación de SnackBars, Dialogs y otros widgets de UI

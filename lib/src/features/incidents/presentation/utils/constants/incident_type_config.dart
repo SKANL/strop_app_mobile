@@ -1,6 +1,6 @@
-// lib/src/features/incidents/presentation/config/incident_type_config.dart
+// lib/src/features/incidents/presentation/utils/constants/incident_type_config.dart
 import 'package:flutter/material.dart';
-import '../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../../core/core_domain/entities/incident_entity.dart';
 
 /// Configuración centralizada para los tipos de incidencia
 /// 

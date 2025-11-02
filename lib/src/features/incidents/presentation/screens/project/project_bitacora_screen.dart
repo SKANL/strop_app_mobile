@@ -6,7 +6,7 @@ import 'package:mobile_strop_app/src/core/core_domain/entities/data_state.dart';
 import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import '../../providers/incidents_list_provider.dart';
 import '../../widgets/list_items/incident_list_item.dart';
-import '../../helpers/incident_helpers.dart';
+import '../../utils/converters/incident_converters.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 13: Bitácora del Proyecto - Historial completo con filtros
@@ -120,7 +120,7 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
           type: incident.type,
           author: incident.createdBy,
           reportedDate: incident.createdAt,
-          status: IncidentHelpers.getStatusLabel(incident.status),
+          status: IncidentConverters.getStatusLabel(incident.status),
           isCritical: incident.priority == IncidentPriority.critical,
           onTap: () {
             context.push('/incident/${incident.id}');
@@ -199,7 +199,7 @@ class _ProjectBitacoraScreenState extends State<ProjectBitacoraScreen> {
     // Filtrar por tipo
     if (_selectedTypes.isNotEmpty) {
       filtered = filtered.where((incident) {
-        final typeLabel = IncidentHelpers.getTypeLabel(incident.type);
+        final typeLabel = IncidentConverters.getTypeLabel(incident.type);
         return _selectedTypes.contains(typeLabel);
       }).toList();
     }

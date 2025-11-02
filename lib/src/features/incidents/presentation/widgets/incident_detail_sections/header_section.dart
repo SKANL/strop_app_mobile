@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/core_domain/entities/incident_entity.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../utils/incident_helpers.dart';
 import '../../utils/date_time_formatter.dart';
 import '../../utils/incident_type_config.dart';
-import '../incident_status_badge.dart';
 import 'section_base.dart';
 
 /// Widget de cabecera para incident detail
@@ -34,8 +34,9 @@ class IncidentDetailHeaderSection extends StatelessWidget {
         style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       actions: [
-        IncidentStatusBadge(
-          status: IncidentHelpers.getStatusLabel(incident.status).toLowerCase(),
+        StatusBadge.incidentStatus(
+          status: IncidentHelpers.getStatusLabel(incident.status),
+          useSoftColors: true,
         ),
       ],
       builder: (context) {

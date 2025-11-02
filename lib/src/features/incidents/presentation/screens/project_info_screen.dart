@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
 import '../widgets/project_activity_card.dart';
 import '../widgets/project_material_category.dart';
-import '../widgets/project_info_banner.dart';
 
 /// Screen 15: Información del Proyecto - Programa y explosión de insumos (solo lectura)
 class ProjectInfoScreen extends StatefulWidget {
@@ -69,10 +68,10 @@ class _ProjectInfoScreenState extends State<ProjectInfoScreen>
       padding: const EdgeInsets.all(16.0),
       children: [
         // Banner informativo
-        ProjectInfoBanner(
+        InfoBanner(
           message: 'Este es el programa original del proyecto. Es de solo lectura.',
           icon: Icons.info_outline,
-          color: AppColors.primary,
+          type: InfoBannerType.info,
         ),
 
         const SizedBox(height: 24),
@@ -119,10 +118,10 @@ class _ProjectInfoScreenState extends State<ProjectInfoScreen>
       padding: const EdgeInsets.all(16.0),
       children: [
         // Banner informativo
-        ProjectInfoBanner(
+        InfoBanner(
           message: 'Presupuesto de insumos del proyecto. Solo lectura.',
           icon: Icons.lock_outline,
-          color: AppColors.warning,
+          type: InfoBannerType.warning,
         ),
 
         const SizedBox(height: 24),

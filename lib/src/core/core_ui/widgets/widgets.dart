@@ -70,7 +70,7 @@ export 'cards/example_card.dart';
 export 'section_card.dart';
 // legacy: moved to legacy/ during refactor cleanup. Keep export to preserve API while we validate.
 export 'action_type_card.dart';
-export 'selectable_card.dart';
+// selectable_card.dart eliminado - código muerto no utilizado
 
 // ============================================================================
 // DIALOGS

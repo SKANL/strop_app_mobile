@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
-import '../../widgets/user_avatar_section.dart';
+import '../../widgets/sections/user_avatar_section.dart';
 import '../../widgets/dialogs/change_password_dialog.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
 

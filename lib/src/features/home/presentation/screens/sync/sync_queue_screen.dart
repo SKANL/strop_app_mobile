@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
-import '../../widgets/sync/connection_status_card.dart';
-import '../../widgets/sync/pending_items_section.dart';
-import '../../widgets/sync/conflicts_section.dart';
+import '../../widgets/sections/connection_status_card.dart';
+import '../../widgets/sections/pending_items_section.dart';
+import '../../widgets/sections/conflicts_section.dart';
 
 /// Pantalla de Cola de Sincronización (Fase 1)
 /// 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Widget para ingresar cantidad y mostrar unidad de medida
 class QuantityInputSection extends StatelessWidget {

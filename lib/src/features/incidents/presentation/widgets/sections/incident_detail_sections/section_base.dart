@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/core_ui/utils/app_logger.dart';
-import '../../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/utils/app_logger.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Reusable base for incident detail sections.
 ///
@@ -10,7 +10,6 @@ import '../../../../../../core/core_ui/widgets/widgets.dart';
 /// - Header (title, leading, actions) uniforme
 /// - visibility/empty handling
 /// - try/catch + centralized logging
-/// - optional loading and error builders
 class DetailSectionBase extends StatelessWidget {
   const DetailSectionBase({
     super.key,

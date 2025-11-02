@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/theme/app_colors.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget para marcar una solicitud como urgente/crítica
 class UrgentToggleSection extends StatelessWidget {

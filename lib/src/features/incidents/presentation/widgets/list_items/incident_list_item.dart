@@ -1,7 +1,7 @@
 // lib/src/features/incidents/presentation/widgets/list_items/incident_list_item.dart
 import 'package:flutter/material.dart';
-import '../../../../../core/core_domain/entities/incident_entity.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 import '../../formatters/date_time_formatter.dart';
 
 /// Widget reutilizable para mostrar un item de incidencia en listas

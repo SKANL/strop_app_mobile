@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/core_domain/entities/data_state.dart';
-import '../../../../../core/core_domain/entities/incident_entity.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/data_state.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import '../../providers/incidents_list_provider.dart';
 import '../../widgets/list_items/incident_list_item.dart';
 import '../../helpers/incident_helpers.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 13: Bitácora del Proyecto - Historial completo con filtros
 /// 

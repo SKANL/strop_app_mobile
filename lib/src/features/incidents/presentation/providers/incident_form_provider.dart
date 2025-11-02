@@ -1,7 +1,7 @@
 // lib/src/features/incidents/presentation/providers/incident_form_provider.dart
 import 'package:flutter/foundation.dart';
-import '../../../../core/core_domain/entities/incident_entity.dart';
-import '../../../../core/core_domain/entities/data_state.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/data_state.dart';
 import '../../../../core/core_domain/errors/failures.dart';
 import '../../../../core/core_domain/repositories/incident_repository.dart';
 

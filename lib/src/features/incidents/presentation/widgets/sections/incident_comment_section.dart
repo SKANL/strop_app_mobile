@@ -1,6 +1,6 @@
 // lib/src/features/incidents/presentation/widgets/sections/incident_comment_section.dart
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Widget that displays the comment input section for incidents
 class IncidentCommentSection extends StatelessWidget {

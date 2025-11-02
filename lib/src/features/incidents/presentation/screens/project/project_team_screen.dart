@@ -1,6 +1,6 @@
 // lib/src/features/incidents/presentation/screens/project/project_team_screen.dart
 import 'package:flutter/material.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 14: Equipo del Proyecto - Ver jerarquía de personal asignado
 class ProjectTeamScreen extends StatelessWidget {

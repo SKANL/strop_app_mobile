@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
-import '../../../../../core/core_domain/entities/incident_entity.dart';
+import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.dart';
 import '../../providers/incident_form_provider.dart';
 import '../../helpers/incident_helpers.dart';
 import '../../helpers/ui_helpers.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Screen 17: Formulario de Reporte Básico (Avance, Problema, Consulta, Seguridad)
 /// 

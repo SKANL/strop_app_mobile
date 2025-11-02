@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
-import 'section_base.dart';
+import 'package:mobile_strop_app/src/features/incidents/presentation/widgets/sections/incident_detail_sections/section_base.dart';
 
 /// Widget de galería de fotos para incident detail
 /// 

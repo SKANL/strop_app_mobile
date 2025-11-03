@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget reutilizable para mostrar grids de fotos o imágenes.
 /// 
@@ -100,7 +101,7 @@ class PhotoGrid extends StatelessWidget {
                 return Container(
                   width: photoSize,
                   height: photoSize,
-                  color: Colors.grey[300],
+                  color: AppColors.borderColor,
                   child: const Icon(Icons.broken_image),
                 );
               },
@@ -115,12 +116,12 @@ class PhotoGrid extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: AppColors.overlay50,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.close,
-                    color: Colors.white,
+                    color: AppColors.cardBackground,
                     size: 16,
                   ),
                 ),
@@ -138,10 +139,10 @@ class PhotoGrid extends StatelessWidget {
         width: photoSize,
         height: photoSize,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: AppColors.backgroundMedium,
           borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(
-            color: Colors.grey[400]!,
+            color: AppColors.borderMedium,
             width: 1,
             style: BorderStyle.solid,
           ),
@@ -149,7 +150,7 @@ class PhotoGrid extends StatelessWidget {
         child: const Center(
           child: Icon(
             Icons.add_photo_alternate_outlined,
-            color: Colors.grey,
+            color: AppColors.iconColor,
             size: 32,
           ),
         ),
@@ -162,10 +163,10 @@ class PhotoGrid extends StatelessWidget {
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: AppColors.black,
             appBar: AppBar(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.black,
+              foregroundColor: AppColors.cardBackground,
               elevation: 0,
             ),
             body: Center(
@@ -179,7 +180,7 @@ class PhotoGrid extends StatelessWidget {
                     return const Center(
                       child: Icon(
                         Icons.broken_image,
-                        color: Colors.white,
+                        color: AppColors.cardBackground,
                         size: 64,
                       ),
                     );

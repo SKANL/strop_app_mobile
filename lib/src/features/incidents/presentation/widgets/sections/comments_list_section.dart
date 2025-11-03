@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'section_base.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget de comentarios para incident detail
 /// 
@@ -32,7 +33,7 @@ class IncidentCommentsListSection extends StatelessWidget {
             Text(
               'Los comentarios aparecerán aquí...',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
+                color: AppColors.textMuted,
                 fontStyle: FontStyle.italic,
               ),
             ),

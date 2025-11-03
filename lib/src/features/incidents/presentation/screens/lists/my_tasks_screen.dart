@@ -33,7 +33,8 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userId = context.read<AuthProvider>().user?.id ?? '';
-      context.read<IncidentsListProvider>().loadMyTasks(userId);
+      // Cargar tareas filtradas por el proyecto actual
+      context.read<IncidentsListProvider>().loadMyTasks(userId, projectId: widget.projectId);
     });
   }
 
@@ -55,7 +56,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
             return RefreshIndicator(
               onRefresh: () {
                 final userId = context.read<AuthProvider>().user?.id ?? '';
-                return context.read<IncidentsListProvider>().loadMyTasks(userId);
+                return context.read<IncidentsListProvider>().loadMyTasks(userId, projectId: widget.projectId);
               },
               child: _buildTasksList(context, tasks),
             );
@@ -66,7 +67,7 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
                 message: failure.message,
                 onRetry: () {
                   final userId = context.read<AuthProvider>().user?.id ?? '';
-                  context.read<IncidentsListProvider>().loadMyTasks(userId);
+                  context.read<IncidentsListProvider>().loadMyTasks(userId, projectId: widget.projectId);
                 },
               ),
             );
@@ -90,7 +91,8 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
           status: IncidentConverters.getStatusLabel(task.status),
           isCritical: task.priority == IncidentPriority.critical,
           onTap: () {
-            context.push('/incident/${task.id}');
+            // Navegar usando la ruta del proyecto para mantener el stack/visual coherente
+            context.push('/project/${task.projectId}/incident/${task.id}');
           },
         );
       },

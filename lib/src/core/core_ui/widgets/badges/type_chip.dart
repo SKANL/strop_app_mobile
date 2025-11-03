@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/badges/type_chip.dart
 
 import 'package:flutter/material.dart';
+import '../widgets.dart';
 import '../../../core_domain/entities/incident_entity.dart';
 
 /// Widget reutilizable para chips de tipo de incidencia.
@@ -49,7 +50,7 @@ class TypeChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: config.color.withValues(alpha: 0.15),
+  color: AppColors.withOpacity(config.color, 0.15),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: config.color, width: 1),
       ),

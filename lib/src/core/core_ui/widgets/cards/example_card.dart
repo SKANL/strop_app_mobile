@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget reutilizable para mostrar ejemplos o tips
 /// 
@@ -53,9 +54,9 @@ class ExampleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? Colors.blue.shade50;
-    final ic = iconColor ?? Colors.blue.shade700;
-    final txt = textColor ?? Colors.blue.shade800;
+  final bg = backgroundColor ?? AppColors.infoLight;
+  final ic = iconColor ?? AppColors.infoDark;
+  final txt = textColor ?? AppColors.infoText;
 
     return Container(
       padding: padding,
@@ -70,10 +71,10 @@ class ExampleCard extends StatelessWidget {
             children: [
               Icon(icon, color: ic, size: 20),
               const SizedBox(width: 8),
-              Text(
+                Text(
                 title,
                 style: TextStyle(
-                  color: Colors.blue.shade900,
+                  color: AppColors.infoText,
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),

@@ -78,18 +78,18 @@ class IncidentDetailHeaderSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  border: Border.all(color: Colors.red),
+                  color: AppColors.dangerLight,
+                  border: Border.all(color: AppColors.dangerBorder),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.warning, color: Colors.red.shade700, size: 20),
+                    Icon(Icons.warning, color: AppColors.dangerIcon, size: 20),
                     const SizedBox(width: 8),
                     Text(
                       '¡Incidencia Crítica!',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.red.shade700,
+                        color: AppColors.dangerIcon,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -117,7 +117,7 @@ class IncidentDetailHeaderSection extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
-      backgroundColor: typeData.color.withValues(alpha: 0.1),
+        backgroundColor: AppColors.withOpacity(typeData.color, 0.1),
       side: BorderSide(color: typeData.color),
     );
   }

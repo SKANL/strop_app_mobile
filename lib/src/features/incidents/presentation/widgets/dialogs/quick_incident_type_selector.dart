@@ -206,10 +206,10 @@ class QuickIncidentTypeSelector extends StatelessWidget {
         child: Row(
           children: [
             // Icono
-            Container(
+              Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
+                color: AppColors.withOpacity(iconColor, 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
@@ -243,7 +243,7 @@ class QuickIncidentTypeSelector extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.2),
+                            color: AppColors.withOpacity(AppColors.warningBorder, 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -251,7 +251,7 @@ class QuickIncidentTypeSelector extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
-                              color: Colors.orange.shade700,
+                              color: AppColors.warningIcon,
                             ),
                           ),
                         ),

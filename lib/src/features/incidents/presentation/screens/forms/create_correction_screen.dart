@@ -69,7 +69,7 @@ class _CreateCorrectionScreenState extends State<CreateCorrectionScreen> {
                     label: 'Aclaración para:',
                     title: 'Incidencia #${widget.incidentId}',
                     icon: Icons.description,
-                    backgroundColor: Colors.grey.shade100,
+                    backgroundColor: AppColors.backgroundLight,
                   ),
                   const SizedBox(height: 24),
                   
@@ -112,7 +112,7 @@ class _CreateCorrectionScreenState extends State<CreateCorrectionScreen> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: AppColors.overlayColor,
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),

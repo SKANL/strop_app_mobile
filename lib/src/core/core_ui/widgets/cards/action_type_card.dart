@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/action_type_card.dart
 
 import 'package:flutter/material.dart';
+import '../widgets.dart';
 
 /// Widget reutilizable para Cards de acción/tipo con icono grande.
 /// 
@@ -66,13 +67,13 @@ class ActionTypeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveIconBgColor = iconBackgroundColor ?? iconColor.withValues(alpha: 0.15);
+  final effectiveIconBgColor = iconBackgroundColor ?? AppColors.withOpacity(iconColor, 0.15);
 
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
-        side: BorderSide(color: iconColor.withValues(alpha: 0.3), width: 1.5),
+  side: BorderSide(color: AppColors.withOpacity(iconColor, 0.3), width: 1.5),
       ),
       child: InkWell(
         onTap: onTap,

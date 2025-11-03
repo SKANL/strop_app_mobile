@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/badges/approval_badge.dart
 
 import 'package:flutter/material.dart';
+import '../widgets.dart';
 import '../../../core_domain/entities/incident_entity.dart';
 
 /// Widget reutilizable para badges de estado de aprobación.
@@ -35,7 +36,7 @@ class ApprovalBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: config.color.withValues(alpha: 0.15),
+  color: AppColors.withOpacity(config.color, 0.15),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: config.color, width: 1.5),
       ),

@@ -112,6 +112,12 @@ class AppColors {
   
   /// Para overlays y sombras
   static const Color overlayColor = Color(0x1F000000); // Black 12%
+
+  /// Overlay negro 50% (usado en modals/acciones sobre imagenes)
+  static const Color overlay50 = Color(0x80000000); // Black 50%
+
+  /// Alias negro y blanco para uso en componentes que lo requieran
+  static const Color black = Color(0xFF000000);
   
   /// Para backgrounds de cards
   static const Color cardBackground = Colors.white;
@@ -258,6 +264,12 @@ class AppColors {
   // Background colors
   static const Color backgroundLight = Color(0xFFF5F5F5);
   static const Color backgroundMedium = Color(0xFFEEEEEE);
+
+  // On-primary text variants (used on AppBar or primary colored surfaces)
+  static const Color onPrimaryText = Color(0xB3FFFFFF); // approx. white70
+
+  /// Utility: transparent alias so views reference theme for transparency
+  static const Color transparent = Color(0x00000000);
   
   // Border colors
   static const Color borderLight = borderColor;
@@ -270,4 +282,26 @@ class AppColors {
   static const Color warningDark = Color(0xFFF57C00);
   static const Color info = Color(0xFF2196F3);
   static const Color infoDark = Color(0xFF1976D2);
+  /// Azul muy claro - para backgrounds de componentes informativos
+  static const Color infoLight = Color(0xFFE3F2FD);
+  /// Texto/ícono más oscuro para variantes informativas
+  static const Color infoText = Color(0xFF0D47A1);
+
+  // Banners / warning variants
+  static const Color warningLight = Color(0xFFFFF3E0);
+  static const Color warningBorder = Color(0xFFFF9800);
+  static const Color warningIcon = Color(0xFFF57C00);
+  static const Color warningText = Color(0xFFE65100);
+
+  // Success / approval variants
+  static const Color successLight = Color(0xFFE8F5E9);
+  static const Color successBorder = Color(0xFF4CAF50);
+  static const Color successIcon = Color(0xFF388E3C);
+  static const Color successText = Color(0xFF1B5E20);
+
+  // Danger / error variants
+  static const Color dangerLight = Color(0xFFFFEBEE);
+  static const Color dangerBorder = Color(0xFFF44336);
+  static const Color dangerIcon = Color(0xFFD32F2F);
+  static const Color dangerText = Color(0xFFB71C1C);
 }

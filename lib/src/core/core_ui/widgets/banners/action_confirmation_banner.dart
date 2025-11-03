@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/app_colors.dart';
 
 /// Widget reutilizable para banners de confirmación e información
 /// 
@@ -59,10 +60,10 @@ class ActionConfirmationBanner extends StatelessWidget {
     required this.message,
     this.padding = const EdgeInsets.all(12),
   })  : icon = Icons.check_circle,
-        backgroundColor = const Color(0xFFC8E6C9),
-        iconColor = const Color(0xFF2E7D32),
-        textColor = const Color(0xFF1B5E20),
-        borderColor = const Color(0xFF81C784);
+        backgroundColor = AppColors.successLight,
+        iconColor = AppColors.successIcon,
+        textColor = AppColors.successText,
+        borderColor = AppColors.successBorder;
 
   /// Constructor para advertencia (naranja)
   const ActionConfirmationBanner.warning({
@@ -70,10 +71,10 @@ class ActionConfirmationBanner extends StatelessWidget {
     required this.message,
     this.padding = const EdgeInsets.all(12),
   })  : icon = Icons.info_outline,
-        backgroundColor = const Color(0xFFFFE0B2),
-        iconColor = const Color(0xFFE65100),
-        textColor = const Color(0xFF3E2723),
-        borderColor = const Color(0xFFFFB74D);
+        backgroundColor = AppColors.warningLight,
+        iconColor = AppColors.warningIcon,
+        textColor = AppColors.warningText,
+        borderColor = AppColors.warningBorder;
 
   /// Constructor para información (azul)
   const ActionConfirmationBanner.info({
@@ -81,10 +82,10 @@ class ActionConfirmationBanner extends StatelessWidget {
     required this.message,
     this.padding = const EdgeInsets.all(12),
   })  : icon = Icons.info_outline,
-        backgroundColor = const Color(0xFFBBDEFB),
-        iconColor = const Color(0xFF01579B),
-        textColor = const Color(0xFF0D47A1),
-        borderColor = const Color(0xFF64B5F6);
+        backgroundColor = AppColors.infoLight,
+        iconColor = AppColors.infoDark,
+        textColor = AppColors.infoText,
+        borderColor = AppColors.info;
 
   @override
   Widget build(BuildContext context) {

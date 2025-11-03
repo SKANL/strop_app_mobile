@@ -94,9 +94,9 @@ class ProjectCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withAlpha((0.1 * 255).round()),
+  color: AppColors.withOpacity(color, 0.1),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withAlpha((0.3 * 255).round())),
+  border: Border.all(color: AppColors.withOpacity(color, 0.3)),
       ),
       child: Text(
         label,

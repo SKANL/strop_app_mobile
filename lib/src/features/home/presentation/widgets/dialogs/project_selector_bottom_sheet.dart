@@ -160,14 +160,14 @@ class ProjectSelectorBottomSheet extends StatelessWidget {
         // Esperar un pequeño delay para asegurarnos que el bottom sheet
         // haya cerrado antes de abrir el siguiente. Usamos el contexto padre
         // que pasó el caller para abrir el siguiente BottomSheet.
-        Future.delayed(const Duration(milliseconds: 200), () {
+          Future.delayed(const Duration(milliseconds: 200), () {
           // Verificar que el context padre siga montado antes de usarlo
           if (!parentContext.mounted) return;
           
           showModalBottomSheet(
             context: parentContext,
             isScrollControlled: true,
-            backgroundColor: Colors.transparent,
+              backgroundColor: AppColors.transparent,
             builder: (c) => QuickIncidentTypeSelector(
               projectId: project.id,
             ),
@@ -189,7 +189,7 @@ class ProjectSelectorBottomSheet extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: _getStatusColor(project.status).withAlpha((0.1 * 255).round()),
+                color: AppColors.withOpacity(_getStatusColor(project.status), 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(

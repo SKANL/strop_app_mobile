@@ -65,7 +65,7 @@ class _QuickActionsWidgetState extends State<QuickActionsWidget> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withAlpha((0.1 * 255).round()),
+                  color: AppColors.withOpacity(AppColors.primary, 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -163,7 +163,7 @@ class _QuickActionsWidgetState extends State<QuickActionsWidget> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (sheetContext) => ChangeNotifierProvider.value(
         value: projectsProvider,
         child: ProjectSelectorBottomSheet(parentContext: parentContext),
@@ -191,7 +191,7 @@ class _HeroQuickActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
@@ -202,13 +202,13 @@ class _HeroQuickActionButton extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 iconColor,
-                iconColor.withAlpha((0.8 * 255).round()),
+                AppColors.withOpacity(iconColor, 0.8),
               ],
             ),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: iconColor.withAlpha((0.4 * 255).round()),
+                color: AppColors.withOpacity(iconColor, 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
                 spreadRadius: 2,
@@ -223,14 +223,14 @@ class _HeroQuickActionButton extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withAlpha((0.2 * 255).round()),
-                    shape: BoxShape.circle,
-                  ),
+                      color: AppColors.withOpacity(AppColors.cardBackground, 0.2),
+                      shape: BoxShape.circle,
+                    ),
                   child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 40,
-                  ),
+                      icon,
+                      color: AppColors.cardBackground,
+                      size: 40,
+                    ),
                 ),
                 
                 const SizedBox(width: 20),
@@ -244,14 +244,14 @@ class _HeroQuickActionButton extends StatelessWidget {
                         label,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppColors.cardBackground,
                             ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.white.withAlpha((0.9 * 255).round()),
+                              color: AppColors.withOpacity(AppColors.cardBackground, 0.9),
                             ),
                       ),
                     ],
@@ -261,7 +261,7 @@ class _HeroQuickActionButton extends StatelessWidget {
                 // Flecha
                 Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.white,
+                  color: AppColors.cardBackground,
                   size: 24,
                 ),
               ],
@@ -300,13 +300,13 @@ class _QuickActionCard extends StatelessWidget {
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.borderColor),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.overlayColor,
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -318,7 +318,7 @@ class _QuickActionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.1),
+                    color: AppColors.withOpacity(iconColor, 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -347,11 +347,11 @@ class _QuickActionCard extends StatelessWidget {
                         minWidth: 20,
                         minHeight: 20,
                       ),
-                      child: Center(
+                          child: Center(
                         child: Text(
                           badge!,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.cardBackground,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),

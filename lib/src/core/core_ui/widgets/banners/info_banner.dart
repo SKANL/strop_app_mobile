@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Un banner informativo reutilizable que muestra un mensaje con un ícono.
 ///
@@ -106,31 +107,31 @@ class InfoBanner extends StatelessWidget {
     switch (type) {
       case InfoBannerType.info:
         return _BannerColors(
-          backgroundColor: Colors.blue.shade50,
-          borderColor: Colors.blue.shade200,
-          iconColor: Colors.blue.shade700,
-          textColor: Colors.blue.shade900,
+          backgroundColor: AppColors.infoLight,
+          borderColor: AppColors.info,
+          iconColor: AppColors.infoDark,
+          textColor: AppColors.infoText,
         );
       case InfoBannerType.warning:
         return _BannerColors(
-          backgroundColor: Colors.orange.shade50,
-          borderColor: Colors.orange.shade200,
-          iconColor: Colors.orange.shade700,
-          textColor: Colors.orange.shade900,
+          backgroundColor: AppColors.warningLight,
+          borderColor: AppColors.warningBorder,
+          iconColor: AppColors.warningIcon,
+          textColor: AppColors.warningText,
         );
       case InfoBannerType.error:
         return _BannerColors(
-          backgroundColor: Colors.red.shade50,
-          borderColor: Colors.red.shade200,
-          iconColor: Colors.red.shade700,
-          textColor: Colors.red.shade900,
+          backgroundColor: AppColors.dangerLight,
+          borderColor: AppColors.dangerBorder,
+          iconColor: AppColors.dangerIcon,
+          textColor: AppColors.dangerText,
         );
       case InfoBannerType.success:
         return _BannerColors(
-          backgroundColor: Colors.green.shade50,
-          borderColor: Colors.green.shade200,
-          iconColor: Colors.green.shade700,
-          textColor: Colors.green.shade900,
+          backgroundColor: AppColors.successLight,
+          borderColor: AppColors.successBorder,
+          iconColor: AppColors.successIcon,
+          textColor: AppColors.successText,
         );
     }
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/incident_form_provider.dart';
+import '../../../../../core/core_ui/widgets/widgets.dart';
 import '../../utils/converters/incident_converters.dart';
 import '../../utils/ui_helpers/ui_helpers.dart';
-import '../../../../../core/core_ui/widgets/widgets.dart';
 
 /// Screen 22: Cerrar Incidencia (Modal)
 /// 
@@ -43,8 +43,8 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cerrar Incidencia'),
-        backgroundColor: Colors.green.shade700,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.successDark,
+        foregroundColor: AppColors.cardBackground,
       ),
       body: Form(
         key: _formKey,
@@ -82,12 +82,12 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: AppColors.backgroundLight,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
                           children: [
-                            Icon(Icons.add_a_photo, size: 32, color: Colors.grey),
+                            Icon(Icons.add_a_photo, size: 32, color: AppColors.iconColor),
                             const SizedBox(height: 8),
                             const Text('Selecciona fotos de evidencia'),
                           ],
@@ -112,7 +112,7 @@ class _CloseIncidentScreenState extends State<CloseIncidentScreen> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: AppColors.overlayColor,
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),

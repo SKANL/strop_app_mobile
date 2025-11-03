@@ -5,6 +5,7 @@ import 'package:mobile_strop_app/src/core/core_domain/entities/incident_entity.d
 import 'package:mobile_strop_app/src/core/core_domain/entities/user_entity.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
 import 'section_base.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget de botones de acción para incident detail
 /// 
@@ -51,7 +52,7 @@ class IncidentActionsSection extends StatelessWidget {
                 label: Text(action.label),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: action.color,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.cardBackground,
                 ),
               ),
             );
@@ -70,7 +71,7 @@ class IncidentActionsSection extends StatelessWidget {
       label: 'Agregar Comentario',
       icon: Icons.comment,
       route: 'add-comment',
-      color: Colors.blue,
+      color: AppColors.info,
     ));
     
     // Asignar (solo R/S)
@@ -80,7 +81,7 @@ class IncidentActionsSection extends StatelessWidget {
           label: 'Asignar Tarea',
           icon: Icons.person_add,
           route: 'assign',
-          color: Colors.orange,
+          color: AppColors.approvalPendingColor,
         ));
       }
     }
@@ -94,7 +95,7 @@ class IncidentActionsSection extends StatelessWidget {
           label: 'Cerrar Incidencia',
           icon: Icons.check_circle,
           route: 'close',
-          color: Colors.green,
+          color: AppColors.approvedColor,
         ));
       }
     }

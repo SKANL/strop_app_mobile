@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 import '../../../core_domain/entities/user_entity.dart';
 
 /// Widget reutilizable para seleccionar usuario
@@ -44,7 +45,7 @@ class UserSelectorWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 filled: true,
-                fillColor: Colors.grey.shade50,
+                fillColor: AppColors.backgroundLight,
               ),
             ),
           ),
@@ -76,13 +77,13 @@ class UserSelectorWidget extends StatelessWidget {
           Icon(
             Icons.people_outline,
             size: 64,
-            color: Colors.grey.shade400,
+            color: AppColors.textMuted,
           ),
           const SizedBox(height: 16),
           Text(
             emptyMessage,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: Colors.grey.shade600,
+              style: theme.textTheme.bodyLarge?.copyWith(
+              color: AppColors.textMuted,
             ),
             textAlign: TextAlign.center,
           ),
@@ -97,7 +98,7 @@ class UserSelectorWidget extends StatelessWidget {
     
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      color: isSelected ? Colors.blue.shade50 : null,
+  color: isSelected ? AppColors.infoLight : null,
       elevation: isSelected ? 2 : 1,
       child: ListTile(
         leading: _buildAvatar(user, isSelected),
@@ -108,9 +109,9 @@ class UserSelectorWidget extends StatelessWidget {
           ),
         ),
         subtitle: Text(_getRoleLabel(user.role)),
-        trailing: isSelected
-            ? Icon(Icons.check_circle, color: Colors.blue.shade700)
-            : const Icon(Icons.radio_button_unchecked, color: Colors.grey),
+    trailing: isSelected
+      ? Icon(Icons.check_circle, color: AppColors.infoDark)
+      : const Icon(Icons.radio_button_unchecked, color: AppColors.iconColor),
         onTap: () => onUserSelected(user.id),
       ),
     );
@@ -118,14 +119,26 @@ class UserSelectorWidget extends StatelessWidget {
   
   Widget _buildAvatar(UserEntity user, bool isSelected) {
     final initials = _getInitials(user.name);
-    final color = isSelected ? Colors.blue : Colors.grey;
-    
+
+    if (isSelected) {
+      return CircleAvatar(
+        backgroundColor: AppColors.infoLight,
+        child: Text(
+          initials,
+          style: const TextStyle(
+            color: AppColors.infoText,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    }
+
     return CircleAvatar(
-      backgroundColor: color.shade100,
+      backgroundColor: AppColors.backgroundLight,
       child: Text(
         initials,
         style: TextStyle(
-          color: color.shade700,
+          color: AppColors.iconColor,
           fontWeight: FontWeight.bold,
         ),
       ),

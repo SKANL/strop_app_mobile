@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/filter_bottom_sheet.dart
 
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para Bottom Sheet de filtros.
 /// 
@@ -39,7 +40,7 @@ class FilterBottomSheet {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+  backgroundColor: AppColors.transparent,
       builder: (context) => _FilterBottomSheetContent(
         title: title,
         filterGroups: filterGroups,
@@ -83,8 +84,8 @@ class _FilterBottomSheetContent extends StatelessWidget {
             margin: const EdgeInsets.only(top: 12, bottom: 8),
             width: 40,
             height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
+              decoration: BoxDecoration(
+              color: AppColors.borderColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -135,7 +136,7 @@ class _FilterBottomSheetContent extends StatelessWidget {
               color: theme.colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: AppColors.withOpacity(AppColors.black, 0.05),
                   offset: const Offset(0, -2),
                   blurRadius: 8,
                 ),

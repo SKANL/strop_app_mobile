@@ -183,7 +183,7 @@ class IncidentListItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       visualDensity: VisualDensity.compact,
       side: BorderSide(color: color),
-      backgroundColor: color.withValues(alpha: 0.1),
+  backgroundColor: AppColors.withOpacity(color, 0.1),
     );
   }
 }

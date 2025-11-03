@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../auth/presentation/manager/auth_provider.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 import '../lists/my_tasks_screen.dart';
 import '../lists/my_reports_screen.dart';
 import 'project_bitacora_screen.dart';
@@ -54,7 +55,7 @@ class _ProjectTabsScreenState extends State<ProjectTabsScreen> with SingleTicker
             Text(
               'Torre Centenario - CDMX',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white70,
+                    color: AppColors.onPrimaryText,
                   ),
             ),
           ],
@@ -122,7 +123,7 @@ class _ProjectTabsScreenState extends State<ProjectTabsScreen> with SingleTicker
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (context) => ChangeNotifierProvider.value(
         value: context.read<AuthProvider>(),
         child: QuickIncidentTypeSelector(

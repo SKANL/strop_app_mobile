@@ -56,7 +56,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: AppColors.transparent,
                       builder: (c) => QuickIncidentTypeSelector(projectId: widget.projectId),
                     );
                   },

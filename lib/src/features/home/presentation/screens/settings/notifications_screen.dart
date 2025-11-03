@@ -137,7 +137,7 @@ class _NotificationTile extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: notification.isRead
             ? AppColors.borderColor
-      : Theme.of(context).colorScheme.primary.withAlpha((0.2 * 255).round()),
+  : AppColors.withOpacity(Theme.of(context).colorScheme.primary, 0.2),
         child: Icon(
           _getIconForType(notification.type),
           color: notification.isRead

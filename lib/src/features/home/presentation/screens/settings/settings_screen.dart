@@ -25,7 +25,16 @@ class SettingsScreen extends StatelessWidget {
         title: const Text('Configuración'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            // Avoid throwing GoError when there is nothing to pop from
+            // the Navigator stack (app opened directly on this route).
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            } else {
+              // Navigate to a safe default (home) instead.
+              context.go('/home');
+            }
+          },
         ),
       ),
       body: ListView(

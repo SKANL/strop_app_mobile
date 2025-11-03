@@ -116,7 +116,7 @@ class _AssignUserScreenState extends State<AssignUserScreen> {
         color: theme.scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: AppColors.withOpacity(AppColors.black, 0.1),
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),

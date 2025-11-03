@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget reutilizable para mostrar referencia de un elemento
 /// 
@@ -56,8 +57,8 @@ class ReferenceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bg = backgroundColor ?? Colors.grey.shade100;
-    final ic = iconColor ?? Colors.grey.shade600;
+  final bg = backgroundColor ?? AppColors.backgroundLight;
+  final ic = iconColor ?? AppColors.textMuted;
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +95,7 @@ class ReferenceCard extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.grey.shade600,
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],

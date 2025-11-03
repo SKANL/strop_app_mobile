@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/cards/app_card.dart
 
 import 'package:flutter/material.dart';
+import '../widgets.dart';
 
 /// Widget reutilizable para Cards con comportamiento y estilo consistente.
 ///
@@ -219,7 +220,7 @@ class StatsCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            backgroundColor: color.withValues(alpha: 0.1),
+            backgroundColor: AppColors.withOpacity(color, 0.1),
             radius: 28,
             child: Icon(icon, color: color, size: 28),
           ),

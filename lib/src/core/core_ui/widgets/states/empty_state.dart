@@ -1,5 +1,6 @@
 // lib/src/core/core_ui/widgets/empty_state.dart
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget reutilizable para estados vacíos
 /// Usado en: Listas vacías, sin datos, sin resultados
@@ -93,7 +94,7 @@ class EmptyState extends StatelessWidget {
             Icon(
               icon,
               size: 80,
-              color: Colors.grey[400],
+              color: AppColors.textMuted,
             ),
             const SizedBox(height: 24),
 
@@ -101,7 +102,7 @@ class EmptyState extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.grey[700],
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -113,7 +114,7 @@ class EmptyState extends StatelessWidget {
               Text(
                 message!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: AppColors.textMuted,
                 ),
                 textAlign: TextAlign.center,
               ),

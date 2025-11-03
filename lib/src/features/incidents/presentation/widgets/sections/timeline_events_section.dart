@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 import 'section_base.dart';
 
 /// Widget del timeline de eventos para incident detail
@@ -58,18 +59,29 @@ class IncidentTimelineEventsSection extends StatelessWidget {
     required String time,
   }) {
     final theme = Theme.of(context);
-    
+
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Icon container
         Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 16, color: Colors.blue.shade700),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.infoLight,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 16, color: AppColors.infoDark),
+          ),
         ),
+
         const SizedBox(width: 12),
+
+        // Title + subtitle
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,19 +92,22 @@ class IncidentTimelineEventsSection extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              const SizedBox(height: 4),
               Text(
                 subtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.grey.shade600,
+                  color: AppColors.textMuted,
                 ),
               ),
             ],
           ),
         ),
+
+        // Time
         Text(
           time,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.grey.shade500,
+            color: AppColors.textMuted,
           ),
         ),
       ],

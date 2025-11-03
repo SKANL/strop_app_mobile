@@ -1,5 +1,6 @@
 // lib/src/core/core_ui/widgets/loading_placeholder.dart
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/theme/app_colors.dart';
 
 /// Widget para mostrar placeholder de carga con efecto animado
 /// 
@@ -159,7 +160,7 @@ class _AnimatedPlaceholderState extends State<_AnimatedPlaceholder>
           height: widget.height,
           margin: widget.margin ?? const EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
-            color: Colors.grey[300]?.withValues(alpha: _opacity.value),
+            color: AppColors.withOpacity(AppColors.borderColor, _opacity.value),
             borderRadius: widget.borderRadius,
           ),
         );

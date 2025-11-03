@@ -211,7 +211,7 @@ class _ProjectInfoScreenState extends State<ProjectInfoScreen>
                 padding: EdgeInsets.zero,
                 visualDensity: VisualDensity.compact,
                 side: BorderSide(color: statusColor),
-                backgroundColor: statusColor.withValues(alpha: 0.1),
+                backgroundColor: AppColors.withOpacity(statusColor, 0.1),
               ),
             ],
           ),

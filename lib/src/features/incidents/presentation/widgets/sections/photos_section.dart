@@ -29,13 +29,13 @@ class IncidentPhotosSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.infoLight,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             '${photoUrls.length} foto${photoUrls.length > 1 ? "s" : ""}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.blue.shade700,
+              color: AppColors.infoDark,
               fontWeight: FontWeight.w600,
             ),
           ),

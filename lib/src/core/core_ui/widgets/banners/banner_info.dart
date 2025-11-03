@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/banners/banner_info.dart
 
 import 'package:flutter/material.dart';
+import '../../theme/app_colors.dart';
 
 /// Widget reutilizable para banners informativos con diferentes tipos/severidades.
 ///
@@ -102,7 +103,7 @@ class BannerInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: config.backgroundColor,
+          color: config.backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: config.borderColor, width: 1.5),
       ),
@@ -168,37 +169,37 @@ class BannerInfo extends StatelessWidget {
 enum BannerType {
   /// Banner informativo (azul)
   info(BannerConfig(
-    backgroundColor: Color(0xFFE3F2FD),
-    borderColor: Color(0xFF2196F3),
-    iconColor: Color(0xFF1976D2),
-    textColor: Color(0xFF0D47A1),
+    backgroundColor: AppColors.infoLight,
+    borderColor: AppColors.info,
+    iconColor: AppColors.infoDark,
+    textColor: AppColors.infoText,
     icon: Icons.info_outline,
   )),
 
   /// Banner de advertencia (naranja)
   warning(BannerConfig(
-    backgroundColor: Color(0xFFFFF3E0),
-    borderColor: Color(0xFFFF9800),
-    iconColor: Color(0xFFF57C00),
-    textColor: Color(0xFFE65100),
+    backgroundColor: AppColors.warningLight,
+    borderColor: AppColors.warningBorder,
+    iconColor: AppColors.warningIcon,
+    textColor: AppColors.warningText,
     icon: Icons.warning_amber,
   )),
 
   /// Banner de éxito (verde)
   success(BannerConfig(
-    backgroundColor: Color(0xFFE8F5E9),
-    borderColor: Color(0xFF4CAF50),
-    iconColor: Color(0xFF388E3C),
-    textColor: Color(0xFF1B5E20),
+    backgroundColor: AppColors.successLight,
+    borderColor: AppColors.successBorder,
+    iconColor: AppColors.successIcon,
+    textColor: AppColors.successText,
     icon: Icons.check_circle_outline,
   )),
 
   /// Banner de error (rojo)
   error(BannerConfig(
-    backgroundColor: Color(0xFFFFEBEE),
-    borderColor: Color(0xFFF44336),
-    iconColor: Color(0xFFD32F2F),
-    textColor: Color(0xFFB71C1C),
+    backgroundColor: AppColors.dangerLight,
+    borderColor: AppColors.dangerBorder,
+    iconColor: AppColors.dangerIcon,
+    textColor: AppColors.dangerText,
     icon: Icons.error_outline,
   ));
 

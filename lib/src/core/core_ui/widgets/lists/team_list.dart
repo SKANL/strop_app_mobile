@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/lists/team_list.dart
 
 import 'package:flutter/material.dart';
+import '../../theme/app_colors.dart';
 import '../cards/team_member_card.dart';
 import '../states/empty_state.dart';
 
@@ -157,16 +158,16 @@ class _TeamListState extends State<TeamList> {
     // Importamos desde app_colors si es necesario
     switch (role.toLowerCase()) {
       case 'superintendent':
-        return const Color(0xFF9C27B0);
+        return AppColors.superintendentColor;
       case 'resident':
-        return const Color(0xFF1976D2);
+        return AppColors.residentColor;
       case 'cabo':
       case 'foreman':
-        return const Color(0xFFFF9800);
+        return AppColors.caboColor;
       case 'worker':
-        return const Color(0xFF4CAF50);
+        return AppColors.workerColor;
       default:
-        return const Color(0xFF757575);
+        return AppColors.iconColor;
     }
   }
 }

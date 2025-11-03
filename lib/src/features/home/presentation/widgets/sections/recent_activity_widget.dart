@@ -237,7 +237,7 @@ class _RecentActivityWidgetState extends State<RecentActivityWidget> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(incident.status).withOpacity(0.1),
+                  color: AppColors.withOpacity(_getStatusColor(incident.status), 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(

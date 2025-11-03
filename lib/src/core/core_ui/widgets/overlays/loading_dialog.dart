@@ -1,6 +1,7 @@
 // lib/src/core/core_ui/widgets/loading_dialog.dart
 
 import 'package:flutter/material.dart';
+import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 
 /// Widget reutilizable para mostrar un diálogo de carga consistente.
 /// 
@@ -46,7 +47,7 @@ class _LoadingDialogContent extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Dialog(
-        backgroundColor: Colors.transparent,
+  backgroundColor: AppColors.transparent,
         elevation: 0,
         child: Container(
           padding: const EdgeInsets.all(24),
@@ -104,7 +105,7 @@ class LoadingOverlay extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      color: backgroundColor ?? Colors.black.withValues(alpha: 0.5),
+      color: backgroundColor ?? AppColors.withOpacity(AppColors.black, 0.5),
       child: Center(
         child: Container(
           padding: const EdgeInsets.all(24),

@@ -62,7 +62,7 @@ class _CreateIncidentFormScreenState extends State<CreateIncidentFormScreen> {
             Center(
               child: CircleAvatar(
                 radius: 40,
-                backgroundColor: _getTypeColor().withValues(alpha: 0.15),
+                backgroundColor: AppColors.withOpacity(_getTypeColor(), 0.15),
                 child: Icon(
                   _getTypeIcon(),
                   size: 40,

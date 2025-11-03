@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
-import '../../../../core/core_ui/theme/app_colors.dart';
 import '../providers/my_tasks_provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
 import '../widgets/list_items/incident_list_item.dart';
@@ -116,10 +115,10 @@ class _AllMyTasksScreenState extends State<AllMyTasksScreen> {
                     margin: const EdgeInsets.all(16),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.progressReportColor.withAlpha((0.1 * 255).round()),
+                      color: AppColors.withOpacity(AppColors.progressReportColor, 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: AppColors.progressReportColor.withAlpha((0.3 * 255).round()),
+                        color: AppColors.withOpacity(AppColors.progressReportColor, 0.3),
                       ),
                     ),
                     child: Row(

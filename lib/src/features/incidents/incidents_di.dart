@@ -1,4 +1,5 @@
 // lib/src/features/incidents/incidents_di.dart
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -22,12 +23,13 @@ import 'presentation/providers/incident_form_provider.dart';
 
 // AuthProvider (cross-module)
 import '../auth/presentation/manager/auth_provider.dart';
+import '../home/presentation/screens/main_shell_screen.dart';
 
 // Pantallas
 import 'presentation/screens/project/project_tabs_screen.dart';
 import 'presentation/screens/project/project_team_screen.dart';
 import 'presentation/screens/project/project_info_screen.dart';
-import 'presentation/screens/forms/select_incident_type_screen.dart';
+import 'presentation/widgets/dialogs/quick_incident_type_selector.dart';
 import 'presentation/screens/forms/create_incident_form_screen.dart';
 import 'presentation/screens/forms/create_material_request_form_screen.dart';
 import 'presentation/screens/details/incident_detail_screen.dart';
@@ -35,6 +37,7 @@ import 'presentation/screens/forms/create_correction_screen.dart';
 import 'presentation/screens/details/assign_user_screen.dart';
 import 'presentation/screens/details/close_incident_screen.dart';
 import 'presentation/screens/details/add_comment_screen.dart';
+import 'presentation/screens/all_my_tasks_screen.dart';
 
 final getIt = GetIt.instance;
 
@@ -134,7 +137,10 @@ final incidentRoutes = <GoRoute>[
       final projectId = state.pathParameters['projectId']!;
       return ChangeNotifierProvider.value(
         value: getIt<AuthProvider>(),
-        child: SelectIncidentTypeScreen(projectId: projectId),
+        child: Scaffold(
+          appBar: AppBar(title: const Text('Seleccionar Tipo de Reporte')),
+          body: QuickIncidentTypeSelector(projectId: projectId),
+        ),
       );
     },
   ),
@@ -233,6 +239,22 @@ final incidentRoutes = <GoRoute>[
       return ChangeNotifierProvider.value(
         value: getIt<IncidentFormProvider>(),
         child: CloseIncidentScreen(incidentId: incidentId),
+      );
+    },
+  ),
+
+  // Screen 23: Vista consolidada de todas las tareas del usuario (con bottom nav)
+  GoRoute(
+    path: '/all-my-tasks',
+    builder: (context, state) {
+      return MainShellScreen(
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: getIt<MyTasksProvider>()),
+            ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
+          ],
+          child: const AllMyTasksScreen(),
+        ),
       );
     },
   ),

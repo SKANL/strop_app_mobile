@@ -9,6 +9,7 @@ import '../../providers/incidents_list_provider.dart';
 import 'package:mobile_strop_app/src/core/core_ui/widgets/widgets.dart';
 import '../../utils/converters/incident_converters.dart';
 import '../../widgets/list_items/incident_list_item.dart';
+import '../../widgets/dialogs/quick_incident_type_selector.dart';
 
 /// Screen 12: Mis Reportes - Lista de incidencias creadas por el usuario (Bottom-Up)
 /// 
@@ -50,8 +51,16 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
           success: (reports) {
             if (reports.isEmpty) {
               return EmptyState.noReports(
-                onCreateReport: () => context.push('/project/${widget.projectId}/select-incident-type'),
-              );
+                  onCreateReport: () {
+                    // Abrir selector rápido de tipo como bottom sheet (UX optimizada)
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (c) => QuickIncidentTypeSelector(projectId: widget.projectId),
+                    );
+                  },
+                );
             }
 
             return RefreshIndicator(

@@ -19,98 +19,44 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: AppColors.borderColor, width: 1),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+          child: Row(
             children: [
-              // Header con nombre e icono de estado
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      project.name,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  _buildStatusChip(context),
-                ],
-              ),
-              
-              const SizedBox(height: 8),
-              
-              // Ubicación
-              if (project.address != null)
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      size: 16,
-                      color: AppColors.iconColor,
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        project.address!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.iconColor,
-                            ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              // Nombre del proyecto
+              Expanded(
+                child: Text(
+                  project.name,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              
-              const SizedBox(height: 8),
-              
-              // Fechas
-              Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    size: 16,
-                    color: AppColors.iconColor,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    _formatDateRange(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.iconColor,
-                        ),
-                  ),
-                ],
               ),
               
-              if (isArchived) ...[
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.archive_outlined,
-                      size: 16,
-                      color: AppColors.iconColor,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Proyecto archivado',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.iconColor,
-                            fontStyle: FontStyle.italic,
-                          ),
-                    ),
-                  ],
-                ),
-              ],
+              const SizedBox(width: 8),
+              
+              // Status badge compacto
+              _buildCompactStatusBadge(context),
+              
+              const SizedBox(width: 4),
+              
+              // Icono de navegación
+              Icon(
+                Icons.chevron_right,
+                color: AppColors.iconColor,
+                size: 18,
+              ),
             ],
           ),
         ),
@@ -118,62 +64,48 @@ class ProjectCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusChip(BuildContext context) {
+  Widget _buildCompactStatusBadge(BuildContext context) {
     Color color;
     String label;
-    IconData icon;
 
     switch (project.status) {
       case ProjectStatus.planning:
         color = AppColors.progressReportColor;
-        label = 'Planificación';
-        icon = Icons.edit_calendar;
+        label = 'Plan';
         break;
       case ProjectStatus.active:
         color = AppColors.closedStatusColor;
         label = 'Activo';
-        icon = Icons.play_circle_outline;
         break;
       case ProjectStatus.paused:
         color = AppColors.pendingStatusColor;
         label = 'Pausado';
-        icon = Icons.pause_circle_outline;
         break;
       case ProjectStatus.completed:
         color = AppColors.inactiveStatusColor;
         label = 'Completado';
-        icon = Icons.check_circle_outline;
         break;
       case ProjectStatus.cancelled:
         color = AppColors.error;
         label = 'Cancelado';
-        icon = Icons.cancel_outlined;
         break;
     }
 
-    return Chip(
-      avatar: Icon(icon, size: 16, color: color),
-      label: Text(
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withAlpha((0.1 * 255).round()),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withAlpha((0.3 * 255).round())),
+      ),
+      child: Text(
         label,
         style: TextStyle(
           color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
         ),
       ),
-  backgroundColor: color.withAlpha((0.1 * 255).round()),
-  side: BorderSide(color: color.withAlpha((0.3 * 255).round())),
-      padding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
     );
-  }
-
-  String _formatDateRange() {
-    final start = '${project.startDate.day}/${project.startDate.month}/${project.startDate.year}';
-    if (project.endDate != null) {
-      final end = '${project.endDate!.day}/${project.endDate!.month}/${project.endDate!.year}';
-      return '$start - $end';
-    }
-    return 'Desde $start';
   }
 }

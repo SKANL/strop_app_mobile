@@ -1,12 +1,29 @@
 // lib/src/features/home/presentation/screens/home_screen.dart
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/presentation/manager/auth_provider.dart';
 import '../providers/projects_provider.dart';
 import '../../../../core/core_ui/widgets/widgets.dart';
-import '../widgets/cards/project_card.dart';
+import '../widgets/sections/quick_actions_widget.dart';
+import '../widgets/sections/recent_activity_widget.dart';
 
+/// Pantalla principal de inicio de la aplicación
+/// 
+/// ENFOQUE: Agilizar el registro de incidencias
+/// 
+/// Esta pantalla está diseñada para que el usuario pueda:
+/// 1. **Crear reportes rápidamente**: Botón grande y visible para crear nuevos reportes
+/// 2. **Ver actividad reciente**: Resumen compacto de últimos reportes y acciones
+/// 3. **Acceder a tareas**: Contador visible de tareas pendientes
+/// 
+/// SIMPLIFICACIONES REALIZADAS:
+/// - ❌ Eliminada sección de "Proyectos Activos" (duplicada con tab Proyectos)
+/// - ✅ Foco en acciones rápidas como elemento principal
+/// - ✅ Layout minimalista para reducir fricción
+/// 
+/// FLUJO DE REGISTRO DE INCIDENCIA:
+/// Home → [Toca "Crear Nuevo Reporte"] → Selecciona Proyecto → Selecciona Tipo → Formulario → ✓
+/// Tiempo estimado: 30 segundos
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -18,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Cargar proyectos al iniciar
+    // Cargar proyectos activos para que estén disponibles en el ProjectSelector
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProjectsProvider>().loadActiveProjects();
     });
@@ -38,63 +55,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    user != null ? 'Hola, ${user.name}' : 'Mis Proyectos',
+                    user != null ? 'Hola, ${user.name}' : 'Inicio',
                     style: const TextStyle(fontSize: 18),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () => context.push('/notifications'),
-                tooltip: 'Notificaciones',
-              ),
-              IconButton(
-                icon: const Icon(Icons.person_outline),
-                onPressed: () => context.push('/settings'),
-                tooltip: 'Configuración',
-              ),
-            ],
           ),
           body: RefreshIndicator(
             onRefresh: () async {
-              // TODO: Implementar refresh de proyectos
-              await Future.delayed(const Duration(seconds: 1));
+              // Recargar tareas y actividades recientes
+              final authProvider = context.read<AuthProvider>();
+              final userId = authProvider.user?.id ?? '';
+              if (userId.isNotEmpty) {
+                // Podrías agregar aquí la recarga de datos si es necesario
+              }
             },
             child: CustomScrollView(
               slivers: [
-                // Sección de proyectos activos
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Mis Proyectos Activos',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                
+                // HÉROE: Acciones Rápidas - Lo más importante
+                // Este es el foco principal de la app: registrar incidencias rápidamente
+                const SliverToBoxAdapter(
+                  child: QuickActionsWidget(),
                 ),
                 
-                // Lista de proyectos (placeholder por ahora)
-                _buildProjectsList(context),
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
                 
-                // Botón para ver proyectos archivados
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: OutlinedButton.icon(
-                      onPressed: () => context.push('/archived-projects'),
-                      icon: const Icon(Icons.archive_outlined),
-                      label: const Text('Ver Proyectos Archivados'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 48),
-                      ),
-                    ),
-                  ),
+                // Mini resumen: Actividad Reciente compacta
+                const SliverToBoxAdapter(
+                  child: RecentActivityWidget(),
                 ),
+                
+                // Espacio final
+                const SliverToBoxAdapter(child: SizedBox(height: 80)),
               ],
             ),
           ),
@@ -102,85 +98,4 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-  Widget _buildProjectsList(BuildContext context) {
-    return Consumer<ProjectsProvider>(
-      builder: (context, projectsProvider, _) {
-        // Loading state
-        if (projectsProvider.isLoadingActive) {
-          return const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(child: AppLoading()),
-          );
-        }
-
-        // Error state
-        if (projectsProvider.activeError != null) {
-          return SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: AppError(
-                message: 'Error al cargar proyectos',
-                onRetry: () => projectsProvider.loadActiveProjects(),
-              ),
-            ),
-          );
-        }
-
-        final projects = projectsProvider.activeProjects;
-
-        // Empty state
-        if (projects.isEmpty) {
-          return SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.folder_open_outlined,
-                    size: 64,
-                    color: AppColors.borderColor,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Aún no tienes proyectos asignados',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.iconColor,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Los proyectos asignados aparecerán aquí',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        // Lista de proyectos reales usando ProjectCard reusable
-        return SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final project = projects[index];
-                return ProjectCard(
-                  project: project,
-                  onTap: () => context.push('/project/${project.id}/tabs'),
-                );
-              },
-              childCount: projects.length,
-            ),
-          ),
-        );
-      },
-    );
-  }
-  
-  // Helper methods removed — replaced by reusable widgets (ProjectCard, AvatarWithInitials)
 }

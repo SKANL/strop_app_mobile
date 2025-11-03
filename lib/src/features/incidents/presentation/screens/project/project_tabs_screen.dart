@@ -1,9 +1,12 @@
 // lib/src/features/incidents/presentation/screens/project/project_tabs_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../../auth/presentation/manager/auth_provider.dart';
 import '../lists/my_tasks_screen.dart';
 import '../lists/my_reports_screen.dart';
 import 'project_bitacora_screen.dart';
+import '../../widgets/dialogs/quick_incident_type_selector.dart';
 
 /// Pantalla de Tabs del Proyecto (Fase 2)
 /// Centro de trabajo principal con navegación por tabs: Mis Tareas, Mis Reportes, Bitácora
@@ -106,11 +109,25 @@ class _ProjectTabsScreenState extends State<ProjectTabsScreen> with SingleTicker
       ),
       // Ocultar FAB en modo archivo (Screen 24)
       floatingActionButton: widget.isArchived ? null : FloatingActionButton.extended(
-        onPressed: () {
-          context.push('/project/${widget.projectId}/select-incident-type');
-        },
+        onPressed: () => _showQuickIncidentCreator(context),
         icon: const Icon(Icons.add),
-        label: const Text('Crear Reporte'),
+        label: const Text('Nuevo Reporte'),
+      ),
+    );
+  }
+  
+  /// Muestra el selector rápido de tipo de incidencia (BottomSheet)
+  /// Reemplaza la navegación a SelectIncidentTypeScreen
+  void _showQuickIncidentCreator(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ChangeNotifierProvider.value(
+        value: context.read<AuthProvider>(),
+        child: QuickIncidentTypeSelector(
+          projectId: widget.projectId,
+        ),
       ),
     );
   }

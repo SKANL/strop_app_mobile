@@ -8,12 +8,19 @@ import 'data/datasources/projects_fake_datasource.dart';
 import 'data/repositories_impl/projects_repository_impl.dart';
 import 'presentation/providers/projects_provider.dart';
 import 'presentation/screens/projects/archived_projects_screen.dart';
+import 'presentation/screens/projects/projects_list_screen.dart';
 import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/main_shell_screen.dart';
 import 'presentation/screens/settings/notifications_screen.dart';
 import 'presentation/screens/settings/settings_screen.dart';
 import 'presentation/screens/sync/sync_conflict_screen.dart';
 import 'presentation/screens/sync/sync_queue_screen.dart';
 import 'presentation/screens/settings/user_profile_screen.dart';
+
+// Import providers from incidents module for HomeScreen
+import '../incidents/presentation/providers/my_tasks_provider.dart';
+import '../incidents/presentation/providers/my_reports_provider.dart';
+import '../auth/presentation/manager/auth_provider.dart';
 
 final getIt = GetIt.instance;
 
@@ -44,12 +51,30 @@ void setupHomeModule() {
 /// NOTA: AuthProvider ahora se provee globalmente en app.dart
 /// Solo necesitamos proveer ProjectsProvider en las rutas que lo necesiten
 final homeRoutes = <GoRoute>[
-  // Pantalla principal
+  // Shell principal con bottom navigation
   GoRoute(
     path: '/home',
-    builder: (context, state) => ChangeNotifierProvider.value(
-      value: getIt<ProjectsProvider>(),
-      child: const HomeScreen(),
+    builder: (context, state) => MainShellScreen(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: getIt<ProjectsProvider>()),
+          ChangeNotifierProvider.value(value: getIt<MyTasksProvider>()),
+          ChangeNotifierProvider.value(value: getIt<MyReportsProvider>()),
+          ChangeNotifierProvider.value(value: getIt<AuthProvider>()),
+        ],
+        child: const HomeScreen(),
+      ),
+    ),
+  ),
+  
+  // Lista completa de proyectos (con bottom nav)
+  GoRoute(
+    path: '/projects',
+    builder: (context, state) => MainShellScreen(
+      child: ChangeNotifierProvider.value(
+        value: getIt<ProjectsProvider>(),
+        child: const ProjectsListScreen(),
+      ),
     ),
   ),
   
@@ -59,10 +84,12 @@ final homeRoutes = <GoRoute>[
     builder: (context, state) => const NotificationsScreen(),
   ),
   
-  // Configuración
+  // Configuración (con bottom nav)
   GoRoute(
     path: '/settings',
-    builder: (context, state) => const SettingsScreen(),
+    builder: (context, state) => const MainShellScreen(
+      child: SettingsScreen(),
+    ),
   ),
   
   // Perfil de usuario
@@ -83,11 +110,23 @@ final homeRoutes = <GoRoute>[
     builder: (context, state) => const SyncConflictScreen(),
   ),
   
-  // Proyectos archivados
+  // Proyectos archivados (deprecated - usar /projects en su lugar)
   GoRoute(
     path: '/archived-projects',
     builder: (context, state) => const ArchivedProjectsScreen(),
   ),
+  
+  // Lista completa de proyectos (activos y archivados) - legacy route sin nav
+  // Se mantiene por compatibilidad pero se recomienda usar /projects
+  /*
+  GoRoute(
+    path: '/projects-old',
+    builder: (context, state) => ChangeNotifierProvider.value(
+      value: getIt<ProjectsProvider>(),
+      child: const ProjectsListScreen(),
+    ),
+  ),
+  */
   
   // Proyecto individual (placeholder para ProjectTabs)
   GoRoute(

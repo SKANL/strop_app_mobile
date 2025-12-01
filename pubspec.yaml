@@ -37,6 +37,8 @@ dependencies:
   # UI/UX
   lottie: ^3.2.1
   image_picker: ^1.1.2
+  speech_to_text: ^7.0.0
+  mobile_scanner: ^5.1.0
   
   # Storage
   flutter_secure_storage: ^9.2.2

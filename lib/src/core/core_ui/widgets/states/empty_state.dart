@@ -39,15 +39,13 @@ class EmptyState extends StatelessWidget {
   }
 
   /// Constructor para sin resultados de búsqueda
-  factory EmptyState.noResults({
-    String? query,
-  }) {
+  factory EmptyState.noResults({String? query}) {
     return EmptyState(
       icon: Icons.search_off,
       title: 'Sin resultados',
-      message: query != null 
-        ? 'No encontramos resultados para "$query"'
-        : 'No se encontraron resultados para tu búsqueda',
+      message: query != null
+          ? 'No encontramos resultados para "$query"'
+          : 'No se encontraron resultados para tu búsqueda',
     );
   }
 
@@ -70,9 +68,7 @@ class EmptyState extends StatelessWidget {
   }
 
   /// Constructor para sin reportes
-  factory EmptyState.noReports({
-    VoidCallback? onCreateReport,
-  }) {
+  factory EmptyState.noReports({VoidCallback? onCreateReport}) {
     return EmptyState(
       icon: Icons.description_outlined,
       title: 'No has creado reportes aún',
@@ -85,60 +81,58 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Icono
-            Icon(
-              icon,
-              size: 80,
-              color: AppColors.textMuted,
-            ),
-            const SizedBox(height: 24),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Icono
+              Icon(icon, size: 80, color: AppColors.textMuted),
+              const SizedBox(height: 24),
 
-            // Título
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-
-            // Mensaje opcional
-            if (message != null) ...[
-              const SizedBox(height: 8),
+              // Título
               Text(
-                message!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textMuted,
+                title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-            ],
 
-            // Acción opcional
-            if (customAction != null) ...[
-              const SizedBox(height: 24),
-              customAction!,
-            ] else if (onAction != null && actionLabel != null) ...[
-              const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: onAction,
-                icon: const Icon(Icons.add),
-                label: Text(actionLabel!),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
+              // Mensaje opcional
+              if (message != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  message!,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppColors.textMuted),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+
+              // Acción opcional
+              if (customAction != null) ...[
+                const SizedBox(height: 24),
+                customAction!,
+              ] else if (onAction != null && actionLabel != null) ...[
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: onAction,
+                  icon: const Icon(Icons.add),
+                  label: Text(actionLabel!),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -149,16 +143,10 @@ class EmptyState extends StatelessWidget {
 class SliverEmptyState extends StatelessWidget {
   final EmptyState emptyState;
 
-  const SliverEmptyState({
-    super.key,
-    required this.emptyState,
-  });
+  const SliverEmptyState({super.key, required this.emptyState});
 
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      hasScrollBody: false,
-      child: emptyState,
-    );
+    return SliverFillRemaining(hasScrollBody: false, child: emptyState);
   }
 }

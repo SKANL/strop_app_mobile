@@ -5,9 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'src/features/auth/presentation/manager/auth_provider.dart';
+import 'src/features/home/presentation/providers/projects_provider.dart';
 
 /// Widget raíz de la aplicación Strop
-/// 
+///
 /// Este widget es completamente agnóstico al contenido de la app.
 /// Su única responsabilidad es:
 /// 1. Obtener el router configurado desde el contenedor de DI
@@ -20,11 +21,17 @@ class StropApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Obtenemos el router ya configurado desde GetIt
     final router = GetIt.instance<GoRouter>();
-    
-    // Proveemos AuthProvider globalmente para que esté disponible en toda la app
-    // Esto es necesario porque múltiples features necesitan acceso al usuario actual
-    return ChangeNotifierProvider<AuthProvider>.value(
-      value: GetIt.instance<AuthProvider>(),
+
+    // Proveemos AuthProvider y ProjectsProvider globalmente
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>.value(
+          value: GetIt.instance<AuthProvider>(),
+        ),
+        ChangeNotifierProvider<ProjectsProvider>.value(
+          value: GetIt.instance<ProjectsProvider>(),
+        ),
+      ],
       child: MaterialApp.router(
         title: 'Strop - Campo',
         debugShowCheckedModeBanner: false,

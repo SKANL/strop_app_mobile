@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../core/core_ui/widgets/widgets.dart';
+import '../../../../../core/core_ui/widgets/layouts/responsive_container.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -15,8 +16,17 @@ class NotificationsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.done_all),
+            tooltip: 'Marcar todas como leídas',
+            onPressed: () {
+              // TODO: Implementar marcar todas como leídas
+            },
+          ),
+        ],
       ),
-      body: _buildNotificationsList(context),
+      body: ResponsiveContainer(child: _buildNotificationsList(context)),
     );
   }
 
@@ -63,9 +73,9 @@ class NotificationsScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'No tienes notificaciones',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.iconColor,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: AppColors.iconColor),
             ),
           ],
         ),
@@ -73,9 +83,9 @@ class NotificationsScreen extends StatelessWidget {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       itemCount: placeholderNotifications.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final notification = placeholderNotifications[index];
         return _NotificationTile(
@@ -126,78 +136,108 @@ class _NotificationTile extends StatelessWidget {
   final _NotificationItem notification;
   final VoidCallback onTap;
 
-  const _NotificationTile({
-    required this.notification,
-    required this.onTap,
-  });
+  const _NotificationTile({required this.notification, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: notification.isRead
-            ? AppColors.borderColor
-  : AppColors.withOpacity(Theme.of(context).colorScheme.primary, 0.2),
-        child: Icon(
-          _getIconForType(notification.type),
+    return Container(
+      decoration: BoxDecoration(
+        color: notification.isRead
+            ? Colors.white
+            : AppColors.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
           color: notification.isRead
-              ? AppColors.iconColor
-              : Theme.of(context).colorScheme.primary,
+              ? AppColors.borderColor.withOpacity(0.5)
+              : AppColors.primary.withOpacity(0.2),
+        ),
+        boxShadow: [
+          if (!notification.isRead)
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+        ],
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: notification.isRead
+              ? AppColors.borderColor.withOpacity(0.3)
+              : AppColors.primary.withOpacity(0.1),
+          child: Icon(
+            _getIconForType(notification.type),
+            color: notification.isRead
+                ? AppColors.iconColor
+                : AppColors.primary,
+            size: 20,
+          ),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.textSecondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                notification.projectName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                notification.title,
+                style: TextStyle(
+                  fontWeight: notification.isRead
+                      ? FontWeight.w600
+                      : FontWeight.bold,
+                  fontSize: 14,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (!notification.isRead)
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 6),
+            Text(
+              notification.message,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13, color: AppColors.textPrimary),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              _formatTimestamp(notification.timestamp),
+              style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+            ),
+          ],
+        ),
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
         ),
       ),
-      title: Row(
-        children: [
-          Text(
-            '[${notification.projectName}]',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              notification.title,
-              style: TextStyle(
-                fontWeight:
-                    notification.isRead ? FontWeight.normal : FontWeight.bold,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          if (!notification.isRead)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                shape: BoxShape.circle,
-              ),
-            ),
-        ],
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 4),
-          Text(
-            notification.message,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            _formatTimestamp(notification.timestamp),
-            style: TextStyle(
-              fontSize: 11,
-              color: AppColors.iconColor,
-            ),
-          ),
-        ],
-      ),
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 
